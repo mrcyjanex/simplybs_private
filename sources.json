@@ -1033,6 +1033,11 @@
                 "306c88f4d1286aec1bf96e544632897886af5501"
             ]
         },
+        "https://github.com/gluonhq/gluon-samples.git": {
+            "refs": [
+                "5a362bdf5b6a407b382c4fb3d759664bb4282ce0"
+            ]
+        },
         "https://github.com/google/filament.git": {
             "refs": [
                 "0e58877c09afb1aacd09ff640f74d2adcd2a7e80"
@@ -1042,6 +1047,11 @@
             "refs": [
                 "0a439623f75c029912728d80cb7f1b8b48739ca4",
                 "b514bdc898e2951020cbdca1304b75f5950d1f59"
+            ]
+        },
+        "https://github.com/graalvm/mx.git": {
+            "refs": [
+                "5eb6d6f73d16a37f52c9d69815af479523513bdd"
             ]
         },
         "https://github.com/guillemj/libmd.git": {
@@ -1128,6 +1138,11 @@
         "https://github.com/nothings/stb.git": {
             "refs": [
                 "013ac3beddff3dbffafd5177e7972067cd2b5083"
+            ]
+        },
+        "https://github.com/oracle/graal.git": {
+            "refs": [
+                "1f72d5384cbf5a744b8284f874ad77947d2710bc"
             ]
         },
         "https://github.com/pypa/flit.git": {

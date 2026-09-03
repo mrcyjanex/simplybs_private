@@ -169,8 +169,8 @@ func TestRenderCommentContainsMarker(t *testing.T) {
 			RunURL:     "https://example.test/run/1",
 		}},
 		Remaining: []Item{{Package: "curl", Host: "x86_64-linux-gnu"}},
-	}, "")
-	st, ok := parseState(body, commentMarker)
+	}, "linux-amd64")
+	st, ok := parseState(body, stateMarker("linux-amd64"))
 	if !ok {
 		t.Fatalf("parse failed:\n%s", body)
 	}
@@ -183,10 +183,14 @@ func TestRenderCommentContainsMarker(t *testing.T) {
 }
 
 func TestRenderCommentQueueMarkersDoNotCollide(t *testing.T) {
-	linux := renderComment(CommentState{SHA: "abc"}, "")
+	linux := renderComment(CommentState{SHA: "abc"}, "linux-amd64")
 	macos := renderComment(CommentState{SHA: "abc"}, "macos")
-	if !strings.Contains(linux, commentMarker) {
-		t.Fatalf("linux comment missing default marker:\n%s", linux)
+	arm64 := renderComment(CommentState{SHA: "abc"}, "linux-arm64")
+	if !strings.Contains(linux, stateMarker("linux-amd64")) {
+		t.Fatalf("linux-amd64 comment missing marker:\n%s", linux)
+	}
+	if !strings.Contains(linux, "## simplybs package queue (linux-amd64)") {
+		t.Fatalf("linux-amd64 title missing:\n%s", linux)
 	}
 	if !strings.Contains(macos, stateMarker("macos")) {
 		t.Fatalf("macos comment missing marker:\n%s", macos)
@@ -194,13 +198,111 @@ func TestRenderCommentQueueMarkersDoNotCollide(t *testing.T) {
 	if !strings.Contains(macos, "## simplybs package queue (macos)") {
 		t.Fatalf("macos title missing:\n%s", macos)
 	}
+	if !strings.Contains(arm64, stateMarker("linux-arm64")) {
+		t.Fatalf("linux-arm64 comment missing marker:\n%s", arm64)
+	}
+	if !strings.Contains(arm64, "## simplybs package queue (linux-arm64)") {
+		t.Fatalf("linux-arm64 title missing:\n%s", arm64)
+	}
+	if _, ok := parseState(linux, stateMarker("linux-amd64")); !ok {
+		t.Fatalf("linux-amd64 parser missed linux-amd64 comment:\n%s", linux)
+	}
 	if _, ok := parseState(macos, stateMarker("macos")); !ok {
 		t.Fatalf("macos parser missed macos comment:\n%s", macos)
 	}
-	if _, ok := parseState(linux, stateMarker("macos")); ok {
-		t.Fatal("macos parser matched linux comment")
+	if _, ok := parseState(arm64, stateMarker("linux-arm64")); !ok {
+		t.Fatalf("linux-arm64 parser missed linux-arm64 comment:\n%s", arm64)
 	}
-	if _, ok := parseState(macos, commentMarker); ok {
-		t.Fatal("linux parser matched macos comment")
+	if _, ok := parseState(linux, stateMarker("macos")); ok {
+		t.Fatal("macos parser matched linux-amd64 comment")
+	}
+	if _, ok := parseState(linux, stateMarker("linux-arm64")); ok {
+		t.Fatal("linux-arm64 parser matched linux-amd64 comment")
+	}
+	if _, ok := parseState(macos, stateMarker("linux-amd64")); ok {
+		t.Fatal("linux-amd64 parser matched macos comment")
+	}
+	if _, ok := parseState(arm64, stateMarker("linux-amd64")); ok {
+		t.Fatal("linux-amd64 parser matched linux-arm64 comment")
+	}
+	if _, ok := parseState(macos, stateMarker("linux-arm64")); ok {
+		t.Fatal("linux-arm64 parser matched macos comment")
+	}
+	if _, ok := parseState(arm64, stateMarker("macos")); ok {
+		t.Fatal("macos parser matched linux-arm64 comment")
+	}
+	if _, ok := parseState(linux, commentMarker); ok {
+		t.Fatal("legacy unlabeled parser matched linux-amd64 comment")
+	}
+}
+
+func TestNextQueueZlibLinuxArm64HostsSkipAndroid(t *testing.T) {
+	chdirRepoRoot(t)
+	hosts := []string{
+		"aarch64-apple-darwin",
+		"x86_64-apple-darwin",
+		"aarch64-apple-ios",
+		"aarch64-apple-ios-simulator",
+		"x86_64-w64-mingw32",
+		"x86_64-linux-gnu",
+		"aarch64-linux-gnu",
+	}
+	res, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json"},
+		hosts:        hosts,
+		cached: func(p *pack.Package, h *host.Host) (bool, error) {
+			return p.Package != "zlib", nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Status != "next" || res.Package != "zlib" {
+		t.Fatalf("got %+v", res)
+	}
+	if res.Host != hosts[0] {
+		t.Fatalf("expected first non-android host %s, got %s", hosts[0], res.Host)
+	}
+	for _, it := range res.Remaining {
+		if strings.Contains(it.Host, "android") {
+			t.Fatalf("android host leaked into remaining: %+v", it)
+		}
+	}
+	if strings.Contains(res.Host, "android") {
+		t.Fatalf("android host selected: %s", res.Host)
+	}
+}
+
+func TestNextQueueZlibDarwinHostsSkipLinuxGnuAndMingw(t *testing.T) {
+	chdirRepoRoot(t)
+	hosts := []string{
+		"aarch64-apple-darwin",
+		"x86_64-apple-darwin",
+		"aarch64-apple-ios",
+		"aarch64-apple-ios-simulator",
+		"aarch64-linux-android",
+		"x86_64-linux-android",
+		"armv7a-linux-androideabi",
+	}
+	res, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json"},
+		hosts:        hosts,
+		cached: func(p *pack.Package, h *host.Host) (bool, error) {
+			return p.Package != "zlib", nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Status != "next" || res.Package != "zlib" {
+		t.Fatalf("got %+v", res)
+	}
+	if res.Host != hosts[0] {
+		t.Fatalf("expected first darwin host %s, got %s", hosts[0], res.Host)
+	}
+	for _, it := range append([]Item{{Package: res.Package, Host: res.Host}}, res.Remaining...) {
+		if strings.Contains(it.Host, "linux-gnu") || strings.Contains(it.Host, "mingw") {
+			t.Fatalf("linux-gnu/mingw host leaked: %+v", it)
+		}
 	}
 }

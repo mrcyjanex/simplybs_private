@@ -16,6 +16,8 @@ jobs:
         include:
           - os: ubuntu-latest
             host: x86_64-linux-gnu
+          - os: ubuntu-24.04-arm
+            host: aarch64-linux-gnu
           - os: macos-latest
             host: aarch64-apple-darwin
     runs-on: ${{ matrix.os }}
