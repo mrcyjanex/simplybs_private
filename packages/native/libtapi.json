@@ -14,6 +14,7 @@
         "*:*:native/bash",
         "*:*:native/cmake",
         "*:*:native/ninja",
+        "*:*:native/python@3.11",
         "{linux_*,windows_*}:*:native/libc++"
     ],
     "build": {
@@ -43,6 +44,7 @@
             "{linux_*,windows_*}:*:config_opts=$config_opts -DLLVM_ENABLE_LIBCXX=ON",
             "{linux_*,windows_*}:*:config_opts=$config_opts -DCMAKE_C_COMPILER=$NATIVEPREFIX/_/bin/clang",
             "{linux_*,windows_*}:*:config_opts=$config_opts -DCMAKE_CXX_COMPILER=$NATIVEPREFIX/_/bin/clang++",
+            "{linux_*,windows_*}:*:config_opts=$config_opts -DPython3_EXECUTABLE=$NATIVEPREFIX/bin/python3.11",
             "{linux_*,windows_*}:*:CMAKE_CXX_FLAGS=-stdlib=libc++ -I$NATIVEPREFIX/include/c++/v1",
             "{linux_*,windows_*}:*:CMAKE_EXE_LINKER_FLAGS=-L$NATIVEPREFIX/lib -stdlib=libc++ -lc++ -lc++abi -lunwind -latomic",
             "{linux_*,windows_*}:*:CMAKE_SHARED_LINKER_FLAGS=-L$NATIVEPREFIX/lib -stdlib=libc++ -lc++ -lc++abi -lunwind"
