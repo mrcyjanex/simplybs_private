@@ -27,8 +27,10 @@
             "*:*:$JAVA_HOME/bin/javac --release 8 -cp $REPO/org/jline/jline-native/3.23.0/jline-native-3.23.0.jar -d $WORKDIR/classes @$WORKDIR/sources",
             "*:*:find terminal/src/main/resources -type f 2>/dev/null | while IFS= read -r f; do rel=${f#terminal/src/main/resources/}; mkdir -p $WORKDIR/classes/$(dirname $rel); cp $f $WORKDIR/classes/$rel; done",
             "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jline-terminal-3.23.0.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jline-terminal-3.23.0-sources.jar -C terminal/src/main/java .",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-terminal/3.23.0",
-            "*:*:cp $WORKDIR/jline-terminal-3.23.0.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-terminal/3.23.0/jline-terminal-3.23.0.jar"
+            "*:*:cp $WORKDIR/jline-terminal-3.23.0.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-terminal/3.23.0/jline-terminal-3.23.0.jar",
+            "*:*:cp $WORKDIR/jline-terminal-3.23.0-sources.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-terminal/3.23.0/jline-terminal-3.23.0-sources.jar"
         ]
     }
 }

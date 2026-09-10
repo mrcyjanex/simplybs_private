@@ -19,9 +19,9 @@
         "http://gitlab.torproject.org/tpo/core/tor.git": {
             "refs": [
                 "106dcfa18c1a9539cb97337e57954ff89685840e",
+                "78923280eed3eff6a77910bba59ecc1fa2244e02",
                 "e170cdcfebd45f6d098e3d811e2b1e1d120df184",
-                "e41649c9a34f39f1d543e064fd2b97de26d3e097",
-                "78923280eed3eff6a77910bba59ecc1fa2244e02"
+                "e41649c9a34f39f1d543e064fd2b97de26d3e097"
             ]
         },
         "https://android.googlesource.com/platform/bionic": {
@@ -1032,10 +1032,10 @@
         },
         "https://github.com/MrCyjaneK/torch.git": {
             "refs": [
-                "b7a785a538a31ab0cf5baf62d936e3e41182e0b7",
-                "3a40aeb71885044b78f1b4438c10497dd5df3bae",
                 "0bc783fabcb2890463c01278c3779c9fde6a6180",
-                "10a8d069467c03b268c94f21c6bc93c2c052ecf7"
+                "10a8d069467c03b268c94f21c6bc93c2c052ecf7",
+                "3a40aeb71885044b78f1b4438c10497dd5df3bae",
+                "b7a785a538a31ab0cf5baf62d936e3e41182e0b7"
             ]
         },
         "https://github.com/MrCyjaneK/trilead-ssh2-mirror.git": {
@@ -1785,6 +1785,11 @@
                 "60979e99102ad93a0e42d9f3a03ad29e1ec0f55c"
             ]
         },
+        "https://github.com/jruby/jcodings": {
+            "refs": [
+                "729c96c85c8c87f44d4b71c3fc1dc699a0abf413"
+            ]
+        },
         "https://github.com/jspecify/jspecify.git": {
             "refs": [
                 "b2a10e14bb81c1b7cb6e488c112fe55cb2218d7d"
@@ -1827,7 +1832,8 @@
         },
         "https://github.com/llvm/llvm-project": {
             "refs": [
-                "450f52eec88f728c89a9efd667dbeaf2dad93826"
+                "450f52eec88f728c89a9efd667dbeaf2dad93826",
+                "cd89023f797900e4492da58b7bed36f702120011"
             ]
         },
         "https://github.com/luben/zstd-jni.git": {

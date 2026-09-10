@@ -36,7 +36,8 @@
         ],
         "steps": [
             "*:*:mkdir -p HelloStaticLib/build/classes HelloStaticLib/gvm/tmp $STAGING_DIR$PREFIX/lib $STAGING_DIR$PREFIX/include/hellostaticlib",
-            "*:*:cp $PATCH_DIR/hellostaticlib/cc ni-cc",
+            "*:*:sed -e \"s#@CC@#$CC#g\" -e \"s#@CFLAGS@#$CFLAGS#g\" $PATCH_DIR/hellostaticlib/cc > ni-cc",
+            "*:*-apple-*:sed -e \"s#@CC_TARGET@#$CC_target#g\" -e \"s#@CC@#$CC#g\" -e \"s#@CFLAGS@#$CFLAGS#g\" $PATCH_DIR/hellostaticlib/cc-darwin > ni-cc",
             "*:*:chmod +x ni-cc",
             "*:*:$JAVA_HOME/bin/javac -cp $JAVA_HOME/lib/svm/library-support.jar -d HelloStaticLib/build/classes HelloStaticLib/src/main/java/hello/HelloStaticLib.java",
             "*:*:$JAVA_HOME/bin/native-image --shared --no-fallback --target=$GRAAL_TARGET $GRAAL_LIBC_OPT --native-compiler-path=$PWD/ni-cc -H:+UnlockExperimentalVMOptions -H:+ExitAfterRelocatableImageWrite -H:+GenerateBuildArtifactsFile -H:Path=$PWD/HelloStaticLib/gvm -H:TempDirectory=$PWD/HelloStaticLib/gvm/tmp -H:Name=HelloStaticLib -H:NumberOfThreads=$NUM_CORES -cp HelloStaticLib/build/classes:$JAVA_HOME/lib/svm/library-support.jar hello.HelloStaticLib",

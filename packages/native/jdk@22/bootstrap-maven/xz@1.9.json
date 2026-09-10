@@ -27,11 +27,13 @@
         ],
         "steps": [
             "*:*:mkdir -p $WORKDIR",
-            "*:*:find src -name '*.java' >$WORKDIR/sources",
+            "*:*:find src/org -name '*.java' >$WORKDIR/sources",
             "*:*:$JAVA_HOME/bin/javac -d $WORKDIR/classes @$WORKDIR/sources",
             "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/xz-1.9.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/xz-1.9-sources.jar -C src org",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/tukaani/xz/1.9",
             "*:*:cp $WORKDIR/xz-1.9.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/tukaani/xz/1.9/xz-1.9.jar",
+            "*:*:cp $WORKDIR/xz-1.9-sources.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/tukaani/xz/1.9/xz-1.9-sources.jar",
             "*:*:cp xz-1.9.pom $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/tukaani/xz/1.9/xz-1.9.pom"
         ]
     }

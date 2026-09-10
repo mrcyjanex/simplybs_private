@@ -32,8 +32,10 @@
             "*:*:$JAVA_HOME/bin/javac --release 8 -cp $WORKDIR/uchardet:$REPO/org/jline/jline-reader/3.23.0/jline-reader-3.23.0.jar:$REPO/org/jline/jline-style/3.23.0/jline-style-3.23.0.jar:$REPO/org/jline/jline-terminal/3.23.0/jline-terminal-3.23.0.jar:$REPO/org/jline/jline-native/3.23.0/jline-native-3.23.0.jar -d $WORKDIR/classes @$WORKDIR/sources",
             "*:*:find builtins/src/main/resources -type f 2>/dev/null | while IFS= read -r f; do rel=${f#builtins/src/main/resources/}; mkdir -p $WORKDIR/classes/$(dirname $rel); cp $f $WORKDIR/classes/$rel; done",
             "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jline-builtins-3.23.0.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jline-builtins-3.23.0-sources.jar -C builtins/src/main/java .",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-builtins/3.23.0",
-            "*:*:cp $WORKDIR/jline-builtins-3.23.0.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-builtins/3.23.0/jline-builtins-3.23.0.jar"
+            "*:*:cp $WORKDIR/jline-builtins-3.23.0.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-builtins/3.23.0/jline-builtins-3.23.0.jar",
+            "*:*:cp $WORKDIR/jline-builtins-3.23.0-sources.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jline/jline-builtins/3.23.0/jline-builtins-3.23.0-sources.jar"
         ]
     }
 }

@@ -6,6 +6,7 @@
 set -euo pipefail
 
 show_sdk=0
+show_sdk_version=0
 find_tool=""
 toolchain_tool=""
 output_file=""
@@ -19,10 +20,13 @@ while [ $i -lt ${#args[@]} ]; do
 	--show-sdk-path)
 		show_sdk=1
 		;;
+	--show-sdk-version)
+		show_sdk_version=1
+		;;
 	--version)
 		want_version=1
 		;;
-	--find | -f)
+	--find | -find | -f)
 		i=$((i + 1))
 		find_tool=${args[$i]:-}
 		;;
@@ -46,6 +50,22 @@ if [ "$show_sdk" -eq 1 ]; then
 		exit 0
 	fi
 	echo "xcrun: SDK_PATH is not set" >&2
+	exit 1
+fi
+
+if [ "$show_sdk_version" -eq 1 ]; then
+	if [ -n "${SDK_VERSION:-}" ]; then
+		echo "$SDK_VERSION"
+		exit 0
+	fi
+	if [ -n "${SDK_PATH:-}" ]; then
+		base=$(basename "$SDK_PATH")
+		ver=${base#MacOSX}
+		ver=${ver%.sdk}
+		echo "$ver"
+		exit 0
+	fi
+	echo "xcrun: SDK_VERSION is not set" >&2
 	exit 1
 fi
 
@@ -83,6 +103,18 @@ fi
 if [ "$want_version" -eq 1 ]; then
 	echo "xcrun version 72."
 	exit 0
+fi
+
+if [ $# -ge 1 ]; then
+	tool=$1
+	shift
+	if [ -x "$tool" ]; then
+		exec "$tool" "$@"
+	fi
+	if p=$(command -v "$tool" 2>/dev/null); then
+		exec "$p" "$@"
+	fi
+	set -- "$tool" "$@"
 fi
 
 if [ -x "${NATIVEPREFIX:-}/bin/xcrun.real" ]; then

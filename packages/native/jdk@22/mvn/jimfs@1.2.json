@@ -38,8 +38,10 @@
             "*:*:echo com.google.common.jimfs.JimfsFileSystemProvider >$WORKDIR/classes/META-INF/services/java.nio.file.spi.FileSystemProvider",
             "*:*:rm -rf $WORKDIR/classes/org/checkerframework $WORKDIR/classes/com/google/auto $WORKDIR/classes/com/ibm",
             "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jimfs-1.2.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jimfs-1.2-sources.jar -C jimfs/src/main/java .",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/com/google/jimfs/jimfs/1.2",
-            "*:*:cp $WORKDIR/jimfs-1.2.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/com/google/jimfs/jimfs/1.2/jimfs-1.2.jar"
+            "*:*:cp $WORKDIR/jimfs-1.2.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/com/google/jimfs/jimfs/1.2/jimfs-1.2.jar",
+            "*:*:cp $WORKDIR/jimfs-1.2-sources.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/com/google/jimfs/jimfs/1.2/jimfs-1.2-sources.jar"
         ]
     }
 }

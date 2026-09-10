@@ -1,0 +1,75 @@
+{
+    "package": "native/llvm@16.0.1",
+    "version": "16.0.1",
+    "type": "native",
+    "download": [
+        {
+            "kind": "git",
+            "sha256": "cd89023f797900e4492da58b7bed36f702120011",
+            "url": "https://github.com/llvm/llvm-project"
+        }
+    ],
+    "dependencies": [
+        "*:*:native/_/_",
+        "*:*:native/bash",
+        "*:*:native/cmake",
+        "*:*:native/coreutils",
+        "*:*:native/gzip",
+        "*:*:native/ninja",
+        "*:*:native/python@3.14",
+        "*:*:native/sed",
+        "*:*:native/tar"
+    ],
+    "build": {
+        "env": [
+            "*:*:PYTHON=$NATIVEPREFIX/bin/python3",
+            "*:*:config_opts=-G Ninja -S llvm -B build",
+            "*:*:config_opts=$config_opts -DCMAKE_BUILD_TYPE=Release",
+            "*:*:config_opts=$config_opts -DCMAKE_POLICY_VERSION_MINIMUM=3.5",
+            "*:*:config_opts=$config_opts -DPython3_EXECUTABLE=$NATIVEPREFIX/bin/python3",
+            "*:*:config_opts=$config_opts -DLLVM_TARGETS_TO_BUILD=Native",
+            "*:*:config_opts=$config_opts -DLLVM_ENABLE_BINDINGS=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_INCLUDE_TESTS=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_INCLUDE_EXAMPLES=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_INCLUDE_BENCHMARKS=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_ENABLE_ZLIB=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_ENABLE_ZSTD=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_ENABLE_LIBXML2=OFF",
+            "*:*:config_opts=$config_opts -DCLANG_INCLUDE_TESTS=OFF",
+            "*:*:config_opts=$config_opts -DLLVM_TOOL_SANCOV_BUILD=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_SANITIZERS=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_XRAY=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_LIBFUZZER=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_PROFILE=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_MEMPROF=OFF",
+            "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_ORC=OFF",
+            "darwin_*:*:MACOSX_DEPLOYMENT_TARGET=13.0",
+            "darwin_arm64:*:SDK_PATH=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_arm64:*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_arm64:*:SDK_VERSION=26.1",
+            "darwin_*:*:config_opts=$config_opts -DCMAKE_OSX_SYSROOT=$SDK_PATH",
+            "darwin_*:*:config_opts=$config_opts -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0",
+            "darwin_*:*:config_opts=$config_opts -DCMAKE_LIBTOOL=$NATIVEPREFIX/_/bin/llvm-libtool-darwin",
+            "darwin_*:*:config_opts=$config_opts -DDARWIN_macosx_CACHED_SYSROOT=$SDK_PATH",
+            "darwin_*:*:config_opts=$config_opts -DDARWIN_macosx_OVERRIDE_SDK_VERSION=26.1",
+            "darwin_*:*:config_opts=$config_opts -DCOMPILER_RT_ENABLE_IOS=OFF",
+            "darwin_*:*:config_opts=$config_opts -DCOMPILER_RT_ENABLE_WATCHOS=OFF",
+            "darwin_*:*:config_opts=$config_opts -DCOMPILER_RT_ENABLE_TVOS=OFF"
+        ],
+        "steps": [
+            "darwin_arm64:*:cp -f $PATCH_DIR/rust-std/xcrun $NATIVEPREFIX/bin/xcrun",
+            "darwin_arm64:*:chmod +x $NATIVEPREFIX/bin/xcrun",
+            "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-libtool-darwin $NATIVEPREFIX/bin/libtool",
+            "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-lipo $NATIVEPREFIX/bin/lipo",
+            "*:*:sed -i '/DEFINE_COMPILERRT_OUTLINE_FUNCTION_UNMANGLED/,/name: SEPARATOR BTI_C/{ /CFI_START SEPARATOR/d; }' compiler-rt/lib/builtins/assembly.h",
+            "*:*:sed -i 's/name: SEPARATOR BTI_C/name: SEPARATOR CFI_START SEPARATOR BTI_C/' compiler-rt/lib/builtins/assembly.h",
+            "darwin_arm64:*:printf '#!/bin/sh\\ncase \"$1\" in\\n  -productVersion) echo %s ;;\\n  *) echo %s ;;\\nesac\\n' \"$SDK_VERSION\" \"$SDK_VERSION\" > $NATIVEPREFIX/bin/sw_vers",
+            "darwin_arm64:*:chmod +x $NATIVEPREFIX/bin/sw_vers",
+            "*:*:cmake $config_opts -DCMAKE_INSTALL_PREFIX=$PWD/prefix -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt'",
+            "*:*:cd build && ninja -j$NUM_CORES",
+            "*:*:cd build && ninja install",
+            "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/llvm-16.0.1",
+            "*:*:cd prefix && tar czf $STAGING_DIR$NATIVEPREFIX/share/llvm-16.0.1/llvm-org.tar.gz *"
+        ]
+    }
+}

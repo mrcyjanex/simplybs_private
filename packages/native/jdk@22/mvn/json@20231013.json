@@ -23,8 +23,10 @@
             "*:*:find src/main/java -name '*.java' ! -name 'module-info.java' >$WORKDIR/sources",
             "*:*:$JAVA_HOME/bin/javac --release 8 -d $WORKDIR/classes @$WORKDIR/sources",
             "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/json-20231013.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/json-20231013-sources.jar -C src/main/java .",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/json/json/20231013",
-            "*:*:cp $WORKDIR/json-20231013.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/json/json/20231013/json-20231013.jar"
+            "*:*:cp $WORKDIR/json-20231013.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/json/json/20231013/json-20231013.jar",
+            "*:*:cp $WORKDIR/json-20231013-sources.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/json/json/20231013/json-20231013-sources.jar"
         ]
     }
 }
