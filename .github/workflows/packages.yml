@@ -140,7 +140,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
   batch2:
     needs: [image, batch1]
@@ -154,7 +156,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
   batch3:
     needs: [image, batch2]
@@ -168,7 +172,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
   finish:
     if: always()
