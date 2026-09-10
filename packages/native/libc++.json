@@ -15,13 +15,14 @@
         "*:*:native/cmake",
         "*:*:native/cmake",
         "*:*:native/coreutils",
-        "*:*:native/ninja"
+        "*:*:native/ninja",
+        "*:*:native/python@3.11"
     ],
     "build": {
         "env": [],
         "steps": [
             "*:*:mkdir build && cd build",
-            "*:*:cd build && cmake -G Ninja ../runtimes -DLLVM_ENABLE_RUNTIMES='libunwind;libcxx;libcxxabi' -DCMAKE_BUILD_TYPE=Release -DLIBCXX_ENABLE_SHARED=OFF -DLIBCXX_ENABLE_STATIC=ON -DLIBCXX_INCLUDE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$NATIVEPREFIX",
+            "*:*:cd build && cmake -G Ninja ../runtimes -DLLVM_ENABLE_RUNTIMES='libunwind;libcxx;libcxxabi' -DCMAKE_BUILD_TYPE=Release -DLIBCXX_ENABLE_SHARED=OFF -DLIBCXX_ENABLE_STATIC=ON -DLIBCXX_INCLUDE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$NATIVEPREFIX -DPython3_EXECUTABLE=$NATIVEPREFIX/bin/python3.11",
             "*:*:cd build && ninja unwind cxx cxxabi",
             "*:*:cd build && DESTDIR=$STAGING_DIR ninja install-unwind",
             "*:*:cd build && DESTDIR=$STAGING_DIR ninja install-cxx",

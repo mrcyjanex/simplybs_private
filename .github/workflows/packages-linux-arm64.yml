@@ -1,4 +1,4 @@
-name: packages
+name: packages-linux-arm64
 
 on:
   pull_request:
@@ -23,12 +23,11 @@ on:
         required: false
         type: string
 
-# Linux amd64 package queue. macOS and linux-arm64 run in parallel via
-# packages-macos.yml and packages-linux-arm64.yml (separate runners and
-# cache tags). Three batches of 24 slots (72 packages
-# per run) so a zlib-tree cold fill fits without failing the finish job on
-# the old 24-slot cap.
-# Release cache tag is CI-only (v0-sbs-ci-linux-amd64). Do not use the
+# Linux arm64 package queue, parallel with packages.yml (linux amd64) and
+# packages-macos.yml. Builds every SupportedHosts triplet except Android.
+# Three batches of 24 slots (72 packages per run) so a zlib-tree cold fill
+# fits without failing the finish job on the old 24-slot cap.
+# Release cache tag is CI-only (v0-sbs-ci-linux-arm64). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64); CI reuses its own
 # Release across runs after the first cold fill.
 permissions:
@@ -41,7 +40,7 @@ permissions:
 
 jobs:
   image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 30
     outputs:
       image: ${{ steps.out.outputs.image }}
@@ -84,8 +83,8 @@ jobs:
           echo "base=$base" >> "$GITHUB_OUTPUT"
           echo "pr=$pr" >> "$GITHUB_OUTPUT"
           echo "extra_package=$extra" >> "$GITHUB_OUTPUT"
-          echo "cache_tag=v0-sbs-ci-linux-amd64" >> "$GITHUB_OUTPUT"
-          echo "Resolved sha=$sha base=$base pr=$pr extra=$extra cache_tag=v0-sbs-ci-linux-amd64"
+          echo "cache_tag=v0-sbs-ci-linux-arm64" >> "$GITHUB_OUTPUT"
+          echo "Resolved sha=$sha base=$base pr=$pr extra=$extra cache_tag=v0-sbs-ci-linux-arm64"
 
       - uses: actions/checkout@v4
         with:
@@ -111,13 +110,14 @@ jobs:
           push: true
           provenance: false
           sbom: false
-          tags: ${{ steps.img.outputs.name }}:${{ steps.meta.outputs.sha }}
-          cache-from: type=registry,ref=${{ steps.img.outputs.name }}:buildcache
-          cache-to: type=registry,ref=${{ steps.img.outputs.name }}:buildcache,mode=max
+          platforms: linux/arm64
+          tags: ${{ steps.img.outputs.name }}:${{ steps.meta.outputs.sha }}-linux-arm64
+          cache-from: type=registry,ref=${{ steps.img.outputs.name }}:buildcache-linux-arm64
+          cache-to: type=registry,ref=${{ steps.img.outputs.name }}:buildcache-linux-arm64,mode=max
 
       - name: Output image
         id: out
-        run: echo "image=${{ steps.img.outputs.name }}:${{ steps.meta.outputs.sha }}" >> "$GITHUB_OUTPUT"
+        run: echo "image=${{ steps.img.outputs.name }}:${{ steps.meta.outputs.sha }}-linux-arm64" >> "$GITHUB_OUTPUT"
 
       - name: Mark commit pending
         env:
@@ -126,8 +126,8 @@ jobs:
         run: |
           gh api "repos/${GITHUB_REPOSITORY}/statuses/${SHA}" \
             -f state=pending \
-            -f context=simplybs-packages \
-            -f description="package queue running" \
+            -f context=simplybs-packages-linux-arm64 \
+            -f description="linux-arm64 package queue running" \
             -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
   batch1:
@@ -136,14 +136,15 @@ jobs:
     secrets: inherit
     with:
       image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
       sha: ${{ needs.image.outputs.sha }}
       base: ${{ needs.image.outputs.base }}
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
       extra_package: ${{ needs.image.outputs.extra_package }}
-      comment_queue: linux-amd64
+      comment_queue: linux-arm64
   batch2:
     needs: [image, batch1]
     if: needs.batch1.outputs.continue == 'true'
@@ -151,14 +152,15 @@ jobs:
     secrets: inherit
     with:
       image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
       sha: ${{ needs.image.outputs.sha }}
       base: ${{ needs.image.outputs.base }}
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
       extra_package: ${{ needs.image.outputs.extra_package }}
-      comment_queue: linux-amd64
+      comment_queue: linux-arm64
   batch3:
     needs: [image, batch2]
     if: needs.batch2.outputs.continue == 'true'
@@ -166,14 +168,15 @@ jobs:
     secrets: inherit
     with:
       image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
       sha: ${{ needs.image.outputs.sha }}
       base: ${{ needs.image.outputs.base }}
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
       extra_package: ${{ needs.image.outputs.extra_package }}
-      comment_queue: linux-amd64
+      comment_queue: linux-arm64
   finish:
     if: always()
     needs: [image, batch1, batch2, batch3]
@@ -203,20 +206,19 @@ jobs:
           url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           if [ "$failed" = 1 ]; then
             state=failure
-            desc="package queue failed"
+            desc="linux-arm64 package queue failed"
           elif [ "$last" = "true" ]; then
             state=failure
-            desc="package queue hit slot cap; re-run workflow"
+            desc="linux-arm64 package queue hit slot cap; re-run workflow"
           else
             state=success
-            desc="package queue complete"
+            desc="linux-arm64 package queue complete"
           fi
           gh api "repos/${{ github.repository }}/statuses/${SHA}" \
             -f state="$state" \
-            -f context=simplybs-packages \
+            -f context=simplybs-packages-linux-arm64 \
             -f description="$desc" \
             -f target_url="$url"
           if [ "$state" != "success" ]; then
             exit 1
           fi
-
