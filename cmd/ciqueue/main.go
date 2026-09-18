@@ -131,7 +131,7 @@ func cmdComment(args []string) error {
 	jobURL := fs.String("job-url", "", "optional job URL")
 	remaining := fs.String("remaining", "", "JSON array of remaining items (preview)")
 	remainingCount := fs.Int("remaining-count", 0, "full remaining queue length (0 = len(remaining))")
-	queue := fs.String("queue", "", "sticky-comment id (empty = linux)")
+	queue := fs.String("queue", "", "sticky-comment id (linux-amd64, linux-arm64, macos; empty = unlabeled)")
 	repo := fs.String("repo", os.Getenv("GITHUB_REPOSITORY"), "owner/repo")
 	if err := fs.Parse(args); err != nil {
 		return err

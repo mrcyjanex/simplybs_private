@@ -20,7 +20,7 @@ const remainingPreviewLimit = 20
 
 func stateMarker(queue string) string {
 	q := strings.TrimSpace(queue)
-	if q == "" || q == "linux" {
+	if q == "" {
 		return commentMarker
 	}
 	return "<!-- simplybs-ci-" + q + "-state"
@@ -47,7 +47,7 @@ func renderComment(st CommentState, queue string) string {
 	var b strings.Builder
 	title := "## simplybs package queue"
 	q := strings.TrimSpace(queue)
-	if q != "" && q != "linux" {
+	if q != "" {
 		title = "## simplybs package queue (" + q + ")"
 	}
 	b.WriteString(title)

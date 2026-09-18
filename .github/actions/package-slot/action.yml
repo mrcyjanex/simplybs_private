@@ -14,7 +14,7 @@ inputs:
     required: false
     default: ""
   comment_queue:
-    description: sticky-comment id (empty = linux)
+    description: sticky-comment id (linux-amd64, linux-arm64, macos)
     required: false
     default: ""
 outputs:

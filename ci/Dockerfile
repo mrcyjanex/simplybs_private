@@ -1,18 +1,30 @@
 # CI toolchain for package-worker jobs (Go + git + gh).
 # Package artifacts stay on the GitHub Release cache, not in this image.
 #
-# Seed/native binaries (e.g. clang21 ./bin/mkdir) need glibc >= 2.38.
-# bookworm is Debian 12 (glibc 2.36) and fails with GLIBC_2.38 not found.
-# trixie is Debian 13 (glibc 2.41).
-FROM golang:1.25-trixie
+# Seed/native binaries (e.g. clang21 ./bin/mkdir) need a new-enough glibc.
+# bookworm (Debian 12) is glibc 2.36 and fails with GLIBC_2.38 not found.
+# trixie (Debian 13) is glibc 2.41 and fails on linux-arm64 clang21
+# (./bin/mkdir requires GLIBC_2.42).
+# forky (Debian 14 / testing) is glibc 2.42.
+FROM golang:1.25-trixie AS go
 
+FROM debian:forky
+
+COPY --from=go /usr/local/go /usr/local/go
+ENV PATH=/usr/local/go/bin:$PATH
+
+# clang21 still uses the distro linker and C runtime; LLVM cmake also
+# looks for a system Python3. The official golang:*-trixie image
+# inherits gcc/libc-dev/python3 from buildpack-deps; debian:forky does not.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       bash \
+      build-essential \
       ca-certificates \
       curl \
       git \
       gnupg \
+      python3 \
  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
       -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
  && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
