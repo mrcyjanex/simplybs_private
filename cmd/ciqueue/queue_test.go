@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/mrcyjanek/simplybs/host"
 	"github.com/mrcyjanek/simplybs/pack"
@@ -246,5 +247,125 @@ func TestRenderCommentQueueMarkersDoNotCollide(t *testing.T) {
 	}
 	if _, ok := parseState(macos, commentMarker); ok {
 		t.Fatal("linux parser matched macos comment")
+	}
+}
+
+func TestNextQueueDoesNotRecheckSharedDeps(t *testing.T) {
+	chdirRepoRoot(t)
+	type key struct{ pkg, host string }
+	calls := map[key]int{}
+	_, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json", "packages/curl.json"},
+		hosts:        []string{"x86_64-linux-gnu", "aarch64-linux-gnu"},
+		cached: func(p *pack.Package, h *host.Host) (bool, error) {
+			calls[key{p.Package, h.Triplet}]++
+			return false, nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for k, n := range calls {
+		if n != 1 {
+			t.Fatalf("cache lookup %s %s ran %d times", k.pkg, k.host, n)
+		}
+	}
+}
+
+func TestNextQueueDedupesSharedNativeArtifacts(t *testing.T) {
+	chdirRepoRoot(t)
+	m4, err := pack.FindPackage("native/m4")
+	if err != nil {
+		t.Fatal(err)
+	}
+	a := strings.Join(m4.BuiltRelPaths(host.SupportedHosts["x86_64-linux-gnu"]), "|")
+	b := strings.Join(m4.BuiltRelPaths(host.SupportedHosts["aarch64-linux-gnu"]), "|")
+	if a != b {
+		t.Skipf("native/m4 artifacts differ across linux hosts:\n%s\n%s", a, b)
+	}
+	res, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/native/m4.json"},
+		hosts:        []string{"x86_64-linux-gnu", "aarch64-linux-gnu"},
+		cached:       missCache(t),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	seen := 0
+	if res.Package == "native/m4" {
+		seen++
+	}
+	for _, it := range res.Remaining {
+		if it.Package == "native/m4" {
+			seen++
+		}
+	}
+	if seen != 1 {
+		t.Fatalf("native/m4 queued %d times (pick=%s/%s needed=%d)", seen, res.Package, res.Host, res.Needed)
+	}
+}
+
+func TestNextQueueMavenTreeFinishesQuickly(t *testing.T) {
+	chdirRepoRoot(t)
+	var files []string
+	for _, p := range pack.GetAllPackages() {
+		if strings.HasPrefix(p.Package, "native/jdk") || p.Package == "native/graalvm" || p.Package == "hellostaticlib" || p.Package == "graalvm-clibraries" {
+			files = append(files, "packages/"+p.Package+".json")
+		}
+	}
+	if len(files) < 10 {
+		t.Skip("no jdk/graal packages in this checkout")
+	}
+	start := time.Now()
+	res, err := nextQueue(queueOpts{
+		changedFiles: files,
+		hosts:        DefaultHosts,
+		cached:       missCache(t),
+	})
+	elapsed := time.Since(start)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if elapsed > 45*time.Second {
+		t.Fatalf("nextQueue took %s (status=%s needed=%d files=%d); Linux CI looked hung at ~26min for this tree", elapsed, res.Status, res.Needed, len(files))
+	}
+	t.Logf("nextQueue %s needed=%d pick=%s/%s files=%d", elapsed, res.Needed, res.Package, res.Host, len(files))
+}
+
+func TestRenderCommentHugeRemainingStaysUnderGitHubLimit(t *testing.T) {
+	rem := make([]Item, 5000)
+	for i := range rem {
+		rem[i] = Item{
+			Package: "native/jdk@22/bootstrap-maven/pom/error_prone_parent@2.47.0",
+			Host:    "aarch64-apple-ios-simulator",
+		}
+	}
+	body := renderComment(CommentState{SHA: "abc", Remaining: rem, RemainingCount: len(rem)}, "")
+	if len(body) > 65536 {
+		t.Fatalf("comment body %d bytes exceeds GitHub 64KiB limit", len(body))
+	}
+	st, ok := parseState(body, commentMarker)
+	if !ok {
+		t.Fatal("parse failed")
+	}
+	if st.RemainingCount != 5000 {
+		t.Fatalf("remaining_count=%d", st.RemainingCount)
+	}
+	if len(st.Remaining) > remainingPreviewLimit {
+		t.Fatalf("stored remaining %d", len(st.Remaining))
+	}
+	if !strings.Contains(body, "5000 still queued") {
+		t.Fatalf("missing count:\n%s", body)
+	}
+}
+
+func TestOutputResultTruncatesRemaining(t *testing.T) {
+	res := Result{Remaining: make([]Item, 100)}
+	out := outputResult(res)
+	if out.RemainingCount != 100 {
+		t.Fatalf("count=%d", out.RemainingCount)
+	}
+	if len(out.Remaining) != remainingPreviewLimit {
+		t.Fatalf("preview=%d", len(out.Remaining))
 	}
 }
