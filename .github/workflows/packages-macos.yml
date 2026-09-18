@@ -23,7 +23,9 @@ on:
         required: false
         type: string
 
-# macOS package queue, parallel with .github/workflows/packages.yml (linux).
+# macOS package queue, parallel with packages.yml (linux amd64) and
+# packages-linux-arm64.yml. Builds every SupportedHosts triplet except
+# linux-gnu and mingw (those stay on the Linux queues).
 # Three batches of 24 slots (72 packages per run) so a zlib-tree cold fill
 # fits without failing the finish job on the old 24-slot cap.
 # Release cache tag is CI-only (v0-sbs-ci-darwin-arm64). Do not use the
@@ -104,7 +106,7 @@ jobs:
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
   batch2:
@@ -119,7 +121,7 @@ jobs:
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
   batch3:
@@ -134,7 +136,7 @@ jobs:
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
   finish:
