@@ -12,6 +12,12 @@ import (
 
 const commentMarker = "<!-- simplybs-ci-state"
 
+// remainingPreviewLimit caps items stored in the sticky comment and
+// GITHUB_OUTPUT. The previous Linux slot serialized 5k+ remaining items
+// (~500KB JSON) into a GitHub issue comment (64KiB limit) and as a
+// command-line argument to `ciqueue comment`.
+const remainingPreviewLimit = 20
+
 func stateMarker(queue string) string {
 	q := strings.TrimSpace(queue)
 	if q == "" {
@@ -22,9 +28,10 @@ func stateMarker(queue string) string {
 
 // CommentState is stored inside the sticky PR comment.
 type CommentState struct {
-	SHA       string       `json:"sha"`
-	Runs      []CommentRun `json:"runs"`
-	Remaining []Item       `json:"remaining,omitempty"`
+	SHA            string       `json:"sha"`
+	Runs           []CommentRun `json:"runs"`
+	Remaining      []Item       `json:"remaining,omitempty"`
+	RemainingCount int          `json:"remaining_count,omitempty"`
 }
 
 // CommentRun is one slot/package attempt.
@@ -71,18 +78,28 @@ func renderComment(st CommentState, queue string) string {
 		}
 		fmt.Fprintf(&b, "| `%s` | `%s` | %s | %s |\n", pkg, h, r.Conclusion, log)
 	}
-	if len(st.Remaining) > 0 {
-		fmt.Fprintf(&b, "\n%d still queued:\n", len(st.Remaining))
-		max := 20
+	nQueued := st.RemainingCount
+	if nQueued == 0 {
+		nQueued = len(st.Remaining)
+	}
+	if nQueued > 0 {
+		fmt.Fprintf(&b, "\n%d still queued:\n", nQueued)
+		shown := 0
 		for i, it := range st.Remaining {
-			if i == max {
-				fmt.Fprintf(&b, "- … %d more\n", len(st.Remaining)-max)
+			if i == remainingPreviewLimit {
 				break
 			}
 			fmt.Fprintf(&b, "- `%s` / `%s`\n", it.Package, it.Host)
+			shown++
+		}
+		if nQueued > shown {
+			fmt.Fprintf(&b, "- … %d more\n", nQueued-shown)
 		}
 	}
-	raw, _ := json.Marshal(st)
+	persist := st
+	persist.RemainingCount = nQueued
+	persist.Remaining = previewRemaining(st.Remaining)
+	raw, _ := json.Marshal(persist)
 	b.WriteString("\n")
 	b.WriteString(stateMarker(queue))
 	b.WriteByte('\n')
@@ -182,4 +199,27 @@ func formatCmdErr(err error) error {
 		return fmt.Errorf("%w: %s", err, strings.TrimSpace(string(exitErr.Stderr)))
 	}
 	return err
+}
+
+func previewRemaining(items []Item) []Item {
+	if len(items) <= remainingPreviewLimit {
+		if items == nil {
+			return nil
+		}
+		out := make([]Item, len(items))
+		copy(out, items)
+		return out
+	}
+	out := make([]Item, remainingPreviewLimit)
+	copy(out, items[:remainingPreviewLimit])
+	return out
+}
+
+func outputResult(res Result) Result {
+	out := res
+	if out.RemainingCount == 0 {
+		out.RemainingCount = len(res.Remaining)
+	}
+	out.Remaining = previewRemaining(res.Remaining)
+	return out
 }

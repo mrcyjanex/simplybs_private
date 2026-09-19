@@ -36,7 +36,7 @@ func main() {
 func usage() {
 	fmt.Fprintf(os.Stderr, `usage:
   ciqueue next    [-base SHA] [-sha SHA] [-hosts list] [-changed-files PATH] [-package name]
-  ciqueue comment [-pr N] [-sha SHA] [-package name] [-host triplet] [-conclusion text] [-run-url URL] [-remaining JSON] [-queue id]
+  ciqueue comment [-pr N] [-sha SHA] [-package name] [-host triplet] [-conclusion text] [-run-url URL] [-remaining JSON] [-remaining-count N] [-queue id]
 `)
 }
 
@@ -91,7 +91,7 @@ func cmdNext(args []string) error {
 	}
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
-	if err := enc.Encode(res); err != nil {
+	if err := enc.Encode(outputResult(res)); err != nil {
 		return err
 	}
 	return writeGitHubOutput(res)
@@ -110,7 +110,9 @@ func writeGitHubOutput(res Result) error {
 	fmt.Fprintf(f, "status=%s\n", res.Status)
 	fmt.Fprintf(f, "package=%s\n", res.Package)
 	fmt.Fprintf(f, "host=%s\n", res.Host)
-	rem, err := json.Marshal(res.Remaining)
+	out := outputResult(res)
+	fmt.Fprintf(f, "remaining_count=%d\n", out.RemainingCount)
+	rem, err := json.Marshal(out.Remaining)
 	if err != nil {
 		return err
 	}
@@ -127,7 +129,8 @@ func cmdComment(args []string) error {
 	conclusion := fs.String("conclusion", "", "success|failure|skipped|pending|done")
 	runURL := fs.String("run-url", "", "Actions run URL")
 	jobURL := fs.String("job-url", "", "optional job URL")
-	remaining := fs.String("remaining", "", "JSON array of remaining items")
+	remaining := fs.String("remaining", "", "JSON array of remaining items (preview)")
+	remainingCount := fs.Int("remaining-count", 0, "full remaining queue length (0 = len(remaining))")
 	queue := fs.String("queue", "", "sticky-comment id (linux-amd64, linux-arm64, macos; empty = unlabeled)")
 	repo := fs.String("repo", os.Getenv("GITHUB_REPOSITORY"), "owner/repo")
 	if err := fs.Parse(args); err != nil {
@@ -168,7 +171,11 @@ func cmdComment(args []string) error {
 			JobURL:     *jobURL,
 		})
 	}
-	st.Remaining = rem
+	st.Remaining = previewRemaining(rem)
+	st.RemainingCount = *remainingCount
+	if st.RemainingCount == 0 {
+		st.RemainingCount = len(rem)
+	}
 	body := renderComment(st, *queue)
 	return upsertComment(*repo, *pr, body, marker)
 }

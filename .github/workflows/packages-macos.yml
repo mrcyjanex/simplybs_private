@@ -28,7 +28,8 @@ on:
 # linux-gnu and mingw (those stay on the Linux queues).
 # Three batches of 24 slots (72 packages per run) so a zlib-tree cold fill
 # fits without failing the finish job on the old 24-slot cap.
-# Release cache tag is CI-only (v0-sbs-ci-darwin-arm64). Do not use the
+# Release cache tag is CI-only (v0-sbs-ci-darwin-arm64, overflowing to
+# v0-sbs-ci-darwin-arm64.sN at GitHub's 1000-asset cap). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64).
 permissions:
   contents: write

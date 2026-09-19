@@ -28,9 +28,10 @@ on:
 # cache tags). Three batches of 24 slots (72 packages
 # per run) so a zlib-tree cold fill fits without failing the finish job on
 # the old 24-slot cap.
-# Release cache tag is CI-only (v0-sbs-ci-linux-amd64). Do not use the
+# Release cache tag is CI-only (v0-sbs-ci-linux-amd64, overflowing to
+# v0-sbs-ci-linux-amd64.sN at GitHub's 1000-asset cap). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64); CI reuses its own
-# Release across runs after the first cold fill.
+# Releases across runs after the first cold fill.
 permissions:
   contents: write
   packages: write
@@ -141,7 +142,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch2:
@@ -156,7 +159,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch3:
@@ -171,7 +176,9 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: x86_64-linux-gnu,aarch64-linux-android
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
+      # cross targets; 32-bit Android omitted for now.
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   finish:

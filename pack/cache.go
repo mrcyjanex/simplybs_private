@@ -1,42 +1,181 @@
 package pack
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 
 	"github.com/mrcyjanek/simplybs/host"
 )
 
-// Remote build-cache assets live on a GitHub release. Paths under
+// Remote build-cache assets live on GitHub Releases. Paths under
 // DataDir()/built are flattened with '+' so release asset names stay flat:
 //
 //	x86_64-linux-gnu/zlib-1.3.1-deadbeef.tar.gz
 //	  -> x86_64-linux-gnu+zlib-1.3.1-deadbeef.tar.gz
 //
+// GitHub caps each Release at 1000 assets. SIMPLYBS_CACHE_TAG is the base
+// tag (e.g. v0-sbs-ci-linux-amd64); when it fills, uploads overflow to
+// $TAG.s1, $TAG.s2, … automatically. Lookups union every shard, so a
+// package triple can complete across releases. Callers still set only
+// SIMPLYBS_CACHE_TAG and SIMPLYBS_CACHE_REPO.
+//
 // Pull requests artifacts for packages that will actually be extracted or
 // rebuilt. Walking stops at a package whose current-hash files are already
-// local or fully present on the release: BuildPackage only extracts direct
+// local or fully present on the cache: BuildPackage only extracts direct
 // dependencies, so a cache hit (e.g. rust@1_96_0) does not download that
 // package's own bootstrap chain. Push only uploads local files that are
-// missing from the release (content changes produce a new short-hash name).
+// missing from the cache (content changes produce a new short-hash name).
 //
 // Cache is enabled only when both SIMPLYBS_CACHE_TAG and SIMPLYBS_CACHE_REPO
 // are set; EnsureBuilt then auto-pulls missing artifacts.
 
-const cacheAssetSuffixes = 3 // .info.txt, .tar.gz, _native.tar.gz
+const (
+	cacheAssetSuffixes = 3 // .info.txt, .tar.gz, _native.tar.gz
+	maxCacheShards     = 256
+)
+
+// githubReleaseAssetLimit is GitHub's hard cap on assets per Release.
+// Tests lower this to exercise overflow without creating 1000 dummy files.
+var githubReleaseAssetLimit = 1000
 
 var (
 	remoteAssetsOnce sync.Once
-	remoteAssets     map[string]bool
+	remoteMu         sync.Mutex
+	remoteIndex      *remoteAssetIndex
 	remoteAssetsErr  error
 )
+
+type remoteAssetIndex struct {
+	// assets maps asset name -> shard tag that holds it.
+	assets map[string]string
+	shards []string
+	counts map[string]int
+}
+
+func (idx *remoteAssetIndex) has(name string) bool {
+	if idx == nil {
+		return false
+	}
+	remoteMu.Lock()
+	defer remoteMu.Unlock()
+	_, ok := idx.assets[name]
+	return ok
+}
+
+func (idx *remoteAssetIndex) tagFor(name string) (string, bool) {
+	if idx == nil {
+		return "", false
+	}
+	remoteMu.Lock()
+	defer remoteMu.Unlock()
+	tag, ok := idx.assets[name]
+	return tag, ok
+}
+
+func (idx *remoteAssetIndex) nameSet() map[string]bool {
+	if idx == nil {
+		return map[string]bool{}
+	}
+	remoteMu.Lock()
+	defer remoteMu.Unlock()
+	out := make(map[string]bool, len(idx.assets))
+	for n := range idx.assets {
+		out[n] = true
+	}
+	return out
+}
+
+func (idx *remoteAssetIndex) stats() (assets, shards int) {
+	if idx == nil {
+		return 0, 0
+	}
+	remoteMu.Lock()
+	defer remoteMu.Unlock()
+	return len(idx.assets), len(idx.shards)
+}
+
+func (idx *remoteAssetIndex) addShard() string {
+	base := CacheTag()
+	next := 0
+	if len(idx.shards) > 0 {
+		if i, ok := parseCacheShardIndex(base, idx.shards[len(idx.shards)-1]); ok {
+			next = i + 1
+		} else {
+			next = len(idx.shards)
+		}
+	}
+	tag := cacheShardTag(base, next)
+	idx.shards = append(idx.shards, tag)
+	if idx.counts == nil {
+		idx.counts = map[string]int{}
+	}
+	idx.counts[tag] = 0
+	return tag
+}
+
+// pickShardCapacity chooses a shard with room for want files (or as many as
+// fit). Small batches (a package triple) stay together on one shard.
+func (idx *remoteAssetIndex) pickShardCapacity(want int) (tag string, n int) {
+	if want < 1 {
+		return "", 0
+	}
+	take := want
+	if take > githubReleaseAssetLimit {
+		take = githubReleaseAssetLimit
+	}
+	for _, t := range idx.shards {
+		room := githubReleaseAssetLimit - idx.counts[t]
+		if room >= take {
+			return t, take
+		}
+	}
+	if take <= cacheAssetSuffixes {
+		return idx.addShard(), take
+	}
+	for _, t := range idx.shards {
+		room := githubReleaseAssetLimit - idx.counts[t]
+		if room > 0 {
+			if room > take {
+				room = take
+			}
+			return t, room
+		}
+	}
+	return idx.addShard(), take
+}
+
+// cacheShardTag returns the base cache tag (n==0) or "$base.sN".
+func cacheShardTag(base string, n int) string {
+	if n <= 0 {
+		return base
+	}
+	return fmt.Sprintf("%s.s%d", base, n)
+}
+
+func parseCacheShardIndex(base, tag string) (int, bool) {
+	if tag == base {
+		return 0, true
+	}
+	rest, ok := strings.CutPrefix(tag, base+".s")
+	if !ok || rest == "" {
+		return 0, false
+	}
+	n, err := strconv.Atoi(rest)
+	if err != nil || n <= 0 {
+		return 0, false
+	}
+	return n, true
+}
 
 // CacheTag returns SIMPLYBS_CACHE_TAG (empty if unset).
 func CacheTag() string {
@@ -190,38 +329,83 @@ func neededPullAssetNames(pkgs []*Package, h *host.Host, remote map[string]bool)
 	return assetNamesFor(collectCachePullPackages(pkgs, h, remote), h)
 }
 
-func loadRemoteAssets(tag string) (map[string]bool, error) {
+var errReleaseNotFound = errors.New("cache: release not found")
+
+func isNotFoundMsg(msg string) bool {
+	msg = strings.ToLower(msg)
+	return strings.Contains(msg, "not found") ||
+		strings.Contains(msg, "could not find") ||
+		strings.Contains(msg, "http 404")
+}
+
+func loadRemoteAssets() (*remoteAssetIndex, error) {
 	remoteAssetsOnce.Do(func() {
-		remoteAssets = map[string]bool{}
-		cmd := ghCmd("release", "view", tag, "--json", "assets")
-		out, err := cmd.Output()
-		if err != nil {
-			stderr := ""
-			if exitErr, ok := err.(*exec.ExitError); ok {
-				stderr = string(exitErr.Stderr)
-			}
-			msg := strings.ToLower(stderr + string(out) + err.Error())
-			if strings.Contains(msg, "not found") || strings.Contains(msg, "could not find") || strings.Contains(msg, "http 404") {
-				log.Printf("cache: release %q not found; treating as empty", tag)
+		idx := &remoteAssetIndex{
+			assets: map[string]string{},
+			counts: map[string]int{},
+		}
+		base := CacheTag()
+		for i := 0; i < maxCacheShards; i++ {
+			tag := cacheShardTag(base, i)
+			names, err := viewReleaseAssetNames(tag)
+			if err != nil {
+				if errors.Is(err, errReleaseNotFound) {
+					if i == 0 {
+						log.Printf("cache: release %q not found; treating as empty", tag)
+						idx.shards = []string{base}
+						idx.counts[base] = 0
+					}
+					break
+				}
+				remoteAssetsErr = err
 				return
 			}
-			remoteAssetsErr = fmt.Errorf("gh release view %s: %w%s", tag, err, formatStderr(stderr))
-			return
+			for _, name := range names {
+				idx.assets[name] = tag
+			}
+			idx.shards = append(idx.shards, tag)
+			idx.counts[tag] = len(names)
 		}
-		var parsed struct {
-			Assets []struct {
-				Name string `json:"name"`
-			} `json:"assets"`
+		if len(idx.shards) == 0 {
+			idx.shards = []string{base}
+			idx.counts[base] = 0
 		}
-		if err := json.Unmarshal(out, &parsed); err != nil {
-			remoteAssetsErr = err
-			return
-		}
-		for _, a := range parsed.Assets {
-			remoteAssets[a.Name] = true
-		}
+		remoteIndex = idx
+		log.Printf("cache: loaded %d assets across %d shard(s) (base=%s)",
+			len(idx.assets), len(idx.shards), base)
 	})
-	return remoteAssets, remoteAssetsErr
+	return remoteIndex, remoteAssetsErr
+}
+
+func viewReleaseAssetNames(tag string) ([]string, error) {
+	cmd := ghCmd("release", "view", tag, "--json", "assets")
+	out, err := cmd.Output()
+	if err != nil {
+		stderr := ""
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			stderr = string(exitErr.Stderr)
+		}
+		msg := stderr + string(out) + err.Error()
+		if isNotFoundMsg(msg) {
+			return nil, errReleaseNotFound
+		}
+		return nil, fmt.Errorf("gh release view %s: %w%s", tag, err, formatStderr(stderr))
+	}
+	var parsed struct {
+		Assets []struct {
+			Name string `json:"name"`
+		} `json:"assets"`
+	}
+	if err := json.Unmarshal(out, &parsed); err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(parsed.Assets))
+	for _, a := range parsed.Assets {
+		if a.Name != "" {
+			names = append(names, a.Name)
+		}
+	}
+	return names, nil
 }
 
 func formatStderr(stderr string) string {
@@ -234,7 +418,7 @@ func formatStderr(stderr string) string {
 
 func resetRemoteAssetsCache() {
 	remoteAssetsOnce = sync.Once{}
-	remoteAssets = nil
+	remoteIndex = nil
 	remoteAssetsErr = nil
 }
 
@@ -245,11 +429,18 @@ func ensureRelease(tag string) error {
 	}
 	create := ghCmd("release", "create", tag,
 		"--title", "simplybs build cache",
-		"--notes", "Rolling cache of simplybs build artifacts (per-package, content-addressed by short hash).",
+		"--notes", "Rolling cache of simplybs build artifacts (per-package, content-addressed by short hash). Overflow shards use the same base tag plus .sN because GitHub limits each Release to 1000 assets.",
 	)
 	create.Stdout = os.Stdout
 	create.Stderr = os.Stderr
-	return create.Run()
+	if err := create.Run(); err != nil {
+		// Another process may have created this shard first.
+		if view := ghCmd("release", "view", tag); view.Run() == nil {
+			return nil
+		}
+		return err
+	}
+	return nil
 }
 
 func downloadAsset(tag, assetName, destPath string) error {
@@ -304,18 +495,18 @@ func copyFile(src, dst string) error {
 }
 
 // PackageCacheOnRelease reports whether all built artifacts for p on host h
-// already exist on the configured GitHub Release cache. When cache is
-// disabled, it returns false.
+// already exist on the configured GitHub Release cache (any shard). When
+// cache is disabled, it returns false.
 func PackageCacheOnRelease(p *Package, h *host.Host) (bool, error) {
 	if !CacheEnabled() {
 		return false, nil
 	}
-	assets, err := loadRemoteAssets(CacheTag())
+	idx, err := loadRemoteAssets()
 	if err != nil {
 		return false, err
 	}
 	for _, rel := range p.BuiltRelPaths(h) {
-		if !assets[AssetNameForRel(rel)] {
+		if !idx.has(AssetNameForRel(rel)) {
 			return false, nil
 		}
 	}
@@ -329,8 +520,7 @@ func TryPullPackageCache(p *Package, h *host.Host) bool {
 	if !CacheEnabled() {
 		return false
 	}
-	tag := CacheTag()
-	assets, err := loadRemoteAssets(tag)
+	idx, err := loadRemoteAssets()
 	if err != nil {
 		log.Printf("cache: failed to list release assets: %v", err)
 		return false
@@ -343,7 +533,8 @@ func TryPullPackageCache(p *Package, h *host.Host) bool {
 			continue
 		}
 		name := AssetNameForRel(rel)
-		if !assets[name] {
+		tag, present := idx.tagFor(name)
+		if !present {
 			ok = false
 			continue
 		}
@@ -360,17 +551,16 @@ func TryPullPackageCache(p *Package, h *host.Host) bool {
 // It does not fetch dependency trees of packages that are already
 // complete locally or on the release.
 func CachePull(pkgs []*Package, h *host.Host) error {
-	tag, _, err := requireCacheConfig()
-	if err != nil {
+	if _, _, err := requireCacheConfig(); err != nil {
 		return err
 	}
-	assets, err := loadRemoteAssets(tag)
+	idx, err := loadRemoteAssets()
 	if err != nil {
 		return fmt.Errorf("cache: list assets: %w", err)
 	}
 
 	builtRoot := filepath.Join(host.DataDir(), "built")
-	names := neededPullAssetNames(pkgs, h, assets)
+	names := neededPullAssetNames(pkgs, h, idx.nameSet())
 	toDownload := 0
 	skippedLocal := 0
 	missingRemote := 0
@@ -381,7 +571,8 @@ func CachePull(pkgs []*Package, h *host.Host) error {
 			skippedLocal++
 			continue
 		}
-		if !assets[name] {
+		tag, present := idx.tagFor(name)
+		if !present {
 			missingRemote++
 			continue
 		}
@@ -391,23 +582,19 @@ func CachePull(pkgs []*Package, h *host.Host) error {
 		}
 		toDownload++
 	}
-	log.Printf("cache pull: downloaded=%d already-local=%d not-on-release=%d needed=%d tag=%s",
-		toDownload, skippedLocal, missingRemote, len(names), tag)
+	nAssets, nShards := idx.stats()
+	log.Printf("cache pull: downloaded=%d already-local=%d not-on-release=%d needed=%d remote-assets=%d shards=%d base=%s",
+		toDownload, skippedLocal, missingRemote, len(names), nAssets, nShards, CacheTag())
 	return nil
 }
 
 // TryPushPackageCache uploads this package's built artifacts that are missing
-// from the release. No-op when cache is disabled or everything is already remote.
+// from the cache. No-op when cache is disabled or everything is already remote.
 func TryPushPackageCache(p *Package, h *host.Host) {
 	if !CacheEnabled() {
 		return
 	}
-	tag := CacheTag()
-	if err := ensureRelease(tag); err != nil {
-		log.Printf("[%s][%s] cache push: ensure release: %v", h.Triplet, p.Package, err)
-		return
-	}
-	assets, err := loadRemoteAssets(tag)
+	idx, err := loadRemoteAssets()
 	if err != nil {
 		log.Printf("[%s][%s] cache push: list assets: %v", h.Triplet, p.Package, err)
 		return
@@ -417,7 +604,7 @@ func TryPushPackageCache(p *Package, h *host.Host) {
 	var uploadNames []string
 	for _, rel := range p.BuiltRelPaths(h) {
 		name := AssetNameForRel(rel)
-		if assets[name] {
+		if idx.has(name) {
 			continue
 		}
 		abs := filepath.Join(builtRoot, filepath.FromSlash(rel))
@@ -430,14 +617,68 @@ func TryPushPackageCache(p *Package, h *host.Host) {
 	if len(uploadPaths) == 0 {
 		return
 	}
-	if err := uploadAssets(tag, uploadPaths, uploadNames); err != nil {
+	if err := uploadMissing(idx, uploadPaths, uploadNames); err != nil {
 		log.Printf("[%s][%s] cache push failed: %v", h.Triplet, p.Package, err)
 		return
 	}
 	for _, name := range uploadNames {
-		assets[name] = true
 		log.Printf("[%s][%s] cache push: %s", h.Triplet, p.Package, name)
 	}
+}
+
+func uploadMissing(idx *remoteAssetIndex, uploadPaths, uploadNames []string) error {
+	if len(uploadPaths) != len(uploadNames) {
+		return fmt.Errorf("cache: upload path/name count mismatch")
+	}
+	i := 0
+	for i < len(uploadPaths) {
+		remoteMu.Lock()
+		tag, n := idx.pickShardCapacity(len(uploadPaths) - i)
+		remoteMu.Unlock()
+		if n < 1 {
+			return fmt.Errorf("cache: no shard capacity for %d remaining file(s)", len(uploadPaths)-i)
+		}
+		batchPaths := uploadPaths[i : i+n]
+		batchNames := uploadNames[i : i+n]
+		if err := ensureRelease(tag); err != nil {
+			return fmt.Errorf("cache: ensure release %s: %w", tag, err)
+		}
+		if err := uploadAssets(tag, batchPaths, batchNames); err != nil {
+			if isReleaseFullError(err) {
+				log.Printf("cache: release %s is full; overflowing to next shard", tag)
+				remoteMu.Lock()
+				idx.counts[tag] = githubReleaseAssetLimit
+				remoteMu.Unlock()
+				continue
+			}
+			return err
+		}
+		remoteMu.Lock()
+		for _, name := range batchNames {
+			idx.assets[name] = tag
+		}
+		idx.counts[tag] += n
+		remoteMu.Unlock()
+		i += n
+	}
+	return nil
+}
+
+func isReleaseFullError(err error) bool {
+	if err == nil {
+		return false
+	}
+	msg := strings.ToLower(err.Error())
+	if strings.Contains(msg, "1000") && strings.Contains(msg, "asset") {
+		return true
+	}
+	if strings.Contains(msg, "asset limit") || strings.Contains(msg, "too many assets") {
+		return true
+	}
+	if strings.Contains(msg, "published asset") && strings.Contains(msg, "limit") {
+		return true
+	}
+	return strings.Contains(msg, "exceeded") && strings.Contains(msg, "asset")
 }
 
 func uploadAssets(tag string, uploadPaths, uploadNames []string) error {
@@ -460,27 +701,24 @@ func uploadAssets(tag string, uploadPaths, uploadNames []string) error {
 	args := append([]string{"release", "upload", tag}, staged...)
 	cmd := ghCmd(args...)
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	var stderr bytes.Buffer
+	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("cache: upload: %w", err)
+		return fmt.Errorf("cache: upload: %w%s", err, formatStderr(stderr.String()))
 	}
 	log.Printf("cache push: uploaded=%d tag=%s", len(staged), tag)
 	return nil
 }
 
-// CachePush uploads local built artifacts that are not yet on the release.
+// CachePush uploads local built artifacts that are not yet on the cache.
 // When pkgs is non-empty, only artifacts for those packages (and their deps)
 // on host h are considered; otherwise every file under DataDir()/built is.
 func CachePush(pkgs []*Package, h *host.Host) error {
-	tag, _, err := requireCacheConfig()
-	if err != nil {
+	if _, _, err := requireCacheConfig(); err != nil {
 		return err
 	}
-	if err := ensureRelease(tag); err != nil {
-		return fmt.Errorf("cache: ensure release: %w", err)
-	}
 	resetRemoteAssetsCache()
-	assets, err := loadRemoteAssets(tag)
+	idx, err := loadRemoteAssets()
 	if err != nil {
 		return fmt.Errorf("cache: list assets: %w", err)
 	}
@@ -490,7 +728,7 @@ func CachePush(pkgs []*Package, h *host.Host) error {
 	var uploadNames []string
 
 	consider := func(absPath, name string) {
-		if assets[name] {
+		if idx.has(name) {
 			return
 		}
 		uploadPaths = append(uploadPaths, absPath)
@@ -531,15 +769,11 @@ func CachePush(pkgs []*Package, h *host.Host) error {
 	}
 
 	if len(uploadPaths) == 0 {
-		log.Printf("cache push: nothing to upload (tag=%s remote-assets=%d)", tag, len(assets))
+		nAssets, nShards := idx.stats()
+		log.Printf("cache push: nothing to upload (base=%s remote-assets=%d shards=%d)",
+			CacheTag(), nAssets, nShards)
 		return nil
 	}
 
-	if err := uploadAssets(tag, uploadPaths, uploadNames); err != nil {
-		return err
-	}
-	for _, name := range uploadNames {
-		assets[name] = true
-	}
-	return nil
+	return uploadMissing(idx, uploadPaths, uploadNames)
 }

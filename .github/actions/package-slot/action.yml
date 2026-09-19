@@ -107,6 +107,7 @@ runs:
         HOST: ${{ steps.next.outputs.host }}
         STATUS: ${{ steps.next.outputs.status }}
         REMAINING: ${{ steps.next.outputs.remaining }}
+        REMAINING_COUNT: ${{ steps.next.outputs.remaining_count }}
         STALE: ${{ steps.stale.outputs.stale }}
         BUILD_OK: ${{ steps.build.outcome }}
         NEXT_OK: ${{ steps.next.outcome }}
@@ -143,6 +144,7 @@ runs:
           -conclusion "$conclusion" \
           -run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
           -remaining "${REMAINING:-[]}" \
+          -remaining-count "${REMAINING_COUNT:-0}" \
           "${queue_args[@]}"
 
     - name: Decide continue
