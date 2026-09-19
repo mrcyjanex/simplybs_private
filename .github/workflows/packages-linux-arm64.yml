@@ -27,9 +27,10 @@ on:
 # packages-macos.yml. Builds every SupportedHosts triplet except Android.
 # Three batches of 24 slots (72 packages per run) so a zlib-tree cold fill
 # fits without failing the finish job on the old 24-slot cap.
-# Release cache tag is CI-only (v0-sbs-ci-linux-arm64). Do not use the
+# Release cache tag is CI-only (v0-sbs-ci-linux-arm64, overflowing to
+# v0-sbs-ci-linux-arm64.sN at GitHub's 1000-asset cap). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64); CI reuses its own
-# Release across runs after the first cold fill.
+# Releases across runs after the first cold fill.
 permissions:
   contents: write
   packages: write
