@@ -16,6 +16,7 @@
         "*:*:native/coreutils",
         "*:*:native/gzip",
         "*:*:native/ninja",
+        "*:*:native/patch",
         "*:*:native/python@3.14",
         "*:*:native/sed",
         "*:*:native/tar"
@@ -43,6 +44,7 @@
             "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_PROFILE=OFF",
             "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_MEMPROF=OFF",
             "*:*:config_opts=$config_opts -DCOMPILER_RT_BUILD_ORC=OFF",
+            "*:*:CXXFLAGS=$CXXFLAGS -include cstdint",
             "darwin_*:*:MACOSX_DEPLOYMENT_TARGET=13.0",
             "darwin_arm64:*:SDK_PATH=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
             "darwin_arm64:*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
@@ -61,6 +63,7 @@
             "darwin_arm64:*:chmod +x $NATIVEPREFIX/bin/xcrun",
             "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-libtool-darwin $NATIVEPREFIX/bin/libtool",
             "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-lipo $NATIVEPREFIX/bin/lipo",
+            "*:*:patch -p1 < $PATCH_DIR/llvm@16.0.1/cstdint-smallvector.patch",
             "*:*:sed -i '/DEFINE_COMPILERRT_OUTLINE_FUNCTION_UNMANGLED/,/name: SEPARATOR BTI_C/{ /CFI_START SEPARATOR/d; }' compiler-rt/lib/builtins/assembly.h",
             "*:*:sed -i 's/name: SEPARATOR BTI_C/name: SEPARATOR CFI_START SEPARATOR BTI_C/' compiler-rt/lib/builtins/assembly.h",
             "darwin_arm64:*:printf '#!/bin/sh\\ncase \"$1\" in\\n  -productVersion) echo %s ;;\\n  *) echo %s ;;\\nesac\\n' \"$SDK_VERSION\" \"$SDK_VERSION\" > $NATIVEPREFIX/bin/sw_vers",
