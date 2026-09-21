@@ -1,9 +1,0 @@
---- a/src/grammar/lexer.flex
-+++ b/src/grammar/lexer.flex
-@@ -11,6 +11,7 @@
- %unicode
- %line
- %column
-+%option stack
- 
- %{
