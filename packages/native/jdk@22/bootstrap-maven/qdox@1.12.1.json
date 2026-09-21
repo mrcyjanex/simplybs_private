@@ -21,7 +21,8 @@
         "*:*:native/findutils",
         "*:*:native/jdk@22",
         "*:*:native/jdk@22/bootstrap-maven/jflex@1.9.1",
-        "*:*:native/byaccj@1.15"
+        "*:*:native/byaccj@1.15",
+        "*:*:native/patch"
     ],
     "build": {
         "env": [
@@ -29,6 +30,7 @@
         ],
         "steps": [
             "*:*:mkdir -p $WORKDIR/gen $WORKDIR/classes",
+            "*:*:patch -p1 < $PATCH_DIR/qdox@1.12.1/jflex-option-stack.patch",
             "*:*:$JAVA_HOME/bin/java -cp $NATIVEPREFIX/share/java/jflex.jar jflex.Main --nobak -q -d $WORKDIR/gen src/grammar/lexer.flex",
             "*:*:cp src/grammar/parser.y $WORKDIR/gen/",
             "*:*:cd $WORKDIR/gen && byaccj -v -Jnorun -Jnoconstruct -Jclass=Parser -Jsemantic=Value -Jpackage=com.thoughtworks.qdox.parser.impl parser.y",
