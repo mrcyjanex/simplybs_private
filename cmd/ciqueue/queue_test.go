@@ -182,8 +182,8 @@ func TestPackagesYmlHostsMatchDefaultHosts(t *testing.T) {
 	if !bytes.Contains(b, []byte(want)) {
 		t.Fatalf("packages.yml missing %q", want)
 	}
-	if n := bytes.Count(b, []byte(want)); n != 3 {
-		t.Fatalf("expected 3 batch host lists, found %d", n)
+	if n := bytes.Count(b, []byte(want)); n != 10 {
+		t.Fatalf("expected 10 batch host lists, found %d", n)
 	}
 }
 

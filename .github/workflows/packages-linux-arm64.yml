@@ -25,8 +25,8 @@ on:
 
 # Linux arm64 package queue, parallel with packages.yml (linux amd64) and
 # packages-macos.yml. Builds every SupportedHosts triplet except Android.
-# Three batches of 24 slots (72 packages per run) so a zlib-tree cold fill
-# fits without failing the finish job on the old 24-slot cap.
+# Ten batches of 24 slots (240 packages per run) so the GraalVM/maven tree
+# fits without failing the finish job on the old 72-slot cap.
 # Release cache tag is CI-only (v0-sbs-ci-linux-arm64, overflowing to
 # v0-sbs-ci-linux-arm64.sN at GitHub's 1000-asset cap). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64); CI reuses its own
@@ -178,9 +178,121 @@ jobs:
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
+  batch4:
+    needs: [image, batch3]
+    if: needs.batch3.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch5:
+    needs: [image, batch4]
+    if: needs.batch4.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch6:
+    needs: [image, batch5]
+    if: needs.batch5.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch7:
+    needs: [image, batch6]
+    if: needs.batch6.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch8:
+    needs: [image, batch7]
+    if: needs.batch7.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch9:
+    needs: [image, batch8]
+    if: needs.batch8.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
+  batch10:
+    needs: [image, batch9]
+    if: needs.batch9.outputs.continue == 'true'
+    uses: ./.github/workflows/package-batch.yml
+    secrets: inherit
+    with:
+      image: ${{ needs.image.outputs.image }}
+      runner: ubuntu-24.04-arm
+      sha: ${{ needs.image.outputs.sha }}
+      base: ${{ needs.image.outputs.base }}
+      pr: ${{ needs.image.outputs.pr }}
+      cache_tag: ${{ needs.image.outputs.cache_tag }}
+      cache_repo: ${{ github.repository }}
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      extra_package: ${{ needs.image.outputs.extra_package }}
+      comment_queue: linux-arm64
   finish:
     if: always()
-    needs: [image, batch1, batch2, batch3]
+    needs: [image, batch1, batch2, batch3, batch4, batch5, batch6, batch7, batch8, batch9, batch10]
     runs-on: ubuntu-latest
     steps:
       - name: Set commit status
@@ -189,19 +301,33 @@ jobs:
           C1: ${{ needs.batch1.outputs.continue }}
           C2: ${{ needs.batch2.outputs.continue }}
           C3: ${{ needs.batch3.outputs.continue }}
+          C4: ${{ needs.batch4.outputs.continue }}
+          C5: ${{ needs.batch5.outputs.continue }}
+          C6: ${{ needs.batch6.outputs.continue }}
+          C7: ${{ needs.batch7.outputs.continue }}
+          C8: ${{ needs.batch8.outputs.continue }}
+          C9: ${{ needs.batch9.outputs.continue }}
+          C10: ${{ needs.batch10.outputs.continue }}
           R1: ${{ needs.batch1.result }}
           R2: ${{ needs.batch2.result }}
           R3: ${{ needs.batch3.result }}
+          R4: ${{ needs.batch4.result }}
+          R5: ${{ needs.batch5.result }}
+          R6: ${{ needs.batch6.result }}
+          R7: ${{ needs.batch7.result }}
+          R8: ${{ needs.batch8.result }}
+          R9: ${{ needs.batch9.result }}
+          R10: ${{ needs.batch10.result }}
           IMG: ${{ needs.image.result }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           failed=0
           if [ "$IMG" = "failure" ]; then failed=1; fi
-          for r in "$R1" "$R2" "$R3"; do
+          for r in "$R1" "$R2" "$R3" "$R4" "$R5" "$R6" "$R7" "$R8" "$R9" "$R10"; do
             if [ "$r" = "failure" ]; then failed=1; fi
           done
           last=""
-          for v in "$C3" "$C2" "$C1"; do
+          for v in "$C10" "$C9" "$C8" "$C7" "$C6" "$C5" "$C4" "$C3" "$C2" "$C1"; do
             if [ -n "$v" ]; then last=$v; break; fi
           done
           url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
