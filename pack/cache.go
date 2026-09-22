@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/mrcyjanek/simplybs/host"
 )
@@ -42,6 +43,13 @@ import (
 const (
 	cacheAssetSuffixes = 3 // .info.txt, .tar.gz, _native.tar.gz
 	maxCacheShards     = 256
+)
+
+// GitHub Release asset downloads flake with HTTP 500. Retry a few times
+// before treating the file as missing (EnsureBuilt then rebuilds).
+var (
+	cacheDownloadRetries = 5
+	cacheDownloadBackoff = time.Second
 )
 
 // githubReleaseAssetLimit is GitHub's hard cap on assets per Release.
@@ -304,11 +312,27 @@ func packageCacheState(p *Package, h *host.Host, remote map[string]bool) (localC
 		if _, err := os.Stat(dest); err != nil {
 			localComplete = false
 		}
-		if !remote[AssetNameForRel(rel)] {
+		if remote == nil || !remote[AssetNameForRel(rel)] {
 			remoteComplete = false
 		}
 	}
 	return localComplete, remoteComplete
+}
+
+// localBuiltArtifactsPresent is true when .info.txt, .tar.gz, and
+// _native.tar.gz all exist locally. A lone .info.txt (partial GitHub
+// download) is not a cache hit — ExtractEnv panics on the missing tars.
+func (p *Package) localBuiltArtifactsPresent(h *host.Host) bool {
+	local, _ := packageCacheState(p, h, nil)
+	return local
+}
+
+func (p *Package) localBuiltCacheHit(h *host.Host) bool {
+	if !p.localBuiltArtifactsPresent(h) {
+		return false
+	}
+	info, err := os.ReadFile(p.GenerateBuildPath(h, "built") + ".info.txt")
+	return err == nil && string(info) == p.GeneratePackageInfo(h)
 }
 
 func assetNamesFor(pkgs []*Package, h *host.Host) []string {
@@ -443,21 +467,69 @@ func ensureRelease(tag string) error {
 	return nil
 }
 
+func isRetryableCacheDownload(err error, stderr string) bool {
+	if err == nil {
+		return false
+	}
+	msg := strings.ToLower(stderr + " " + err.Error())
+	if strings.Contains(msg, "http 404") ||
+		strings.Contains(msg, "not found") ||
+		strings.Contains(msg, "could not find") ||
+		strings.Contains(msg, "no assets match") {
+		return false
+	}
+	return strings.Contains(msg, "http 5") ||
+		strings.Contains(msg, "http 429") ||
+		strings.Contains(msg, "timeout") ||
+		strings.Contains(msg, "timed out") ||
+		strings.Contains(msg, "connection reset") ||
+		strings.Contains(msg, "internal_error") ||
+		strings.Contains(msg, "temporarily") ||
+		strings.Contains(msg, "tls handshake") ||
+		strings.Contains(msg, "eof") ||
+		strings.Contains(msg, "exit status")
+}
+
 func downloadAsset(tag, assetName, destPath string) error {
+	var last error
+	for attempt := 1; attempt <= cacheDownloadRetries; attempt++ {
+		err, stderr := downloadAssetOnce(tag, assetName, destPath)
+		if err == nil {
+			return nil
+		}
+		last = err
+		if !isRetryableCacheDownload(err, stderr) {
+			if stderr != "" {
+				return fmt.Errorf("%w%s", err, formatStderr(stderr))
+			}
+			return err
+		}
+		if attempt < cacheDownloadRetries {
+			delay := cacheDownloadBackoff * time.Duration(1<<(attempt-1))
+			log.Printf("cache: retry %d/%d downloading %s after %v: %v",
+				attempt, cacheDownloadRetries, assetName, delay, err)
+			time.Sleep(delay)
+		}
+	}
+	return last
+}
+
+func downloadAssetOnce(tag, assetName, destPath string) (err error, stderr string) {
 	if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
-		return err
+		return err, ""
 	}
 	staging, err := os.MkdirTemp("", "simplybs-cache-*")
 	if err != nil {
-		return err
+		return err, ""
 	}
 	defer os.RemoveAll(staging)
 
 	cmd := ghCmd("release", "download", tag, "-p", assetName, "-D", staging)
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	var errBuf bytes.Buffer
+	cmd.Stderr = io.MultiWriter(os.Stderr, &errBuf)
 	if err := cmd.Run(); err != nil {
-		return err
+		return err, errBuf.String()
 	}
 	src := filepath.Join(staging, assetName)
 	// gh may write the literal asset name; if the pattern matched a file with
@@ -465,18 +537,18 @@ func downloadAsset(tag, assetName, destPath string) error {
 	if _, err := os.Stat(src); err != nil {
 		entries, readErr := os.ReadDir(staging)
 		if readErr != nil {
-			return err
+			return err, errBuf.String()
 		}
 		if len(entries) != 1 || entries[0].IsDir() {
-			return fmt.Errorf("cache: expected one downloaded file for %s", assetName)
+			return fmt.Errorf("cache: expected one downloaded file for %s", assetName), errBuf.String()
 		}
 		src = filepath.Join(staging, entries[0].Name())
 	}
 	tmp := destPath + ".tmp"
 	if err := copyFile(src, tmp); err != nil {
-		return err
+		return err, ""
 	}
-	return os.Rename(tmp, destPath)
+	return os.Rename(tmp, destPath), ""
 }
 
 func copyFile(src, dst string) error {
@@ -564,6 +636,7 @@ func CachePull(pkgs []*Package, h *host.Host) error {
 	toDownload := 0
 	skippedLocal := 0
 	missingRemote := 0
+	var firstErr error
 	for _, name := range names {
 		rel := RelFromAssetName(name)
 		dest := filepath.Join(builtRoot, filepath.FromSlash(rel))
@@ -578,14 +651,18 @@ func CachePull(pkgs []*Package, h *host.Host) error {
 		}
 		log.Printf("cache: download %s", name)
 		if err := downloadAsset(tag, name, dest); err != nil {
-			return fmt.Errorf("cache: download %s: %w", name, err)
+			if firstErr == nil {
+				firstErr = fmt.Errorf("cache: download %s: %w", name, err)
+			}
+			log.Printf("cache: download %s failed: %v", name, err)
+			continue
 		}
 		toDownload++
 	}
 	nAssets, nShards := idx.stats()
 	log.Printf("cache pull: downloaded=%d already-local=%d not-on-release=%d needed=%d remote-assets=%d shards=%d base=%s",
 		toDownload, skippedLocal, missingRemote, len(names), nAssets, nShards, CacheTag())
-	return nil
+	return firstErr
 }
 
 // TryPushPackageCache uploads this package's built artifacts that are missing

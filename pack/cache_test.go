@@ -874,3 +874,67 @@ func TestTryPushCreatesBaseReleaseWhenMissing(t *testing.T) {
 		t.Fatalf("expected upload to base tag; log=%s", logStr)
 	}
 }
+
+func TestLocalBuiltCacheHitRequiresAllArtifacts(t *testing.T) {
+	chdirRepoRoot(t)
+	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	pkg, err := FindPackage("native/zlib")
+	if err != nil {
+		t.Fatal(err)
+	}
+	h := host.SupportedHosts["x86_64-linux-gnu"]
+	if pkg.localBuiltArtifactsPresent(h) || pkg.localBuiltCacheHit(h) {
+		t.Fatal("empty built dir must not be a cache hit")
+	}
+
+	infoPath := pkg.GenerateBuildPath(h, "built") + ".info.txt"
+	if err := os.MkdirAll(filepath.Dir(infoPath), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(infoPath, []byte(pkg.GeneratePackageInfo(h)), 0644); err != nil {
+		t.Fatal(err)
+	}
+	// CI failure mode: GitHub HTTP 500 left .info.txt without the tarballs.
+	if pkg.localBuiltArtifactsPresent(h) {
+		t.Fatal("lone info.txt must not count as a complete cache")
+	}
+	if pkg.localBuiltCacheHit(h) {
+		t.Fatal("lone info.txt must not skip the build")
+	}
+
+	for _, rel := range pkg.BuiltRelPaths(h) {
+		path := filepath.Join(host.DataDir(), "built", filepath.FromSlash(rel))
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			t.Fatal(err)
+		}
+		payload := []byte("payload")
+		if strings.HasSuffix(rel, ".info.txt") {
+			payload = []byte(pkg.GeneratePackageInfo(h))
+		}
+		if err := os.WriteFile(path, payload, 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if !pkg.localBuiltArtifactsPresent(h) {
+		t.Fatal("expected all three artifacts to be present")
+	}
+	if !pkg.localBuiltCacheHit(h) {
+		t.Fatal("matching info.txt plus both archives should be a cache hit")
+	}
+}
+
+func TestIsRetryableCacheDownload(t *testing.T) {
+	err500 := fmt.Errorf("exit status 1")
+	if !isRetryableCacheDownload(err500, "HTTP 500 (https://api.github.com/repos/x/y/releases/assets/1)\n") {
+		t.Fatal("HTTP 500 should retry")
+	}
+	if isRetryableCacheDownload(err500, "no assets match foo.tar.gz\n") {
+		t.Fatal("missing asset should not retry")
+	}
+	if isRetryableCacheDownload(err500, "HTTP 404: Not Found\n") {
+		t.Fatal("HTTP 404 should not retry")
+	}
+	if !isRetryableCacheDownload(fmt.Errorf("exit status 1"), "stream error: INTERNAL_ERROR; received from peer") {
+		t.Fatal("INTERNAL_ERROR should retry")
+	}
+}
