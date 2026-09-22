@@ -30,6 +30,7 @@
         "*:*:native/unzip",
         "*:*:native/zip",
         "*:*:native/zlib",
+        "*:*:native/patch",
         "*:*:native/jdk@22",
         "linux_*:*:native/xorgproto",
         "linux_*:*:native/xtrans",
@@ -64,6 +65,7 @@
             "darwin_arm64:*:LDFLAGS=$LDFLAGS -mmacosx-version-min=$OSX_MIN_VERSION"
         ],
         "steps": [
+            "*:*:patch -p1 < $PATCH_DIR/jdk@22/8354941-glibc-uabs.patch",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/jdk-$JDK_VERSION $STAGING_DIR$NATIVEPREFIX/bin",
             "*:*:cp -f $PATCH_DIR/jdk/which $NATIVEPREFIX/bin/which",
             "*:*:chmod +x $NATIVEPREFIX/bin/which",
