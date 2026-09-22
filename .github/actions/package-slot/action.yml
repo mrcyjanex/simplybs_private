@@ -81,7 +81,21 @@ runs:
           extra=(-package "$EXTRA")
         fi
         set -o pipefail
-        go run ./cmd/ciqueue next -base "$BASE" -sha "$SHA" -hosts "$HOSTS" "${extra[@]}" | tee /tmp/ciqueue.json
+        attempt=1
+        delay=2
+        while true; do
+          if go run ./cmd/ciqueue next -base "$BASE" -sha "$SHA" -hosts "$HOSTS" "${extra[@]}" | tee /tmp/ciqueue.json; then
+            break
+          fi
+          if [ "$attempt" -ge 5 ]; then
+            echo "ciqueue next failed after $attempt attempts"
+            exit 1
+          fi
+          echo "ciqueue next failed (attempt $attempt), retrying in ${delay}s..."
+          sleep "$delay"
+          attempt=$((attempt + 1))
+          delay=$((delay * 2))
+        done
 
     - name: Build package
       id: build
