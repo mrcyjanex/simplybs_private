@@ -2662,6 +2662,42 @@
         },
         {
             "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/javacpp-shadowed-1.5.7.jar",
+            "sha256": "55eceefa492cdb20bb09acc468e90381cd97397fa8946b38a466e62e1f1f7d40",
+            "path": "javacpp-shadowed-1.5.7.jar"
+        },
+        {
+            "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/javacpp-shadowed-1.5.7_1-linux-x86_64.jar",
+            "sha256": "e982df99f90b18b8ad091d9bbd7e0a97725c6143b2ccbf3a8f7c8a6c35b31755",
+            "path": "javacpp-shadowed-1.5.7_1-linux-x86_64.jar"
+        },
+        {
+            "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/javacpp-shadowed-1.5.7_2-linux-arm64.jar",
+            "sha256": "4ece67547c95edfd62b5745236c947bef8c192c10f35b2bdc7d6de46365d4877",
+            "path": "javacpp-shadowed-1.5.7_2-linux-arm64.jar"
+        },
+        {
+            "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-13.0.1-1.5.7.jar",
+            "sha256": "e5ab5a512c315834387fa39609618026ee797f362bc1b609321b976086a39eba",
+            "path": "llvm-shadowed-13.0.1-1.5.7.jar"
+        },
+        {
+            "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-13.0.1-1.5.7_1-linux-x86_64.jar",
+            "sha256": "88b058ff820aa13b86591b41b024ff0e8d70865c7166392f6d8827f84ffc1d56",
+            "path": "llvm-shadowed-13.0.1-1.5.7_1-linux-x86_64.jar"
+        },
+        {
+            "kind": "blob",
+            "url": "https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/native-image/llvm-shadowed-13.0.1-1.5.7_2-linux-arm64.jar",
+            "sha256": "a0b49f97e3c7bc16546f6af854e863aa6c524b7669e30d64de1f8bb053b477d6",
+            "path": "llvm-shadowed-13.0.1-1.5.7_2-linux-arm64.jar"
+        },
+        {
+            "kind": "blob",
             "url": "https://libisl.sourceforge.io/isl-0.26.tar.xz",
             "sha256": "a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504",
             "path": ".build/tarballs/isl-0.26.tar.xz"
