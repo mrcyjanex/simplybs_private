@@ -1,0 +1,15 @@
+--- a/substratevm/src/com.oracle.svm.native.libchelper/src/cpuid.c
++++ b/substratevm/src/com.oracle.svm.native.libchelper/src/cpuid.c
+@@ -844,7 +844,12 @@
+ /*
+  * Dummy for non AMD64, non AArch64 and non RISCV64
+  */
++typedef struct {
++    uint64_t dummy;
++} CPUFeatures;
++
+ void determineCPUFeatures(void* features) {
++    (void) features;
+ }
+ 
+ #endif

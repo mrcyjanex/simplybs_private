@@ -15,6 +15,7 @@
         "*:*:native/coreutils",
         "*:*:native/graalvm",
         "*:*:native/grep",
+        "*:*:native/patch",
         "*:*:native/sed"
     ],
     "build": {
@@ -28,6 +29,7 @@
             "*:x86_64-apple-darwin:GRAAL_TARGET=darwin-amd64",
             "*:aarch64-apple-ios:GRAAL_TARGET=ios-aarch64",
             "*:aarch64-apple-ios-simulator:GRAAL_TARGET=ios-aarch64",
+            "*:armv7a-linux-androideabi:GRAAL_TARGET=android-arm",
             "*:*-linux-gnu:JNI_OS=linux",
             "*:*-android*:JNI_OS=linux",
             "*:*-apple-*:JNI_OS=darwin",
@@ -47,6 +49,7 @@
             "*:*-w64-mingw32:JVM_SRC=substratevm/src/com.oracle.svm.native.jvm.windows/src/JvmFuncs.c"
         ],
         "steps": [
+            "*:*:patch -p1 < $PATCH_DIR/graalvm-clibraries/cpuid-arm32-dummy.patch",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/bin $STAGING_DIR$NATIVEPREFIX/graalvm/lib/svm/clibraries/$GRAAL_TARGET/include .clib-build .jni-include",
             "*:*:cp $PATCH_DIR/graalvm-clibraries/jni_md.h .jni-include/jni_md.h",
             "*:*-linux-gnu:cp $JAVA_HOME/include/linux/jni_md.h .jni-include/jni_md.h",
