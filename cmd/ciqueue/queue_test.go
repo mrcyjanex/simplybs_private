@@ -411,7 +411,7 @@ func TestNextQueueMavenTreeFinishesQuickly(t *testing.T) {
 	chdirRepoRoot(t)
 	var files []string
 	for _, p := range pack.GetAllPackages() {
-		if strings.HasPrefix(p.Package, "native/jdk") || p.Package == "native/graalvm" || p.Package == "hellostaticlib" || p.Package == "graalvm-clibraries" {
+		if strings.HasPrefix(p.Package, "native/jdk") || p.Package == "native/graalvm" {
 			files = append(files, "packages/"+p.Package+".json")
 		}
 	}

@@ -1,7 +1,0 @@
-#!/bin/sh
-if [ $# -eq 1 ] && [ "$1" = "-v" ]; then
-	echo "Apple clang version 21.0.0"
-	echo "Target: @CC_TARGET@"
-	exit 0
-fi
-exec @CC@ @CFLAGS@ "$@"
