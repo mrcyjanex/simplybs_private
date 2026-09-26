@@ -135,6 +135,7 @@
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:MACOSX_DEPLOYMENT_TARGET=13.0",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
+                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -217,6 +218,7 @@
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:MACOSX_DEPLOYMENT_TARGET=13.0",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
+                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -299,6 +301,7 @@
                     "linux_arm64:*:CXXFLAGS_aarch64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
                     "linux_amd64:*:CFLAGS_x86_64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
                     "linux_amd64:*:CXXFLAGS_x86_64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
+                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -338,6 +341,7 @@
                     "darwin_arm64:*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
+                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "darwin_arm64:*:CXXFLAGS=-fPIC -stdlib=libc++",
                     "darwin_*:x86_64-linux-gnu:CFLAGS_x86_64_unknown_linux_gnu=--sysroot=$PREFIX/sysroot -I$PREFIX/include -I$PREFIX/usr/include",
                     "darwin_*:x86_64-linux-gnu:CXXFLAGS_x86_64_unknown_linux_gnu=--sysroot=$PREFIX/sysroot -I$PREFIX/include -I$PREFIX/include/c++/13.4.0 -I$PREFIX/include/c++/13.4.0/$HOST -I$PREFIX/usr/include",
