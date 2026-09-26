@@ -3,6 +3,7 @@ package pack
 import (
 	"log"
 	"strings"
+	"sync"
 
 	"github.com/mrcyjanek/simplybs/builder"
 	"github.com/mrcyjanek/simplybs/host"
@@ -16,6 +17,7 @@ type EnvKV struct {
 }
 
 type exportEnvContext struct {
+	mu       sync.Mutex
 	memo     map[string][]EnvKV
 	visiting map[string]bool
 }
@@ -26,6 +28,11 @@ func newExportEnvContext() *exportEnvContext {
 		visiting: make(map[string]bool),
 	}
 }
+
+// sharedExportEnv memoizes resolved export-env across packages in one process.
+// Package JSON is immutable after load, so this is safe for CI queue hashing
+// (thousands of GeneratePackageInfo calls otherwise re-walk the toolchain).
+var sharedExportEnv = newExportEnvContext()
 
 func copyEnv(m map[string]string) map[string]string {
 	out := make(map[string]string, len(m))
@@ -44,6 +51,12 @@ func envKeyFromLine(line string) string {
 }
 
 func (ctx *exportEnvContext) resolvedExportEnv(p *Package, h *host.Host) []EnvKV {
+	ctx.mu.Lock()
+	defer ctx.mu.Unlock()
+	return ctx.resolvedExportEnvLocked(p, h)
+}
+
+func (ctx *exportEnvContext) resolvedExportEnvLocked(p *Package, h *host.Host) []EnvKV {
 	key := p.Package + "\x00" + h.Triplet
 	if ctx.visiting[key] {
 		log.Fatalf("export-env cycle involving package %s", p.Package)
@@ -72,7 +85,7 @@ func (ctx *exportEnvContext) resolvedExportEnv(p *Package, h *host.Host) []EnvKV
 	base["HOST"] = h.Triplet
 	base["TARGET"] = h.Triplet
 	for _, dep := range filteredDependencyPackages(p.Dependencies, h) {
-		for _, e := range ctx.resolvedExportEnv(dep, h) {
+		for _, e := range ctx.resolvedExportEnvLocked(dep, h) {
 			if skipFromDeps[e.K] {
 				continue
 			}
@@ -94,8 +107,7 @@ func (ctx *exportEnvContext) resolvedExportEnv(p *Package, h *host.Host) []EnvKV
 }
 
 func (p *Package) GetExportEnv(h *host.Host) map[string]string {
-	ctx := newExportEnvContext()
-	kvs := ctx.resolvedExportEnv(p, h)
+	kvs := sharedExportEnv.resolvedExportEnv(p, h)
 	env := make(map[string]string, len(kvs))
 	for _, e := range kvs {
 		env[e.K] = e.V
@@ -104,8 +116,10 @@ func (p *Package) GetExportEnv(h *host.Host) map[string]string {
 }
 
 func mergeResolvedExportEnv(env map[string]string, ctx *exportEnvContext, deps []*Package, h *host.Host) {
+	ctx.mu.Lock()
+	defer ctx.mu.Unlock()
 	for _, dep := range deps {
-		for _, e := range ctx.resolvedExportEnv(dep, h) {
+		for _, e := range ctx.resolvedExportEnvLocked(dep, h) {
 			env[e.K] = e.V
 		}
 	}

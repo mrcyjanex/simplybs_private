@@ -10,12 +10,18 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/mrcyjanek/simplybs/builder"
 	"github.com/mrcyjanek/simplybs/crash"
 	"github.com/mrcyjanek/simplybs/host"
 	"github.com/mrcyjanek/simplybs/utils"
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
+)
+
+var (
+	infoHashMu    sync.Mutex
+	infoHashCache = map[string]string{}
 )
 
 func (p *Package) prefixPath(h *host.Host) string {
@@ -69,9 +75,30 @@ func (p *Package) GeneratePackageInfo(h *host.Host) string {
 }
 
 func (p *Package) GeneratePackageInfoHash(h *host.Host) string {
+	key := p.Package + "\x00" + p.Version + "\x00" + h.Triplet
+	infoHashMu.Lock()
+	if s, ok := infoHashCache[key]; ok {
+		infoHashMu.Unlock()
+		return s
+	}
+	infoHashMu.Unlock()
+
 	info := p.GeneratePackageInfo(h)
-	hash := sha256.Sum256([]byte(info))
-	return hex.EncodeToString(hash[:])
+	sum := sha256.Sum256([]byte(info))
+	s := hex.EncodeToString(sum[:])
+
+	infoHashMu.Lock()
+	infoHashCache[key] = s
+	infoHashMu.Unlock()
+	return s
+}
+
+// ResetPackageInfoHashCache clears memoized package-info hashes. Tests that
+// mutate in-memory package definitions should call this.
+func ResetPackageInfoHashCache() {
+	infoHashMu.Lock()
+	infoHashCache = map[string]string{}
+	infoHashMu.Unlock()
 }
 
 func (p *Package) GeneratePackageInfoShortHash(h *host.Host) string {
@@ -149,17 +176,15 @@ func (p *Package) minimalEnv(h *host.Host) map[string]string {
 }
 
 func (p *Package) GetEnv(h *host.Host) map[string]string {
-	ctx := newExportEnvContext()
 	env := p.minimalEnv(h)
-	mergeResolvedExportEnv(env, ctx, filteredDependencyPackages(p.Dependencies, h), h)
+	mergeResolvedExportEnv(env, sharedExportEnv, filteredDependencyPackages(p.Dependencies, h), h)
 	env = utils.AppendEnv(env, p.Build.Env, h)
 	return env
 }
 
 func (p *Package) GetEnvForLogs(h *host.Host) map[string]string {
-	ctx := newExportEnvContext()
 	env := map[string]string{}
-	mergeResolvedExportEnv(env, ctx, filteredDependencyPackages(p.Dependencies, h), h)
+	mergeResolvedExportEnv(env, sharedExportEnv, filteredDependencyPackages(p.Dependencies, h), h)
 	env = utils.AppendEnv(env, p.Build.Env, h)
 	return env
 }

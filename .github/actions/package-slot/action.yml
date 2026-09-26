@@ -81,7 +81,21 @@ runs:
           extra=(-package "$EXTRA")
         fi
         set -o pipefail
-        go run ./cmd/ciqueue next -base "$BASE" -sha "$SHA" -hosts "$HOSTS" "${extra[@]}" | tee /tmp/ciqueue.json
+        attempt=1
+        delay=2
+        while true; do
+          if go run ./cmd/ciqueue next -base "$BASE" -sha "$SHA" -hosts "$HOSTS" "${extra[@]}" | tee /tmp/ciqueue.json; then
+            break
+          fi
+          if [ "$attempt" -ge 5 ]; then
+            echo "ciqueue next failed after $attempt attempts"
+            exit 1
+          fi
+          echo "ciqueue next failed (attempt $attempt), retrying in ${delay}s..."
+          sleep "$delay"
+          attempt=$((attempt + 1))
+          delay=$((delay * 2))
+        done
 
     - name: Build package
       id: build
@@ -107,6 +121,7 @@ runs:
         HOST: ${{ steps.next.outputs.host }}
         STATUS: ${{ steps.next.outputs.status }}
         REMAINING: ${{ steps.next.outputs.remaining }}
+        REMAINING_COUNT: ${{ steps.next.outputs.remaining_count }}
         STALE: ${{ steps.stale.outputs.stale }}
         BUILD_OK: ${{ steps.build.outcome }}
         NEXT_OK: ${{ steps.next.outcome }}
@@ -143,6 +158,7 @@ runs:
           -conclusion "$conclusion" \
           -run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
           -remaining "${REMAINING:-[]}" \
+          -remaining-count "${REMAINING_COUNT:-0}" \
           "${queue_args[@]}"
 
     - name: Decide continue

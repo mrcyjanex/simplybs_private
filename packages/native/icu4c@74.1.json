@@ -1,0 +1,36 @@
+{
+    "package": "native/icu4c@74.1",
+    "version": "74.1",
+    "type": "native",
+    "download": [
+        {
+            "kind": "git",
+            "sha256": "9edac7b78327a1cb58db29e2714b15f9fa14e4d7",
+            "url": "https://github.com/unicode-org/icu.git"
+        }
+    ],
+    "dependencies": [
+        "*:*:native/_/_",
+        "*:*:native/bash",
+        "*:*:native/coreutils",
+        "*:*:native/jdk@22",
+        "*:*:native/make",
+        "*:*:native/python@3.14",
+        "*:*:native/sed"
+    ],
+    "build": {
+        "env": [
+            "*:*:PYTHON=$NATIVEPREFIX/bin/python3",
+            "*:*:ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data"
+        ],
+        "steps": [
+            "*:*:unset HOST TARGET && cd icu4c/source && bash ./configure --prefix=$NATIVEPREFIX --disable-samples --disable-tests --disable-extras --with-data-packaging=archive",
+            "*:*:unset HOST TARGET && cd icu4c/source && make -j$NUM_CORES",
+            "*:*:cp icu4c/source/data/out/icudt74l.dat icu4c/source/data/out/tmp/icudt74l.dat",
+            "*:*:unset HOST TARGET && cd icu4c/source/data && make JAR=$JAVA_HOME/bin/jar icu4j-data",
+            "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/icu4c/74.1",
+            "*:*:cp icu4c/source/data/out/icu4j/icudata.jar $STAGING_DIR$NATIVEPREFIX/share/icu4c/74.1/icudata.jar",
+            "*:*:cp icu4c/source/data/out/icu4j/icutzdata.jar $STAGING_DIR$NATIVEPREFIX/share/icu4c/74.1/icutzdata.jar"
+        ]
+    }
+}

@@ -28,9 +28,18 @@
             "linux_arm64:*:CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=$NATIVEPREFIX/_/bin/clang",
             "linux_arm64:*:RUSTFLAGS=-Clinker=$NATIVEPREFIX/_/bin/clang -Clink-arg=-L$NATIVEPREFIX/lib",
             "darwin_arm64:*:CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=$NATIVEPREFIX/_/bin/clang",
-            "darwin_arm64:*:RUSTFLAGS=-Clinker=$NATIVEPREFIX/_/bin/clang -Clink-arg=-L$NATIVEPREFIX/lib"
+            "darwin_arm64:*:SDK_PATH=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_arm64:*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_arm64:*:SDK_VERSION=26.1",
+            "darwin_arm64:*:MACOSX_DEPLOYMENT_TARGET=13.0",
+            "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
+            "darwin_arm64:*:RUSTFLAGS=-Clinker=$NATIVEPREFIX/_/bin/clang -Clink-arg=-L$NATIVEPREFIX/lib -Clink-arg=-isysroot -Clink-arg=$SDK_PATH"
         ],
         "steps": [
+            "darwin_arm64:*:test -L $NATIVEPREFIX/bin/xcrun && mv $NATIVEPREFIX/bin/xcrun $NATIVEPREFIX/bin/xcrun.real || true",
+            "darwin_arm64:*:cp -f $PATCH_DIR/rust-std/xcrun $NATIVEPREFIX/bin/xcrun",
+            "darwin_arm64:*:chmod +x $NATIVEPREFIX/bin/xcrun",
+            "darwin_arm64:*:mkdir -p build/aarch64-apple-darwin/stage0/lib",
             "*:*:echo '[build]' > config.toml",
             "*:*:echo 'full-bootstrap = true' >> config.toml",
             "*:*:echo 'vendor = true' >> config.toml",
@@ -41,6 +50,8 @@
             "*:*:echo '[llvm]' >> config.toml",
             "*:*:echo 'ninja = true' >> config.toml",
             "*:*:echo 'download-ci-llvm = false' >> config.toml",
+            "*:*:echo '[rust]' >> config.toml",
+            "*:*:echo 'deny-warnings = false' >> config.toml",
             "*:*:env -u ARFLAGS python3 ./x.py build --stage 3 --verbose -j $NUM_CORES",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/bin",
             "*:*:cp -a build/*/stage3/lib $STAGING_DIR$NATIVEPREFIX/",
