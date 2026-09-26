@@ -135,7 +135,6 @@
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:MACOSX_DEPLOYMENT_TARGET=13.0",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
-                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -218,7 +217,6 @@
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:MACOSX_DEPLOYMENT_TARGET=13.0",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
-                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -301,7 +299,6 @@
                     "linux_arm64:*:CXXFLAGS_aarch64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
                     "linux_amd64:*:CFLAGS_x86_64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
                     "linux_amd64:*:CXXFLAGS_x86_64_unknown_linux_gnu=-fPIC -I$NATIVEPREFIX/include",
-                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "*:*:ARFLAGS="
                 ],
                 "unset": [
@@ -341,7 +338,6 @@
                     "darwin_arm64:*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
                     "darwin_arm64:*:SDK_VERSION=26.1",
                     "darwin_arm64:*:CARGO_BUILD_WARNINGS=allow",
-                    "darwin_arm64:*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
                     "darwin_arm64:*:CXXFLAGS=-fPIC -stdlib=libc++",
                     "darwin_*:x86_64-linux-gnu:CFLAGS_x86_64_unknown_linux_gnu=--sysroot=$PREFIX/sysroot -I$PREFIX/include -I$PREFIX/usr/include",
                     "darwin_*:x86_64-linux-gnu:CXXFLAGS_x86_64_unknown_linux_gnu=--sysroot=$PREFIX/sysroot -I$PREFIX/include -I$PREFIX/include/c++/13.4.0 -I$PREFIX/include/c++/13.4.0/$HOST -I$PREFIX/usr/include",
@@ -439,6 +435,9 @@
             "*:*:echo 'deny-warnings = false' >> config.toml",
             "linux_arm64:aarch64-linux-gnu:sed -i 's/download-ci-llvm = false/download-ci-llvm = true/; s/libzstd = false/libzstd = true/' config.toml",
             "*:*:@$RUST_LLVM_PROFILE python3 ./x.py build llvm -j$NUM_CORES",
+            "darwin_arm64:*android*:cp -f $NATIVEPREFIX/_/lib/libclang-cpp.dylib $NATIVEPREFIX/lib/libclang-cpp.dylib",
+            "darwin_arm64:*-linux-gnu:cp -f $NATIVEPREFIX/_/lib/libclang-cpp.dylib $NATIVEPREFIX/lib/libclang-cpp.dylib",
+            "darwin_arm64:*-w64-mingw32:cp -f $NATIVEPREFIX/_/lib/libclang-cpp.dylib $NATIVEPREFIX/lib/libclang-cpp.dylib",
             "*:*:@$RUST_STD_PROFILE python3 ./x.py build library/std --stage 1 --target $RUST_TRIPLET -j$NUM_CORES",
             "linux_*:*-apple-*:ln -sf $RUST_CC $NATIVEPREFIX/bin/cc",
             "linux_*:*-apple-*:ln -sf $RUST_CXX $NATIVEPREFIX/bin/c++",
