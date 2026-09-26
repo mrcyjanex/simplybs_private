@@ -1,7 +1,7 @@
 name: package-batch
 
-# 24 serial package slots. packages.yml calls this three times
-# (72 packages per run) so a zlib-tree cold fill fits in one workflow.
+# 24 serial package slots. packages.yml calls this ten times
+# (240 packages per run) so a GraalVM/maven-tree fill fits in one workflow.
 on:
   workflow_call:
     inputs:

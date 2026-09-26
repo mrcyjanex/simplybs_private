@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"path"
 	"sort"
 	"strings"
@@ -10,10 +11,20 @@ import (
 	"github.com/mrcyjanek/simplybs/pack"
 )
 
-// DefaultHosts are the first targets the package worker builds.
+// DefaultHosts is the Linux CI host list, in queue order.
+// Keep x86_64-linux-gnu first (native-ish on the GHA amd64 runner).
+// 32-bit Android (armv7a-linux-androideabi) stays in host.SupportedHosts
+// but is omitted from CI for now.
 var DefaultHosts = []string{
 	"x86_64-linux-gnu",
+	"aarch64-linux-gnu",
 	"aarch64-linux-android",
+	"x86_64-linux-android",
+	"x86_64-w64-mingw32",
+	"aarch64-apple-darwin",
+	"x86_64-apple-darwin",
+	"aarch64-apple-ios",
+	"aarch64-apple-ios-simulator",
 }
 
 // Item is one (package, host) node in the build queue.
@@ -28,13 +39,14 @@ func (it Item) key() string {
 
 // Result is JSON written to stdout for the Actions worker.
 type Result struct {
-	Status     string   `json:"status"` // next | done | blocked
-	Package    string   `json:"package,omitempty"`
-	Host       string   `json:"host,omitempty"`
-	Needed     int      `json:"needed"`
-	Remaining  []Item   `json:"remaining,omitempty"`
-	ChangedPkg []string `json:"changed_packages,omitempty"`
-	Message    string   `json:"message,omitempty"`
+	Status         string   `json:"status"` // next | done | blocked
+	Package        string   `json:"package,omitempty"`
+	Host           string   `json:"host,omitempty"`
+	Needed         int      `json:"needed"`
+	Remaining      []Item   `json:"remaining,omitempty"`
+	RemainingCount int      `json:"remaining_count,omitempty"`
+	ChangedPkg     []string `json:"changed_packages,omitempty"`
+	Message        string   `json:"message,omitempty"`
 }
 
 type cacheFn func(*pack.Package, *host.Host) (bool, error)
@@ -72,27 +84,62 @@ func nextQueue(opts queueOpts) (Result, error) {
 		}
 	}
 	changedList := sortedKeys(changed)
+	log.Printf("ciqueue: %d changed packages, %d hosts", len(changedList), len(hosts))
 
+	roots := make([]*pack.Package, 0, len(changed))
+	for _, name := range changedList {
+		root, ok := byName[name]
+		if !ok {
+			continue
+		}
+		roots = append(roots, root)
+	}
+
+	// Cache artifact names already queued or known present. Native packages
+	// often share one built/ path across -host triplets; listing them once
+	// avoids N identical CI slots and keeps readiness correct.
 	needed := map[string]Item{}
+	seenArt := map[string]bool{}
+	queuedArt := map[string]string{} // artifact key -> needed item key
+	artMemo := map[string]string{}
+	artifactOf := func(p *pack.Package, ht *host.Host) string {
+		k := p.Package + "\x00" + ht.Triplet
+		if a, ok := artMemo[k]; ok {
+			return a
+		}
+		a := strings.Join(p.BuiltRelPaths(ht), "\x00")
+		artMemo[k] = a
+		return a
+	}
+
 	for _, h := range hosts {
 		ht := host.SupportedHosts[h]
-		for name := range changed {
-			root, ok := byName[name]
-			if !ok {
+		if len(roots) == 0 {
+			continue
+		}
+		tree := pack.CollectNeededPackages(roots, ht)
+		cacheHits := 0
+		added := 0
+		for _, p := range tree {
+			art := artifactOf(p, ht)
+			if seenArt[art] {
 				continue
 			}
-			for _, p := range pack.CollectNeededPackages([]*pack.Package{root}, ht) {
-				it := Item{Package: p.Package, Host: h}
-				onRelease, err := cached(p, ht)
-				if err != nil {
-					return Result{}, fmt.Errorf("cache lookup %s %s: %w", p.Package, h, err)
-				}
-				if onRelease {
-					continue
-				}
-				needed[it.key()] = it
+			seenArt[art] = true
+			onRelease, err := cached(p, ht)
+			if err != nil {
+				return Result{}, fmt.Errorf("cache lookup %s %s: %w", p.Package, h, err)
 			}
+			if onRelease {
+				cacheHits++
+				continue
+			}
+			it := Item{Package: p.Package, Host: h}
+			needed[it.key()] = it
+			queuedArt[art] = it.key()
+			added++
 		}
+		log.Printf("ciqueue: %s tree=%d queued+=%d cache-hit=%d needed=%d", h, len(tree), added, cacheHits, len(needed))
 	}
 
 	if len(needed) == 0 {
@@ -104,38 +151,26 @@ func nextQueue(opts queueOpts) (Result, error) {
 		}, nil
 	}
 
-	depSet := func(it Item) ([]string, error) {
-		p, err := pack.FindPackage(it.Package)
-		if err != nil {
-			return nil, err
+	var ready []Item
+	var blocked []Item
+	for _, it := range needed {
+		p, ok := byName[it.Package]
+		if !ok {
+			return Result{}, fmt.Errorf("unknown package %s", it.Package)
 		}
 		ht := host.SupportedHosts[it.Host]
-		var deps []string
+		okReady := true
 		for _, d := range pack.CollectNeededPackages([]*pack.Package{p}, ht) {
 			if d.Package == p.Package {
 				continue
 			}
-			deps = append(deps, d.Package)
-		}
-		return deps, nil
-	}
-
-	var ready []Item
-	var blocked []Item
-	for _, it := range needed {
-		deps, err := depSet(it)
-		if err != nil {
-			return Result{}, err
-		}
-		ok := true
-		for _, dep := range deps {
-			depItem := Item{Package: dep, Host: it.Host}
-			if _, still := needed[depItem.key()]; still {
-				ok = false
+			art := artifactOf(d, ht)
+			if k := queuedArt[art]; k != "" && k != it.key() {
+				okReady = false
 				break
 			}
 		}
-		if ok {
+		if okReady {
 			ready = append(ready, it)
 		} else {
 			blocked = append(blocked, it)
@@ -144,24 +179,28 @@ func nextQueue(opts queueOpts) (Result, error) {
 
 	if len(ready) == 0 {
 		return Result{
-			Status:     "blocked",
-			Needed:     len(needed),
-			Remaining:  itemsSorted(needed, hosts, byName),
-			ChangedPkg: changedList,
-			Message:    fmt.Sprintf("needed %d items but none are ready (%d blocked)", len(needed), len(blocked)),
+			Status:         "blocked",
+			Needed:         len(needed),
+			Remaining:      itemsSorted(needed, hosts, byName),
+			RemainingCount: len(needed),
+			ChangedPkg:     changedList,
+			Message:        fmt.Sprintf("needed %d items but none are ready (%d blocked)", len(needed), len(blocked)),
 		}, nil
 	}
 
 	sortItems(ready, hosts, byName)
 	pick := ready[0]
 	delete(needed, pick.key())
+	remaining := itemsSorted(needed, hosts, byName)
+	log.Printf("ciqueue: pick %s / %s (needed=%d ready=%d blocked=%d)", pick.Package, pick.Host, len(needed)+1, len(ready), len(blocked))
 	return Result{
-		Status:     "next",
-		Package:    pick.Package,
-		Host:       pick.Host,
-		Needed:     len(needed) + 1,
-		Remaining:  itemsSorted(needed, hosts, byName),
-		ChangedPkg: changedList,
+		Status:         "next",
+		Package:        pick.Package,
+		Host:           pick.Host,
+		Needed:         len(needed) + 1,
+		Remaining:      remaining,
+		RemainingCount: len(remaining),
+		ChangedPkg:     changedList,
 	}, nil
 }
 

@@ -1,0 +1,64 @@
+--- a/src/grammar/lexer.flex
++++ b/src/grammar/lexer.flex
+@@ -79,6 +79,61 @@
+         return s;
+     }
+ 
++    // JFlex 1.9.1's default skeleton omits the nested-stream helpers.
++    // Copied from src/grammar/skeleton.inner (QDox's javadoc include stack).
++    private java.util.Stack zzStreams = new java.util.Stack();
++
++    private static final class ZzFlexStreamInfo {
++        java.io.Reader zzReader;
++        int zzEndRead;
++        int zzStartRead;
++        int zzCurrentPos;
++        int zzMarkedPos;
++        char [] zzBuffer;
++        boolean zzAtEOF;
++        boolean zzEOFDone;
++
++        ZzFlexStreamInfo(java.io.Reader zzReader, int zzEndRead, int zzStartRead,
++                      int zzCurrentPos, int zzMarkedPos,
++                      char [] zzBuffer, boolean zzAtEOF) {
++            this.zzReader      = zzReader;
++            this.zzEndRead     = zzEndRead;
++            this.zzStartRead   = zzStartRead;
++            this.zzCurrentPos  = zzCurrentPos;
++            this.zzMarkedPos   = zzMarkedPos;
++            this.zzBuffer      = zzBuffer;
++            this.zzAtEOF       = zzAtEOF;
++        }
++    }
++
++    public final void yypushStream(java.io.Reader reader) {
++        zzStreams.push(
++            new ZzFlexStreamInfo(zzReader, zzEndRead, zzStartRead, zzCurrentPos,
++                              zzMarkedPos, zzBuffer, zzAtEOF)
++        );
++        zzAtEOF  = false;
++        zzEOFDone = false;
++        zzFinalHighSurrogate = 0;
++        zzBuffer = new char[ZZ_BUFFERSIZE];
++        zzReader = reader;
++        zzEndRead = zzStartRead = 0;
++        zzCurrentPos = zzMarkedPos = 0;
++    }
++
++    public final void yypopStream() throws java.io.IOException {
++        zzReader.close();
++        ZzFlexStreamInfo s = (ZzFlexStreamInfo) zzStreams.pop();
++        zzBuffer      = s.zzBuffer;
++        zzReader      = s.zzReader;
++        zzStartRead   = s.zzStartRead + zzEndRead + 2; //skip javadoc-part
++        zzEndRead     = s.zzEndRead;
++        zzCurrentPos  = s.zzCurrentPos;
++        zzMarkedPos   = s.zzMarkedPos;
++        zzAtEOF       = s.zzAtEOF;
++        zzEOFDone     = s.zzEOFDone;
++        zzFinalHighSurrogate = 0;
++    }
++
+ %}
+ 
+ Eol                     = \r|\n|\r\n
