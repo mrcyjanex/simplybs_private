@@ -90,20 +90,24 @@ SIMPLYBS_ENV_DIR=/opt/_
 ## Build cache (GitHub Releases)
 
 Built package archives are content-addressed (`package-version-<8-char-hash>`).
-They can be shared via a rolling GitHub Release without downloading the whole
+They can be shared via rolling GitHub Releases without downloading the whole
 cache on every run.
+
+GitHub limits each Release to **1000 assets**. `SIMPLYBS_CACHE_TAG` is the
+base tag; when it fills, simplybs overflows to `$TAG.s1`, `$TAG.s2`, … .
+Lookups union every shard, so you still set only the two variables below.
 
 Cache is enabled only when **both** required variables are set:
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `SIMPLYBS_CACHE_TAG` | yes | Release tag (e.g. `v0-sbs-$USER-$GOOS-$GOARCH`) |
+| `SIMPLYBS_CACHE_TAG` | yes | Base release tag (e.g. `v0-sbs-$USER-$GOOS-$GOARCH`); overflow shards are `$TAG.sN` |
 | `SIMPLYBS_CACHE_REPO` | yes | `owner/repo` hosting the release |
 | `SIMPLYBS_GH` | no | Optional path to `gh` |
 
 ```bash
 # export SIMPLYBS_CACHE_TAG=v0-sbs-$USER-$(go env GOOS)-$(go env GOARCH)
-# export SIMPLYBS_CACHE_REPO=mrcyjanek/simplybs_private
+# export SIMPLYBS_CACHE_REPO=mrcyjanex/simplybs_private
 ```
 
 With those set, `-build` auto-pulls artifacts up front, pulls per-package
@@ -125,6 +129,7 @@ go run . -cache-push                                          # all local built/
 go run . -host x86_64-linux-gnu -package zlib -cache-push     # that package tree only
 ```
 
-Push only uploads local artifacts that are not already on the release (a
+Push only uploads local artifacts that are not already on any shard (a
 package rebuild with a new hash is a new asset name, so “changed” caches
-upload naturally).
+upload naturally). When the current shard has no room for the upload,
+the next `$TAG.sN` release is created automatically.

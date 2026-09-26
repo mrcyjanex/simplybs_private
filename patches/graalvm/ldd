@@ -1,0 +1,4 @@
+#!/bin/sh
+# mx get_os_variant() runs `ldd --version` to distinguish musl from glibc.
+# Hermetic builds have no host ldd; emit a glibc-shaped banner.
+echo "ldd (GNU libc)"

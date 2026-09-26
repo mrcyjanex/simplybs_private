@@ -82,7 +82,7 @@
             "{linux_*,windows_*}:*-apple-*:sed -i.bak 's|export CFLAGS=\"\"|export CFLAGS=\"--gcc-toolchain=$NATIVEPREFIX/_/libexec/gcc-toolchain --sysroot=$NATIVEPREFIX/_/sysroot\"|' build_clang.sh",
             "{linux_*,windows_*}:*-apple-*:sed -i.bak 's|export CXXFLAGS=\"\"|export CXXFLAGS=\"--gcc-toolchain=$NATIVEPREFIX/_/libexec/gcc-toolchain --sysroot=$NATIVEPREFIX/_/sysroot\"|' build_clang.sh",
             "*:*-apple-*:export PATH=$PWD/wrapper/bin:$PATH && CC=$NATIVEPREFIX/_/bin/clang-21 CXX=$NATIVEPREFIX/_/bin/clang++-21 LDFLAGS=-fuse-ld=$NATIVEPREFIX/_/bin/ld yes | INSTALLPREFIX=$NATIVEPREFIX ./build_apple_clang.sh",
-            "*:*-apple-*:cd build/clang-21/build_stage3 && make -j$NUM_CORES install DESTDIR=$STAGING_DIR && make -j$NUM_CORES install",
+            "*:*-apple-*:DESTDIR=$STAGING_DIR cmake --install build/clang-21/build_stage3 && cmake --install build/clang-21/build_stage3",
             "*:*-apple-*:sed -i.bak 's/## Compiler test ##/exit 0/g' build.sh",
             "*:*-apple-*:export PATH=$PWD/wrapper/bin:$PATH && OCDEBUG=1 TARGET_DIR=$STAGING_DIR$NATIVEPREFIX bash -x ./build.sh",
             "*:*-apple-*:rm $STAGING_DIR$NATIVEPREFIX/bin/*pkg-config"

@@ -18,24 +18,19 @@ import (
 )
 
 func (p *Package) EnsureBuilt(h *host.Host, buildDependencies bool) {
-	buildPath := p.GenerateBuildPath(h, "built") + ".info.txt"
-	info, err := os.ReadFile(buildPath)
-	if err != nil {
+	if !p.localBuiltArtifactsPresent(h) {
 		// Selective remote pull: only this package's assets (by short-hash name).
-		if TryPullPackageCache(p, h) {
-			info, err = os.ReadFile(buildPath)
-		}
+		TryPullPackageCache(p, h)
 	}
-	if err != nil {
-		log.Printf("[%s][%s] No build cache found, building...", h.Triplet, p.Package)
-		p.BuildPackage(h, true)
-		return
-	}
-	if string(info) == p.GeneratePackageInfo(h) {
+	if p.localBuiltCacheHit(h) {
 		log.Printf("[%s][%s] Build cache found, skipping build...", h.Triplet, p.Package)
 		return
 	}
-	log.Printf("[%s][%s] Build cache found, but info mismatch, rebuilding...", h.Triplet, p.Package)
+	if p.localBuiltArtifactsPresent(h) {
+		log.Printf("[%s][%s] Build cache found, but info mismatch, rebuilding...", h.Triplet, p.Package)
+	} else {
+		log.Printf("[%s][%s] No complete build cache found, building...", h.Triplet, p.Package)
+	}
 	p.BuildPackage(h, true)
 }
 

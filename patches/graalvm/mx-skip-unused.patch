@@ -1,0 +1,29 @@
+--- a/src/mx/_impl/mx.py
++++ b/src/mx/_impl/mx.py
+@@ -5685,6 +5685,8 @@
+             self.testDistribution = name.endswith('_TEST') or name.endswith('_TESTS')
+         else:
+             self.testDistribution = testDistribution
++        if self.testDistribution and not hasattr(self, 'defaultBuild'):
++            self.defaultBuild = False
+ 
+     def is_test_distribution(self):
+         return self.testDistribution
+@@ -7186,6 +7188,8 @@
+             if not self.testProject and not self.suite.getMxCompatibility().disableImportOfTestProjects():
+                 self.testProject = self.name.endswith('.jtt')
+ 
++        if self.testProject and not hasattr(self, 'defaultBuild'):
++            self.defaultBuild = False
+         # Create directories for projects that don't yet exist
+         ensure_dir_exists(d)
+         for s in self.source_dirs():
+@@ -9102,6 +9106,8 @@
+     def __init__(self, suite, name, optional, theLicense, **kwArgs):
+         Dependency.__init__(self, suite, name, theLicense, **kwArgs)
+         self.optional = optional
++        if not hasattr(self, 'defaultBuild'):
++            self.defaultBuild = False
+ 
+     def _walk_deps_visit_edges(self, visited, edge, preVisit=None, visit=None, ignoredEdges=None, visitEdge=None):
+         pass
