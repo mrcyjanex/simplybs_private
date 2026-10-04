@@ -1,0 +1,26 @@
+{
+    "package": "native/jdk@22/mvn/truffle-asm@9.5",
+    "version": "9.5",
+    "type": "native",
+    "dependencies": [
+        "*:*:native/coreutils",
+        "*:*:native/jdk@22",
+        "*:*:native/jdk@22/mvn/asm@9.5",
+        "*:*:native/jdk@22/mvn/asm-tree@9.5",
+        "*:*:native/jdk@22/mvn/asm-analysis@9.5",
+        "*:*:native/jdk@22/mvn/asm-commons@9.5"
+    ],
+    "build": {
+        "env": [
+            "*:*:WORKDIR=work/truffle-asm@9.5",
+            "*:*:REPO=$NATIVEPREFIX/share/maven/repository"
+        ],
+        "steps": [
+            "*:*:mkdir -p $WORKDIR",
+            "*:*:$JAVA_HOME/bin/javac -d $WORKDIR $PATCH_DIR/maven/RelocateJar.java",
+            "*:*:$JAVA_HOME/bin/java -cp $WORKDIR RelocateJar -o $WORKDIR/com.oracle.truffle.api.impl.asm-9.5.0.jar $REPO/org/ow2/asm/asm/9.5/asm-9.5.jar $REPO/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar $REPO/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar $REPO/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar -- org.objectweb.asm com.oracle.truffle.api.impl.asm",
+            "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/graal-external-deps",
+            "*:*:cp $WORKDIR/com.oracle.truffle.api.impl.asm-9.5.0.jar $STAGING_DIR$NATIVEPREFIX/share/graal-external-deps/com.oracle.truffle.api.impl.asm-9.5.0.jar"
+        ]
+    }
+}

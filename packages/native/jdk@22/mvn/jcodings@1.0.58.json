@@ -1,0 +1,35 @@
+{
+    "package": "native/jdk@22/mvn/jcodings@1.0.58",
+    "version": "1.0.58",
+    "type": "native",
+    "download": [
+        {
+            "kind": "git",
+            "sha256": "729c96c85c8c87f44d4b71c3fc1dc699a0abf413",
+            "url": "https://github.com/jruby/jcodings"
+        }
+    ],
+    "dependencies": [
+        "*:*:native/bash",
+        "*:*:native/coreutils",
+        "*:*:native/findutils",
+        "*:*:native/jdk@22"
+    ],
+    "build": {
+        "env": [
+            "*:*:WORKDIR=work/jcodings@1.0.58"
+        ],
+        "steps": [
+            "*:*:mkdir -p $WORKDIR/classes",
+            "*:*:find src -name '*.java' ! -name 'module-info.java' >$WORKDIR/sources",
+            "*:*:$JAVA_HOME/bin/javac --release 8 -d $WORKDIR/classes @$WORKDIR/sources",
+            "*:*:cp -a resources/tables $WORKDIR/classes/tables",
+            "*:*:$JAVA_HOME/bin/jar cf $WORKDIR/jcodings-1.0.58.jar -C $WORKDIR/classes .",
+            "*:*:$JAVA_HOME/bin/javac -d $WORKDIR $PATCH_DIR/maven/RelocateJar.java",
+            "*:*:$JAVA_HOME/bin/java -cp $WORKDIR RelocateJar -o $WORKDIR/graalvm-shadowed-jcodings-1.0.58.1.jar $WORKDIR/jcodings-1.0.58.jar -- org.jcodings org.graalvm.shadowed.org.jcodings",
+            "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jruby/jcodings/jcodings/1.0.58 $STAGING_DIR$NATIVEPREFIX/share/graal-external-deps",
+            "*:*:cp $WORKDIR/jcodings-1.0.58.jar $STAGING_DIR$NATIVEPREFIX/share/maven/repository/org/jruby/jcodings/jcodings/1.0.58/jcodings-1.0.58.jar",
+            "*:*:cp $WORKDIR/graalvm-shadowed-jcodings-1.0.58.1.jar $STAGING_DIR$NATIVEPREFIX/share/graal-external-deps/graalvm-shadowed-jcodings-1.0.58.1.jar"
+        ]
+    }
+}
