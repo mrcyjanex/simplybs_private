@@ -49,6 +49,7 @@
         "*:*-android*:native/7zip",
         "*:*-android*:native/_/_",
         "*:*-android*:native/android-clang",
+        "*:*-android*:native/libc++",
         "*:*-android*:native/python@3.11"
     ],
     "build": {

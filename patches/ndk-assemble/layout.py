@@ -72,7 +72,10 @@ def clang_has_arch(clang: Path, arch: str) -> bool:
         out = subprocess.check_output(
             [str(clang), "-print-targets"], text=True, stderr=subprocess.STDOUT
         )
-    except (OSError, subprocess.CalledProcessError):
+    except (OSError, subprocess.CalledProcessError) as err:
+        print(f"clang -print-targets failed: {err}", flush=True)
+        if getattr(err, "output", None):
+            print(err.output, end="", flush=True)
         return False
     tokens = {line.strip().split()[0].lower() for line in out.splitlines() if line.strip()}
     wanted = {
@@ -80,7 +83,10 @@ def clang_has_arch(clang: Path, arch: str) -> bool:
         "arm": {"arm", "armeb"},
         "x86_64": {"x86-64", "x86_64"},
     }
-    return bool(tokens & wanted.get(arch, {arch}))
+    ok = bool(tokens & wanted.get(arch, {arch}))
+    if not ok:
+        print(f"clang -print-targets missing {arch}:\n{out}", flush=True)
+    return ok
 
 
 def host_tag(goos: str, goarch: str) -> str:
