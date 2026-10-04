@@ -18,7 +18,8 @@ CLANG_TOOL_LINKS = {
     "objcopy": "llvm-objcopy",
     "objdump": "llvm-objdump",
     "readelf": "llvm-readelf",
-    "as": "clang",
+    "readobj": "llvm-readobj",
+    "as": "llvm-as",
 }
 
 
@@ -66,6 +67,8 @@ def copy_clang_into_toolchain(clang_prefix: Path, toolchain: Path) -> Path:
     if (dest_bin / "ld.lld").exists():
         _symlink(dest_bin / "ld", "ld.lld")
         _symlink(dest_bin / "lld", "ld.lld")
+    if (dest_bin / "llvm-readobj").exists() and not (dest_bin / "llvm-readelf").exists():
+        _symlink(dest_bin / "llvm-readelf", "llvm-readobj")
     for name, target in CLANG_TOOL_LINKS.items():
         if (dest_bin / target).exists() and not (dest_bin / name).exists():
             _symlink(dest_bin / name, target)

@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 
 from cmake_patch import patch_cmake_host_tag  # noqa: E402
 from install import install  # noqa: E402
-from layout import api_levels, host_tag, toolchain_root  # noqa: E402
+from layout import Abi, api_levels, host_tag, toolchain_root  # noqa: E402
 from skeleton import detect_zip_host_tag, prepare_skeleton  # noqa: E402
 from wrappers import clang_wrapper  # noqa: E402
 
@@ -52,6 +52,7 @@ def fake_clang_prefix(root: Path) -> Path:
     _touch(root / "bin" / "clang++", "#!/bin/sh\necho clang++-from-source\n")
     _touch(root / "bin" / "ld.lld", "#!/bin/sh\necho lld\n")
     _touch(root / "bin" / "llvm-ar", "#!/bin/sh\necho ar\n")
+    _touch(root / "bin" / "llvm-as", "#!/bin/sh\necho as\n")
     _touch(root / "bin" / "llvm-ranlib", "#!/bin/sh\necho ranlib\n")
     _touch(root / "bin" / "llvm-nm", "#!/bin/sh\necho nm\n")
     _touch(root / "bin" / "llvm-strip", "#!/bin/sh\necho strip\n")
@@ -83,6 +84,11 @@ class HostTagTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             host_tag("plan9", "arm")
 
+    def test_armv7_cflags(self) -> None:
+        abi = Abi.from_clang_triple("armv7a-linux-androideabi")
+        self.assertEqual(abi.cflags, "-mthumb")
+        self.assertEqual(abi.lib_triple, "arm-linux-androideabi")
+
 
 class WrapperTests(unittest.TestCase):
     def test_cc1_passthrough(self) -> None:
@@ -90,6 +96,7 @@ class WrapperTests(unittest.TestCase):
         self.assertIn('--target=aarch64-linux-android21', text)
         self.assertIn('"$1" != "-cc1"', text)
         self.assertIn('"$bin_dir/clang"', text)
+        self.assertTrue(text.startswith("#!/usr/bin/env bash\n"))
 
 
 class SkeletonTests(unittest.TestCase):
@@ -134,6 +141,8 @@ class InstallTests(unittest.TestCase):
         )
         tc = toolchain_root(ndk, "linux-x86_64")
         self.assertTrue((tc / "bin" / "clang").exists())
+        self.assertTrue((tc / "bin" / "llvm-as").exists())
+        self.assertTrue((tc / "bin" / "as").is_symlink())
         wrapper = tc / "bin" / "aarch64-linux-android21-clang"
         self.assertTrue(wrapper.exists())
         text = wrapper.read_text()

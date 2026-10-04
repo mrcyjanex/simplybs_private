@@ -79,7 +79,8 @@ def build_builtins(
 ) -> None:
     info = ABIS[abi_name]
     target = f"{info['clang_triple']}{api}"
-    flags = f"--target={target} --sysroot={sysroot} -fPIC"
+    extra = info.get("cflags", "")
+    flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
     build = dest / "build-rt"
     install = dest / "install-rt"
     _cmake_configure(
@@ -111,6 +112,7 @@ def build_builtins(
             "-DCOMPILER_RT_BUILD_ORC=OFF",
             "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON",
             "-DCOMPILER_RT_INCLUDE_TESTS=OFF",
+            "-DCOMPILER_RT_BUILTINS_HIDE_SYMBOLS=ON",
             f"-DCMAKE_INSTALL_PREFIX={install}",
         ],
     )
@@ -127,10 +129,15 @@ def build_libcxx(
     api: int,
     dest: Path,
     jobs: int,
+    builtins: Path | None = None,
 ) -> None:
     info = ABIS[abi_name]
     target = f"{info['clang_triple']}{api}"
-    flags = f"--target={target} --sysroot={sysroot} -fPIC"
+    extra = info.get("cflags", "")
+    flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
+    link_flags = flags
+    if builtins is not None:
+        link_flags = f"{flags} {builtins}"
     build = dest / "build-cxx"
     install = dest / "install-cxx"
     _cmake_configure(
@@ -149,6 +156,8 @@ def build_libcxx(
             f"-DCMAKE_SYSROOT={sysroot}",
             f"-DCMAKE_C_FLAGS={flags}",
             f"-DCMAKE_CXX_FLAGS={flags}",
+            f"-DCMAKE_SHARED_LINKER_FLAGS={link_flags}",
+            f"-DCMAKE_EXE_LINKER_FLAGS={link_flags}",
             "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
             "-DLIBCXX_ENABLE_SHARED=ON",
             "-DLIBCXX_ENABLE_STATIC=ON",
@@ -156,11 +165,16 @@ def build_libcxx(
             "-DLIBCXX_HAS_PTHREAD_API=ON",
             "-DLIBCXX_INCLUDE_TESTS=OFF",
             "-DLIBCXX_INCLUDE_BENCHMARKS=OFF",
+            "-DLIBCXX_ABI_VERSION=1",
+            "-DLIBCXX_ABI_NAMESPACE=__ndk1",
+            "-DLIBCXX_USE_COMPILER_RT=ON",
             "-DLIBCXXABI_ENABLE_SHARED=OFF",
             "-DLIBCXXABI_ENABLE_STATIC=ON",
             "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
+            "-DLIBCXXABI_USE_COMPILER_RT=ON",
             "-DLIBUNWIND_ENABLE_SHARED=OFF",
             "-DLIBUNWIND_ENABLE_STATIC=ON",
+            "-DLIBUNWIND_USE_COMPILER_RT=ON",
             f"-DCMAKE_INSTALL_PREFIX={install}",
         ],
     )
@@ -193,7 +207,19 @@ def build_runtimes(
             shutil.rmtree(staged)
         staged.mkdir(parents=True)
         build_builtins(llvm_src, clang, clangxx, sysroot, abi_name, api, work, jobs)
-        build_libcxx(llvm_src, clang, clangxx, sysroot, abi_name, api, work, jobs)
+        builtin_libs = list((work / "install-rt").rglob("libclang_rt.builtins*.a"))
+        builtins = builtin_libs[0] if builtin_libs else None
+        build_libcxx(
+            llvm_src,
+            clang,
+            clangxx,
+            sysroot,
+            abi_name,
+            api,
+            work,
+            jobs,
+            builtins=builtins,
+        )
         collect_abi(work / "install-rt", abi_name, staged)
         collect_abi(work / "install-cxx", abi_name, staged)
         shutil.rmtree(work, ignore_errors=True)

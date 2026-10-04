@@ -5,11 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 
 WRAPPER = """\
-#!/bin/bash
+#!/usr/bin/env bash
 bin_dir=`dirname "$0"`
 if [ "$1" != "-cc1" ]; then
     exec "$bin_dir/{driver}" --target={target} "$@"
 else
+    # Target is already an argument.
     exec "$bin_dir/{driver}" "$@"
 fi
 """

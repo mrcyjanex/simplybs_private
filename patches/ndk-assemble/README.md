@@ -17,7 +17,10 @@ $NDK/
 
 This is the Apple-SDK analogue: the compiler and C++/compiler-rt runtimes are
 built from source; bionic headers, CRT objects, and per-API stub libraries
-come from the NDK sysroot (a platform dump).
+come from the NDK sysroot (a platform dump). Clang is configured with
+`DEFAULT_SYSROOT=../sysroot`, `compiler-rt`, `libunwind`, and `libc++` so the
+assembled `bin/<triple><api>-clang` wrappers match the zip (target only; sysroot
+is implicit). libc++ is built with `_LIBCPP_ABI_NAMESPACE=__ndk1`.
 
 ## Commands
 

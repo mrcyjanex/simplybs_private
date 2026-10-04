@@ -31,7 +31,13 @@
             "*:*-android*:config_opts=$config_opts -DLLVM_ENABLE_TERMINFO=OFF",
             "*:*-android*:config_opts=$config_opts -DLLVM_ENABLE_ASSERTIONS=OFF",
             "*:*-android*:config_opts=$config_opts -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON",
+            "*:*-android*:config_opts=$config_opts -DLLVM_INSTALL_BINUTILS_SYMLINKS=ON",
+            "*:*-android*:config_opts=$config_opts -DLLVM_TOOLCHAIN_TOOLS='dsymutil;llvm-ar;llvm-as;llvm-config;llvm-cov;llvm-cxxfilt;llvm-dlltool;llvm-dwp;llvm-ifs;llvm-lib;llvm-link;llvm-lipo;llvm-ml;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-size;llvm-strings;llvm-strip;llvm-symbolizer;llvm-windres'",
             "*:*-android*:config_opts=$config_opts -DCLANG_DEFAULT_LINKER=lld",
+            "*:*-android*:config_opts=$config_opts -DCLANG_DEFAULT_RTLIB=compiler-rt",
+            "*:*-android*:config_opts=$config_opts -DCLANG_DEFAULT_UNWINDLIB=libunwind",
+            "*:*-android*:config_opts=$config_opts -DCLANG_DEFAULT_CXX_STDLIB=libc++",
+            "*:*-android*:config_opts=$config_opts -DDEFAULT_SYSROOT=../sysroot",
             "linux_amd64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=x86_64-linux-gnu",
             "linux_arm64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=aarch64-linux-gnu",
             "darwin_arm64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=aarch64-apple-darwin",
@@ -48,8 +54,7 @@
         "steps": [
             "linux_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
             "darwin_*:*-android*:cmake $config_opts",
-            "*:*-android*:cmake --build build --target clang lld -j$NUM_CORES",
-            "*:*-android*:DESTDIR=$STAGING_DIR cmake --install build"
+            "*:*-android*:DESTDIR=$STAGING_DIR cmake --build build --target install -j$NUM_CORES"
         ]
     }
 }

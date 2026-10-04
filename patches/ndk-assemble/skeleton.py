@@ -35,7 +35,7 @@ def relocate_host_tag(ndk: Path, dest_tag: str) -> Path:
 
 
 def strip_compiler(toolchain: Path) -> None:
-    for name in ("bin", "lib", "lib64", "python3", "runtimes_ndk_cxx", "android_libc++"):
+    for name in ("bin", "lib", "lib64", "python3", "runtimes_ndk_cxx", "android_libc++", "musl"):
         path = toolchain / name
         if path.exists():
             shutil.rmtree(path)

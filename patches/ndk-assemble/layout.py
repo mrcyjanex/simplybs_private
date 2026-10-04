@@ -24,6 +24,7 @@ ABIS = {
         "builtin": "arm-android",
         "arch": "arm",
         "processor": "arm",
+        "cflags": "-mthumb",
     },
     "x86_64": {
         "abi": "x86_64",
@@ -65,6 +66,7 @@ class Abi:
     builtin: str
     arch: str
     processor: str
+    cflags: str = ""
 
     @classmethod
     def from_clang_triple(cls, triple: str) -> Abi:
