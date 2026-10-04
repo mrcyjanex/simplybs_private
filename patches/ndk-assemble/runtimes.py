@@ -34,6 +34,8 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
     env["TMPDIR"] = "/tmp"
     env["TEMP"] = "/tmp"
     env["TMP"] = "/tmp"
+    # toybox `sh` in $NATIVEPREFIX/_/bin cannot run llvm config.guess.
+    env["PATH"] = "/bin:" + env.get("PATH", "")
     subprocess.check_call(cmd, cwd=cwd, env=env)
 
 
