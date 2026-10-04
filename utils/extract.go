@@ -52,7 +52,7 @@ func detectCommonPrefix(readerFactory readerFactory) (string, error) {
 
 	if len(firstLevelDirs) == 1 && rootFiles == 0 {
 		for dirName := range firstLevelDirs {
-			if (dirName == "native") {
+			if dirName == "native" {
 				return "", nil
 			}
 			return dirName + "/", nil
@@ -304,6 +304,47 @@ func writeFileToTar(tw *tar.Writer, header *tar.Header, filePath string) error {
 	return err
 }
 
+// tarArchiveEpoch is a non-zero mtime so tools that treat 0 as "unset"
+// still see a stable timestamp. Matches SOURCE_DATE_EPOCH=1.
+var tarArchiveEpoch = time.Unix(1, 0).UTC()
+
+func normalizeTarHeader(header *tar.Header) {
+	header.Uid = 0
+	header.Gid = 0
+	header.Uname = ""
+	header.Gname = ""
+	header.ModTime = tarArchiveEpoch
+	// Leave atime/ctime unset so archive/tar does not emit PAX records
+	// for them (those would still be deterministic, but USTAR is enough).
+	header.AccessTime = time.Time{}
+	header.ChangeTime = time.Time{}
+	header.Devmajor = 0
+	header.Devminor = 0
+	header.PAXRecords = nil
+	header.Xattrs = nil
+	header.Format = tar.FormatUnknown
+
+	switch header.Typeflag {
+	case tar.TypeDir:
+		header.Mode = 0755
+		if !strings.HasSuffix(header.Name, "/") {
+			header.Name += "/"
+		}
+	case tar.TypeReg, tar.TypeRegA:
+		if header.Mode&0111 != 0 {
+			header.Mode = 0755
+		} else {
+			header.Mode = 0644
+		}
+	case tar.TypeSymlink:
+		header.Mode = 0777
+		header.Size = 0
+		header.Linkname = filepath.ToSlash(header.Linkname)
+	default:
+		header.Mode &= 0777
+	}
+}
+
 func CreateTarGz(sourcePath, archivePath string) error {
 	file, err := os.Create(archivePath)
 	if err != nil {
@@ -315,15 +356,31 @@ func CreateTarGz(sourcePath, archivePath string) error {
 	if err != nil {
 		return err
 	}
-	defer gzw.Close()
+	// gzip -n: no original filename, mtime 0, OS "unknown"
+	gzw.Name = ""
+	gzw.Comment = ""
+	gzw.Extra = nil
+	gzw.ModTime = time.Time{}
+	gzw.OS = 255
 
 	tw := tar.NewWriter(gzw)
-	defer tw.Close()
-
 	log.Printf("Creating archive: %s from %s", archivePath, sourcePath)
 
+	if err := writeReproducibleTar(tw, sourcePath); err != nil {
+		tw.Close()
+		gzw.Close()
+		return err
+	}
+	if err := tw.Close(); err != nil {
+		gzw.Close()
+		return err
+	}
+	return gzw.Close()
+}
+
+func writeReproducibleTar(tw *tar.Writer, sourcePath string) error {
 	var filePaths []string
-	err = filepath.Walk(sourcePath, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(sourcePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -340,8 +397,6 @@ func CreateTarGz(sourcePath, archivePath string) error {
 	}
 
 	sort.Strings(filePaths)
-
-	fixedTime := time.Unix(1, 0)
 
 	for _, path := range filePaths {
 		info, err := os.Lstat(path)
@@ -366,9 +421,6 @@ func CreateTarGz(sourcePath, archivePath string) error {
 		}
 
 		header.Name = filepath.ToSlash(relPath)
-		header.ModTime = fixedTime
-		header.AccessTime = fixedTime
-		header.ChangeTime = fixedTime
 
 		if info.Mode()&os.ModeSymlink != 0 {
 			linkTarget, err := os.Readlink(path)
@@ -380,10 +432,10 @@ func CreateTarGz(sourcePath, archivePath string) error {
 			header.Size = 0
 		}
 
-		if info.Mode().IsRegular() {
-			var filePath = path
+		normalizeTarHeader(header)
 
-			if err := writeFileToTar(tw, header, filePath); err != nil {
+		if info.Mode().IsRegular() {
+			if err := writeFileToTar(tw, header, path); err != nil {
 				return err
 			}
 		} else {
