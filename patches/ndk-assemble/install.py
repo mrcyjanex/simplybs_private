@@ -10,6 +10,7 @@ from cmake_patch import patch_cmake_host_tag
 from layout import ABIS, Abi, api_levels, clang_bin, lib_dir, sysroot_path, toolchain_root
 from wrappers import write_clang_wrappers, write_compat_wrapper, write_ld_wrapper
 
+HOST_LIB_GLOBS = ("libc++.so*", "libc++abi.so*", "libunwind.so*")
 CLANG_TOOL_LINKS = {
     "ar": "llvm-ar",
     "ranlib": "llvm-ranlib",
@@ -84,7 +85,21 @@ def copy_clang_into_toolchain(clang_prefix: Path, toolchain: Path) -> Path:
             resource = None
         if resource is not None and resource.is_dir():
             _copytree(resource, dest_resource_root / resource.name)
+    copy_host_libs([clang_prefix / "lib"], toolchain)
     return dest_bin
+
+
+def copy_host_libs(sources: list[Path], toolchain: Path) -> None:
+    dest = toolchain / "lib"
+    dest.mkdir(parents=True, exist_ok=True)
+    for src_dir in sources:
+        if src_dir is None or not src_dir.is_dir():
+            continue
+        for pattern in HOST_LIB_GLOBS:
+            for src in src_dir.glob(pattern):
+                if src.is_dir():
+                    continue
+                _copy_file(src, dest / src.name)
 
 
 def overlay_runtimes(runtimes: Path, toolchain: Path, sysroot: Path) -> None:
@@ -184,6 +199,7 @@ def install(
     host_tag: str,
     runtimes: Path | None = None,
     prefix_lib_dir: Path | None = None,
+    host_lib_dir: Path | None = None,
     target_triple: str | None = None,
     api: int = 21,
 ) -> Path:
@@ -195,6 +211,8 @@ def install(
         raise FileNotFoundError(f"skeleton sysroot missing: {sysroot}")
 
     dest_bin = copy_clang_into_toolchain(clang_prefix, toolchain)
+    if host_lib_dir is not None:
+        copy_host_libs([host_lib_dir], toolchain)
     if runtimes is not None:
         overlay_runtimes(runtimes, toolchain, sysroot)
     levels = write_all_wrappers(dest_bin, sysroot)

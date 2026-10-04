@@ -57,6 +57,7 @@ def cmd_install(args: argparse.Namespace) -> None:
         host_tag=args.host_tag,
         runtimes=runtimes,
         prefix_lib_dir=prefix_lib_dir,
+        host_lib_dir=args.host_lib_dir if args.host_lib_dir else None,
         target_triple=args.target_triple,
         api=args.api,
     )
@@ -116,6 +117,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--ndk-out", type=_path, required=True)
     p.add_argument("--host-tag", default=_default_host_tag())
     p.add_argument("--prefix-lib-dir", type=_path, default=None)
+    p.add_argument("--host-lib-dir", type=_path, default=None)
     p.add_argument("--target-triple", default=None)
     p.add_argument("--api", type=int, default=MIN_API)
     p.set_defaults(func=cmd_install)

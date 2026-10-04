@@ -14,6 +14,7 @@
         "*:*-android*:native/android-clang",
         "*:*-android*:native/android-sysroot",
         "*:*-android*:native/cmake",
+        "*:*-android*:native/libc++",
         "*:*-android*:native/ninja",
         "*:*-android*:native/python@3.11"
     ],

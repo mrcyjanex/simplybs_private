@@ -129,6 +129,9 @@ class InstallTests(unittest.TestCase):
         runtimes = fake_runtimes(self.tmp / "rt")
         ndk = self.tmp / "ndk"
         prefix_lib = self.tmp / "prefix" / "lib"
+        host_lib = self.tmp / "hostlib"
+        _touch(host_lib / "libc++abi.so.1", "abi")
+        _touch(host_lib / "libunwind.so.1", "unwind")
         install(
             skeleton=skel,
             clang_prefix=clang,
@@ -136,6 +139,7 @@ class InstallTests(unittest.TestCase):
             host_tag="linux-x86_64",
             runtimes=runtimes,
             prefix_lib_dir=prefix_lib,
+            host_lib_dir=host_lib,
             target_triple="aarch64-linux-android",
             api=21,
         )
@@ -164,6 +168,8 @@ class InstallTests(unittest.TestCase):
         self.assertTrue((prefix_lib / "libc.so").exists())
         self.assertTrue((prefix_lib / "libc.a").exists())
         self.assertTrue((prefix_lib / "crtbegin_dynamic.o").exists())
+        self.assertTrue((tc / "lib" / "libc++abi.so.1").exists())
+        self.assertTrue((tc / "lib" / "libunwind.so.1").exists())
         self.assertEqual(api_levels(tc / "sysroot"), [21, 24])
 
     def test_patch_idempotent(self) -> None:
