@@ -28,8 +28,8 @@
             "darwin_arm64:*-android*:ANDROID_HOST_TAG=darwin-arm64"
         ],
         "steps": [
-            "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld",
-            "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld",
+            "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld || test -d android-ndk-r28c",
+            "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld || test -d android-ndk-r28c",
             "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG"
         ]
     }
