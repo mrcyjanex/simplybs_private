@@ -13,6 +13,7 @@
         "*:*-android*:native/_/_",
         "*:*-android*:native/android-clang",
         "*:*-android*:native/android-sysroot",
+        "*:*-android*:native/bash",
         "*:*-android*:native/cmake",
         "*:*-android*:native/libc++",
         "*:*-android*:native/ninja",

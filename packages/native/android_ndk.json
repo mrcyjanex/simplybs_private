@@ -7,6 +7,7 @@
         "*:*-android*:native/android-clang",
         "*:*-android*:native/android-runtimes",
         "*:*-android*:native/android-sysroot",
+        "*:*-android*:native/bash",
         "*:*-android*:native/libc++",
         "*:*-android*:native/python@3.11"
     ],
