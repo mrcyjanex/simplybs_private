@@ -42,7 +42,13 @@
             "linux_amd64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=x86_64-linux-gnu",
             "linux_arm64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=aarch64-linux-gnu",
             "darwin_arm64:*-android*:config_opts=$config_opts -DLLVM_HOST_TRIPLE=aarch64-apple-darwin",
+            "darwin_*:*-android*:MACOSX_DEPLOYMENT_TARGET=13.0",
+            "darwin_arm64:*-android*:SDK_PATH=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_arm64:*-android*:SDKROOT=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk",
+            "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_OSX_SYSROOT=$SDK_PATH",
             "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0",
+            "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_LIBTOOL=$NATIVEPREFIX/_/bin/llvm-libtool-darwin",
+            "darwin_*:*-android*:config_opts=$config_opts -DDARWIN_macosx_CACHED_SYSROOT=$SDK_PATH",
             "linux_*:*-android*:config_opts=$config_opts -DLLVM_ENABLE_LIBCXX=ON",
             "linux_*:*-android*:config_opts=$config_opts -DCMAKE_C_COMPILER=$NATIVEPREFIX/_/bin/clang",
             "linux_*:*-android*:config_opts=$config_opts -DCMAKE_CXX_COMPILER=$NATIVEPREFIX/_/bin/clang++",
@@ -54,7 +60,7 @@
         ],
         "steps": [
             "linux_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
-            "darwin_*:*-android*:cmake $config_opts",
+            "darwin_*:*-android*:cmake $config_opts -DCMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG=\"-Wl,-rpath,\"",
             "*:*-android*:DESTDIR=$STAGING_DIR cmake --build build --target install -j$NUM_CORES"
         ]
     }
