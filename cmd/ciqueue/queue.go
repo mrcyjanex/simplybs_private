@@ -11,13 +11,12 @@ import (
 	"github.com/mrcyjanek/simplybs/pack"
 )
 
-// DefaultHosts is the CI host list.
+// DefaultHosts is the Linux CI host list (packages.yml). 32-bit Android is omitted.
 var DefaultHosts = []string{
 	"x86_64-linux-gnu",
 	"aarch64-linux-gnu",
 	"aarch64-linux-android",
 	"x86_64-linux-android",
-	"armv7a-linux-androideabi",
 	"x86_64-w64-mingw32",
 	"aarch64-apple-darwin",
 	"x86_64-apple-darwin",
