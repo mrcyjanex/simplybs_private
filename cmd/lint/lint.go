@@ -252,6 +252,12 @@ func createSourcesFile() {
 		sources.Repositories = make(map[string]utils.RepositoryInfo)
 	}
 
+	// Rebuild blob/tarball entries from current package definitions. Merging
+	// into the previous list keeps downloads for removed packages (prebuilt
+	// Graal JNI JARs, old CE tarballs, unused tarballs). Git refs stay so
+	// existing bundles remain listed until historic collection runs.
+	sources.Downloads = nil
+
 	currentRefs := 0
 	currentDownloads := 0
 
