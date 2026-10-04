@@ -24,6 +24,17 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
     subprocess.check_call(cmd, cwd=cwd, env=env)
 
 
+def _install_builtins_for_clang(clang: Path, builtins: Path, target: str) -> None:
+    wanted = Path(
+        subprocess.check_output(
+            [str(clang), f"--target={target}", "-print-libgcc-file-name"],
+            text=True,
+        ).strip()
+    )
+    wanted.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(builtins, wanted)
+
+
 def _cmake_configure(build: Path, args: list[str]) -> None:
     if build.exists():
         shutil.rmtree(build)
@@ -59,6 +70,11 @@ def collect_abi(install_prefix: Path, abi_name: str, dest: Path) -> None:
         found = _first(list(install_prefix.rglob(name)))
         if found is not None:
             shutil.copy2(found, lib_dest / name)
+
+    shared = lib_dest / "libc++_shared.so"
+    script = lib_dest / "libc++.so"
+    if shared.exists() and not script.exists():
+        script.write_text("INPUT(-lc++_shared)\n")
 
     headers = _first(
         [
@@ -137,9 +153,8 @@ def build_libcxx(
     target = f"{info['clang_triple']}{api}"
     extra = info.get("cflags", "")
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
-    link_flags = flags
     if builtins is not None:
-        link_flags = f"{flags} {builtins}"
+        _install_builtins_for_clang(clang, builtins, target)
     build = dest / "build-cxx"
     install = dest / "install-cxx"
     _cmake_configure(
@@ -149,33 +164,27 @@ def build_libcxx(
             "Ninja",
             "-S",
             str(llvm_src / "runtimes"),
+            f"-C{llvm_src / 'libcxx' / 'cmake' / 'caches' / 'AndroidNDK.cmake'}",
             "-DLLVM_ENABLE_RUNTIMES=libunwind;libcxx;libcxxabi",
             "-DCMAKE_BUILD_TYPE=Release",
             f"-DCMAKE_C_COMPILER={clang}",
             f"-DCMAKE_CXX_COMPILER={clangxx}",
+            f"-DCMAKE_ASM_COMPILER={clang}",
             f"-DCMAKE_C_COMPILER_TARGET={target}",
             f"-DCMAKE_CXX_COMPILER_TARGET={target}",
+            f"-DCMAKE_ASM_COMPILER_TARGET={target}",
             f"-DCMAKE_SYSROOT={sysroot}",
             f"-DCMAKE_C_FLAGS={flags}",
             f"-DCMAKE_CXX_FLAGS={flags}",
-            f"-DCMAKE_SHARED_LINKER_FLAGS={link_flags}",
-            f"-DCMAKE_EXE_LINKER_FLAGS={link_flags}",
-            "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
-            "-DLIBCXX_ENABLE_SHARED=ON",
-            "-DLIBCXX_ENABLE_STATIC=ON",
-            "-DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=ON",
-            "-DLIBCXX_HAS_PTHREAD_API=ON",
+            f"-DCMAKE_ASM_FLAGS={flags}",
+            f"-DCMAKE_SHARED_LINKER_FLAGS={flags}",
+            f"-DCMAKE_EXE_LINKER_FLAGS={flags}",
+            "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
+            "-DLIBCXX_USE_COMPILER_RT=ON",
+            "-DLIBCXXABI_USE_COMPILER_RT=ON",
             "-DLIBCXX_INCLUDE_TESTS=OFF",
             "-DLIBCXX_INCLUDE_BENCHMARKS=OFF",
-            "-DLIBCXX_ABI_VERSION=1",
-            "-DLIBCXX_ABI_NAMESPACE=__ndk1",
-            "-DLIBCXX_USE_COMPILER_RT=ON",
-            "-DLIBCXXABI_ENABLE_SHARED=OFF",
-            "-DLIBCXXABI_ENABLE_STATIC=ON",
-            "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
-            "-DLIBCXXABI_USE_COMPILER_RT=ON",
             "-DLIBUNWIND_ENABLE_SHARED=OFF",
-            "-DLIBUNWIND_ENABLE_STATIC=ON",
             "-DLIBUNWIND_USE_COMPILER_RT=ON",
             f"-DCMAKE_INSTALL_PREFIX={install}",
         ],
