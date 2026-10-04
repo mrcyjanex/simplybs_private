@@ -10,12 +10,30 @@ from pathlib import Path
 from layout import ABIS, MIN_API
 
 
+def _host_triple() -> str:
+    sysname = os.uname().sysname.lower()
+    machine = os.uname().machine
+    if sysname == "linux" and machine in ("x86_64", "amd64"):
+        return "x86_64-unknown-linux-gnu"
+    if sysname == "linux" and machine in ("aarch64", "arm64"):
+        return "aarch64-unknown-linux-gnu"
+    if sysname == "darwin" and machine in ("arm64", "aarch64"):
+        return "aarch64-apple-darwin"
+    if sysname == "darwin":
+        return "x86_64-apple-darwin"
+    return f"{machine}-unknown-{sysname}"
+
+
 def _run(cmd: list[str], cwd: Path | None = None) -> None:
     print("+", " ".join(cmd), flush=True)
     env = os.environ.copy()
     # The bootstrap clang in $NATIVEPREFIX/_ ships an LLVM CMake package that
     # points at missing llvm-tblgen. compiler-rt/libcxx must not pick it up.
     env.pop("LLVM_DIR", None)
+    # simplybs TMPDIR is under env-native/_/tmp; llvm config.guess cannot mkdir there.
+    env["TMPDIR"] = "/tmp"
+    env["TEMP"] = "/tmp"
+    env["TMP"] = "/tmp"
     subprocess.check_call(cmd, cwd=cwd, env=env)
 
 
@@ -145,7 +163,7 @@ def build_libcxx(
             "-S",
             str(llvm_src / "runtimes"),
             "-DLLVM_ENABLE_RUNTIMES=libunwind;libcxx;libcxxabi",
-            "-DLLVM_RUNTIMES_BUILD=ON",
+            f"-DLLVM_HOST_TRIPLE={_host_triple()}",
             "-DCMAKE_BUILD_TYPE=Release",
             f"-DCMAKE_C_COMPILER={clang}",
             f"-DCMAKE_CXX_COMPILER={clangxx}",
