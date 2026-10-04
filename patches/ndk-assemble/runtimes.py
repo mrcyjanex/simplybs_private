@@ -12,7 +12,11 @@ from layout import ABIS, MIN_API
 
 def _run(cmd: list[str], cwd: Path | None = None) -> None:
     print("+", " ".join(cmd), flush=True)
-    subprocess.check_call(cmd, cwd=cwd)
+    env = os.environ.copy()
+    # The bootstrap clang in $NATIVEPREFIX/_ ships an LLVM CMake package that
+    # points at missing llvm-tblgen. compiler-rt/libcxx must not pick it up.
+    env.pop("LLVM_DIR", None)
+    subprocess.check_call(cmd, cwd=cwd, env=env)
 
 
 def _cmake_configure(build: Path, args: list[str]) -> None:
@@ -89,7 +93,7 @@ def build_builtins(
             "-G",
             "Ninja",
             "-S",
-            str(llvm_src / "compiler-rt"),
+            str(llvm_src / "compiler-rt" / "lib" / "builtins"),
             "-DCMAKE_BUILD_TYPE=Release",
             f"-DCMAKE_C_COMPILER={clang}",
             f"-DCMAKE_CXX_COMPILER={clangxx}",
@@ -102,16 +106,9 @@ def build_builtins(
             f"-DCMAKE_CXX_FLAGS={flags}",
             f"-DCMAKE_ASM_FLAGS={flags}",
             "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
-            "-DCOMPILER_RT_BUILD_BUILTINS=ON",
-            "-DCOMPILER_RT_BUILD_SANITIZERS=OFF",
-            "-DCOMPILER_RT_BUILD_XRAY=OFF",
-            "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF",
-            "-DCOMPILER_RT_BUILD_PROFILE=OFF",
-            "-DCOMPILER_RT_BUILD_MEMPROF=OFF",
-            "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF",
-            "-DCOMPILER_RT_BUILD_ORC=OFF",
+            "-DLLVM_RUNTIMES_BUILD=ON",
+            "-DANDROID=1",
             "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON",
-            "-DCOMPILER_RT_INCLUDE_TESTS=OFF",
             "-DCOMPILER_RT_BUILTINS_HIDE_SYMBOLS=ON",
             f"-DCMAKE_INSTALL_PREFIX={install}",
         ],
@@ -148,6 +145,7 @@ def build_libcxx(
             "-S",
             str(llvm_src / "runtimes"),
             "-DLLVM_ENABLE_RUNTIMES=libunwind;libcxx;libcxxabi",
+            "-DLLVM_RUNTIMES_BUILD=ON",
             "-DCMAKE_BUILD_TYPE=Release",
             f"-DCMAKE_C_COMPILER={clang}",
             f"-DCMAKE_CXX_COMPILER={clangxx}",
