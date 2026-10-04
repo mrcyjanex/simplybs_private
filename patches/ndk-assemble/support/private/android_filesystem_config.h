@@ -1,0 +1,105 @@
+/*
+ * Copyright (C) 2007 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Used to compile bionic's getpwnam/getpwuid AID table. Values match AOSP.
+ */
+#pragma once
+
+#define AID_ROOT 0
+#define AID_DAEMON 1
+#define AID_BIN 2
+#define AID_SYS 3
+#define AID_SYSTEM 1000
+#define AID_RADIO 1001
+#define AID_BLUETOOTH 1002
+#define AID_GRAPHICS 1003
+#define AID_INPUT 1004
+#define AID_AUDIO 1005
+#define AID_CAMERA 1006
+#define AID_LOG 1007
+#define AID_COMPASS 1008
+#define AID_MOUNT 1009
+#define AID_WIFI 1010
+#define AID_ADB 1011
+#define AID_INSTALL 1012
+#define AID_MEDIA 1013
+#define AID_DHCP 1014
+#define AID_SDCARD_RW 1015
+#define AID_VPN 1016
+#define AID_KEYSTORE 1017
+#define AID_USB 1018
+#define AID_DRM 1019
+#define AID_MDNSR 1020
+#define AID_GPS 1021
+#define AID_MEDIA_RW 1023
+#define AID_MTP 1024
+#define AID_NFC 1027
+#define AID_SDCARD_R 1028
+#define AID_CLAT 1029
+#define AID_LOOP_RADIO 1030
+#define AID_MEDIA_DRM 1031
+#define AID_PACKAGE_INFO 1032
+#define AID_LOGD 1036
+#define AID_SHARED_RELRO 1037
+#define AID_DBUS 1038
+#define AID_MEDIA_EX 1040
+#define AID_AUDIOSERVER 1041
+#define AID_WEBSERV 1044
+#define AID_DEBUGGERD 1045
+#define AID_MEDIA_CODEC 1046
+#define AID_CAMERASERVER 1047
+#define AID_DNS 1051
+#define AID_WEBVIEW_ZYGOTE 1053
+#define AID_TOMBSTONED 1058
+#define AID_STATSD 1066
+#define AID_INCIDENTD 1067
+#define AID_LMKD 1069
+#define AID_NETWORK_STACK 1073
+#define AID_ARTD 1082
+#define AID_SHELL 2000
+#define AID_CACHE 2001
+#define AID_DIAG 2002
+#define AID_SECURE_ELEMENT 1068
+#define AID_OEM_RESERVED_START 2900
+#define AID_OEM_RESERVED_END 2999
+#define AID_OEM_RESERVED_2_START 5000
+#define AID_OEM_RESERVED_2_END 5999
+#define AID_SYSTEM_RESERVED_START 6000
+#define AID_SYSTEM_RESERVED_END 6499
+#define AID_SYSTEM_EXT_RESERVED_START 7500
+#define AID_SYSTEM_EXT_RESERVED_END 7999
+#define AID_NET_BT_ADMIN 3001
+#define AID_NET_BT 3002
+#define AID_INET 3003
+#define AID_NET_RAW 3004
+#define AID_NET_ADMIN 3005
+#define AID_NET_BW_STATS 3006
+#define AID_NET_BW_ACCT 3007
+#define AID_READPROC 3009
+#define AID_WAKELOCK 3010
+#define AID_UHID 3011
+#define AID_EVERYBODY 9997
+#define AID_MISC 9998
+#define AID_NOBODY 9999
+#define AID_APP 10000
+#define AID_APP_START 10000
+#define AID_APP_END 19999
+#define AID_CACHE_GID_START 20000
+#define AID_CACHE_GID_END 29999
+#define AID_EXT_GID_START 30000
+#define AID_EXT_GID_END 39999
+#define AID_EXT_CACHE_GID_START 40000
+#define AID_EXT_CACHE_GID_END 49999
+#define AID_SHARED_GID_START 50000
+#define AID_SHARED_GID_END 59999
+#define AID_OVERFLOWUID 65534
+#define AID_ISOLATED_START 90000
+#define AID_ISOLATED_END 99999
+#define AID_USER 100000
+#define AID_USER_OFFSET 100000

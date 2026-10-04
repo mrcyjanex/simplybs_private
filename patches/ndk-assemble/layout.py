@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
 MIN_API = 21
 
-# Clang --target triple (wrapper name) -> sysroot usr/lib/<triple> directory.
+# Only ABIs for simplybs SupportedHosts android triplets.
+# Per-target builds pass a single ABI; do not compile the rest.
 ABIS = {
     "arm64-v8a": {
         "abi": "arm64-v8a",
@@ -16,6 +18,7 @@ ABIS = {
         "builtin": "aarch64-android",
         "arch": "aarch64",
         "processor": "aarch64",
+        "llvm_target": "AArch64",
     },
     "armeabi-v7a": {
         "abi": "armeabi-v7a",
@@ -25,6 +28,7 @@ ABIS = {
         "arch": "arm",
         "processor": "arm",
         "cflags": "-mthumb",
+        "llvm_target": "ARM",
     },
     "x86_64": {
         "abi": "x86_64",
@@ -33,14 +37,7 @@ ABIS = {
         "builtin": "x86_64-android",
         "arch": "x86_64",
         "processor": "x86_64",
-    },
-    "x86": {
-        "abi": "x86",
-        "clang_triple": "i686-linux-android",
-        "lib_triple": "i686-linux-android",
-        "builtin": "i686-android",
-        "arch": "i686",
-        "processor": "i686",
+        "llvm_target": "X86",
     },
 }
 
@@ -67,20 +64,49 @@ class Abi:
     arch: str
     processor: str
     cflags: str = ""
+    min_api: int = MIN_API
+    llvm_target: str = ""
 
     @classmethod
     def from_clang_triple(cls, triple: str) -> Abi:
         info = CLANG_TRIPLE_TO_ABI.get(triple)
         if info is None:
             raise ValueError(f"unknown clang triple {triple!r}")
-        return cls(**info)
+        return cls(**{k: v for k, v in info.items() if k in cls.__dataclass_fields__})
 
     @classmethod
     def from_lib_triple(cls, triple: str) -> Abi:
         info = LIB_TRIPLE_TO_ABI.get(triple)
         if info is None:
             raise ValueError(f"unknown lib triple {triple!r}")
-        return cls(**info)
+        return cls(**{k: v for k, v in info.items() if k in cls.__dataclass_fields__})
+
+
+def abi_min_api(abi_name: str) -> int:
+    return int(ABIS[abi_name].get("min_api", MIN_API))
+
+
+def abi_name_for_triple(clang_triple: str) -> str:
+    return CLANG_TRIPLE_TO_ABI[clang_triple]["abi"]
+
+
+def clang_has_arch(clang: Path, arch: str) -> bool:
+    """True if this clang was built with the backend for `arch`."""
+    import subprocess
+
+    try:
+        out = subprocess.check_output(
+            [str(clang), "-print-targets"], text=True, stderr=subprocess.STDOUT
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return False
+    tokens = {line.strip().split()[0].lower() for line in out.splitlines() if line.strip()}
+    wanted = {
+        "aarch64": {"aarch64", "arm64"},
+        "arm": {"arm", "armeb"},
+        "x86_64": {"x86-64", "x86_64"},
+    }
+    return bool(tokens & wanted.get(arch, {arch}))
 
 
 def host_tag(goos: str, goarch: str) -> str:
@@ -123,3 +149,14 @@ def lib_dir(sysroot: Path, lib_triple: str, api: int | None = None) -> Path:
     if api is not None:
         return path / str(api)
     return path
+
+
+def prune_sysroot_abis(sysroot: Path, keep: list[str]) -> None:
+    """Remove usr/lib/<triple> trees that are not in `keep` (ABI names)."""
+    keep_triples = {ABIS[name]["lib_triple"] for name in keep if name in ABIS}
+    libroot = sysroot / "usr" / "lib"
+    if not libroot.is_dir():
+        return
+    for child in list(libroot.iterdir()):
+        if child.is_dir() and child.name not in keep_triples:
+            shutil.rmtree(child)

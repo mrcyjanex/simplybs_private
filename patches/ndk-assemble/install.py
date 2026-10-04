@@ -114,9 +114,8 @@ def overlay_runtimes(runtimes: Path, toolchain: Path, sysroot: Path) -> None:
         abi_dir = runtimes / abi_name
         if not abi_dir.is_dir():
             continue
-        for builtin in (abi_dir / "lib").glob("libclang_rt.builtins*.a"):
-            dest = linux_dir / f"libclang_rt.builtins-{info['builtin']}.a"
-            _copy_file(builtin, dest)
+        for rt in (abi_dir / "lib").glob("libclang_rt.*"):
+            _copy_file(rt, linux_dir / rt.name)
         lib_triple = info["lib_triple"]
         dest_lib = lib_dir(sysroot, lib_triple)
         dest_lib.mkdir(parents=True, exist_ok=True)
@@ -124,24 +123,39 @@ def overlay_runtimes(runtimes: Path, toolchain: Path, sysroot: Path) -> None:
             "libc++_shared.so",
             "libc++_static.a",
             "libc++abi.a",
+            "libc++experimental.a",
             "libunwind.a",
             "libc++.so",
             "libc++.a",
+            "libcompiler_rt-extras.a",
+            "libc.a",
+            "libm.a",
+            "libdl.a",
+            "libz.a",
+            "libstdc++.a",
         ):
             src = abi_dir / "lib" / name
             if src.exists():
                 _copy_file(src, dest_lib / name)
+        for child in dest_lib.iterdir():
+            if child.is_dir() and child.name.isdigit():
+                for script in ("libc++.so", "libc++.a"):
+                    src = dest_lib / script
+                    if src.exists():
+                        _copy_file(src, child / script)
         headers = abi_dir / "include" / "c++" / "v1"
         if headers.is_dir():
             dest_headers = sysroot / "usr" / "include" / "c++" / "v1"
             _copytree(headers, dest_headers)
 
 
-def write_all_wrappers(bin_dir: Path, sysroot: Path) -> list[int]:
+def write_all_wrappers(bin_dir: Path, sysroot: Path, clang_triple: str | None = None) -> list[int]:
     levels = api_levels(sysroot) or [21]
-    for info in ABIS.values():
-        write_clang_wrappers(bin_dir, info["clang_triple"], levels)
-        write_ld_wrapper(bin_dir, info["lib_triple"])
+    triples = [clang_triple] if clang_triple else [info["clang_triple"] for info in ABIS.values()]
+    for triple in triples:
+        abi = Abi.from_clang_triple(triple)
+        write_clang_wrappers(bin_dir, abi.clang_triple, levels)
+        write_ld_wrapper(bin_dir, abi.lib_triple)
     return levels
 
 
@@ -215,8 +229,10 @@ def install(
         copy_host_libs([host_lib_dir], toolchain)
     if runtimes is not None:
         overlay_runtimes(runtimes, toolchain, sysroot)
-    levels = write_all_wrappers(dest_bin, sysroot)
-    if api not in levels:
+    levels = write_all_wrappers(dest_bin, sysroot, clang_triple=target_triple)
+    if api not in levels and target_triple:
+        write_clang_wrappers(dest_bin, Abi.from_clang_triple(target_triple).clang_triple, [api])
+    elif api not in levels:
         write_clang_wrappers(dest_bin, ABIS["arm64-v8a"]["clang_triple"], [api])
     patch_cmake_host_tag(ndk_out, host_tag)
 

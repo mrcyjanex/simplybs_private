@@ -38,6 +38,7 @@ def cmd_build_sysroot(args: argparse.Namespace) -> None:
     abis = [a.strip() for a in args.abis.split(",") if a.strip()] if args.abis else None
     apis = [int(a) for a in args.apis.split(",") if a.strip()] if args.apis else None
     crt_src = args.crt_src if args.crt_src else Path(__file__).resolve().parent / "crt"
+    support = args.support if args.support else Path(__file__).resolve().parent / "support"
     build_sysroot(
         bionic=args.bionic,
         clang_prefix=args.clang_prefix,
@@ -46,6 +47,11 @@ def cmd_build_sysroot(args: argparse.Namespace) -> None:
         ndk_meta=args.ndk_meta,
         abis=abis,
         apis=apis,
+        zlib_src=args.zlib,
+        llvm_src=args.llvm_src,
+        support=support,
+        arm_opt=args.arm_opt,
+        ucd=args.ucd,
     )
     print(args.sysroot)
 
@@ -125,6 +131,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--crt-src", type=_path, default=None)
     p.add_argument("--abis", default="")
     p.add_argument("--apis", default="")
+    p.add_argument("--zlib", type=_path, default=None)
+    p.add_argument("--llvm-src", type=_path, default=None)
+    p.add_argument("--support", type=_path, default=None)
+    p.add_argument("--arm-opt", type=_path, default=None)
+    p.add_argument("--ucd", type=_path, default=None)
     p.set_defaults(func=cmd_build_sysroot)
 
     p = sub.add_parser("build-runtimes", help="build compiler-rt builtins and libc++")

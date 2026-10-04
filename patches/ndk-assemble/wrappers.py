@@ -16,12 +16,12 @@ fi
 """
 
 COMPAT = """\
-#!/bin/sh
+#!/usr/bin/env bash
 exec "$(cd "$(dirname "$0")/{rel}" && pwd)/{name}" "$@"
 """
 
 LD_WRAPPER = """\
-#!/bin/sh
+#!/usr/bin/env bash
 exec "$(dirname "$0")/ld.lld" "$@"
 """
 

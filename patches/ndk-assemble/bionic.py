@@ -8,13 +8,16 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from layout import ABIS, MIN_API
+from layout import ABIS, MIN_API, abi_min_api, clang_has_arch, prune_sysroot_abis
+from static import build_static_for_abi, install_static_libs
+from stubs import STUB_LIBS, extract_header_symbols
 
 MAP_ARCH = {
     "arm64-v8a": "arm64",
     "armeabi-v7a": "arm",
     "x86_64": "x86_64",
     "x86": "x86",
+    "riscv64": "riscv64",
 }
 
 ARCH_TAGS = {"arm", "arm64", "x86", "x86_64", "riscv64"}
@@ -121,9 +124,26 @@ def stub_source(symbols: list[tuple[str, str, bool]]) -> str:
     return "\n".join(lines)
 
 
-def version_script(soname: str, symbols: list[tuple[str, str, bool]]) -> str:
+def version_tag(soname: str, map_text: str | None = None) -> str:
+    """ELF version node: first `{` name in a bionic map, else SONAME without .so."""
+    if map_text:
+        for raw in map_text.splitlines():
+            line, _, _ = raw.partition("#")
+            line = line.strip()
+            if line.endswith("{"):
+                tag = line[:-1].strip()
+                if tag:
+                    return tag
+    return soname.removesuffix(".so").upper().replace("-", "_").replace("++", "XX")
+
+
+def version_script(
+    soname: str,
+    symbols: list[tuple[str, str, bool]],
+    map_text: str | None = None,
+) -> str:
     names = "\n".join(f"    {name};" for name, _, _ in symbols)
-    return f"{soname.upper().replace('.', '_')} {{\n  global:\n{names}\n  local:\n    *;\n}};\n"
+    return f"{version_tag(soname, map_text)} {{\n  global:\n{names}\n  local:\n    *;\n}};\n"
 
 
 def _clang_common(clang: Path, sysroot: Path, target: str, api: int) -> list[str]:
@@ -224,11 +244,12 @@ def build_stubs(
     work.mkdir(parents=True, exist_ok=True)
     built: set[str] = set()
     for soname, rel in BIONIC_MAPS.items():
-        symbols = parse_map_symbols((bionic / rel).read_text(), arch, api)
+        map_text = (bionic / rel).read_text()
+        symbols = parse_map_symbols(map_text, arch, api)
         src = work / f"{soname}.c"
         script = work / f"{soname}.map"
         src.write_text(stub_source(symbols))
-        script.write_text(version_script(soname, symbols))
+        script.write_text(version_script(soname, symbols, map_text))
         _link_stub(
             clang, sysroot, target, api, soname, src, script, dest / soname, crt_dir=crt_dir
         )
@@ -241,16 +262,30 @@ def build_stubs(
         for soname, min_api in system_libs.items():
             if soname in built or api < int(min_api):
                 continue
-            _link_stub(
-                clang,
-                sysroot,
-                target,
-                api,
-                soname,
-                empty_src,
-                empty_map,
-                dest / soname,
-            )
+            spec = STUB_LIBS.get(soname)
+            symbols: list[tuple[str, str, bool]] = []
+            if spec is not None:
+                symbols = extract_header_symbols(clang, sysroot, target, api, spec)
+            if symbols:
+                src = work / f"{soname}.c"
+                script = work / f"{soname}.map"
+                src.write_text(stub_source(symbols))
+                script.write_text(version_script(soname, symbols))
+                _link_stub(
+                    clang, sysroot, target, api, soname, src, script, dest / soname, crt_dir=crt_dir
+                )
+            else:
+                _link_stub(
+                    clang,
+                    sysroot,
+                    target,
+                    api,
+                    soname,
+                    empty_src,
+                    empty_map,
+                    dest / soname,
+                )
+            built.add(soname)
 
 
 def install_into_sysroot(sysroot: Path, abi_name: str, api: int, crt_dir: Path, stub_dir: Path) -> None:
@@ -258,18 +293,21 @@ def install_into_sysroot(sysroot: Path, abi_name: str, api: int, crt_dir: Path, 
     lib = sysroot / "usr" / "lib" / info["lib_triple"]
     api_dir = lib / str(api)
     api_dir.mkdir(parents=True, exist_ok=True)
-    lib.mkdir(parents=True, exist_ok=True)
     for name in CRT_OBJECTS:
         src = crt_dir / name
         if src.exists():
-            dest = api_dir / name
-            dest.write_bytes(src.read_bytes())
-            if name != "crtbegin_static.o":
-                (lib / name).write_bytes(src.read_bytes())
+            (api_dir / name).write_bytes(src.read_bytes())
     for src in stub_dir.glob("*.so"):
-        data = src.read_bytes()
-        (api_dir / src.name).write_bytes(data)
-        (lib / src.name).write_bytes(data)
+        (api_dir / src.name).write_bytes(src.read_bytes())
+    # Zip layout: libc++ linker scripts live in every API directory.
+    cxx_so = lib / "libc++.so"
+    cxx_a = lib / "libc++.a"
+    if not cxx_so.exists():
+        cxx_so.write_text("INPUT(-lc++_shared)\n")
+    if not cxx_a.exists():
+        cxx_a.write_text("INPUT(-lc++_static -lc++abi)\n")
+    (api_dir / "libc++.so").write_text(cxx_so.read_text())
+    (api_dir / "libc++.a").write_text(cxx_a.read_text())
 
 
 def load_system_libs(ndk: Path) -> dict[str, int]:
@@ -296,20 +334,38 @@ def build_sysroot(
     ndk_meta: Path,
     abis: list[str] | None = None,
     apis: list[int] | None = None,
+    zlib_src: Path | None = None,
+    llvm_src: Path | None = None,
+    support: Path | None = None,
+    arm_opt: Path | None = None,
+    ucd: Path | None = None,
 ) -> None:
     clang = clang_prefix / "bin" / "clang"
+    llvm_ar = clang_prefix / "bin" / "llvm-ar"
     if not clang.exists():
         raise FileNotFoundError(clang)
-    if abis is None:
-        abis = list(ABIS)
+    requested = list(ABIS) if abis is None else list(abis)
+    implicit = abis is None
+    prune_sysroot_abis(sysroot, requested)
     if apis is None:
         lo, hi = load_api_range(ndk_meta)
         apis = list(range(lo, hi + 1))
     system_libs = load_system_libs(ndk_meta)
     work = Path(tempfile.mkdtemp(prefix="android-bionic-"))
     try:
-        for abi_name in abis:
-            for api in apis:
+        for abi_name in requested:
+            info = ABIS[abi_name]
+            if not clang_has_arch(clang, info["arch"]):
+                msg = f"clang has no backend for {info['arch']} ({abi_name})"
+                if not implicit:
+                    raise RuntimeError(msg + "; rebuild native/android-clang with that LLVM target")
+                print("WARNING:", msg, "- skipped until android-clang includes that target", flush=True)
+                continue
+            min_api = abi_min_api(abi_name)
+            abi_apis = [a for a in apis if a >= min_api]
+            if not abi_apis:
+                continue
+            for api in abi_apis:
                 crt_dir = work / f"crt-{abi_name}-{api}"
                 stub_dir = work / f"stub-{abi_name}-{api}"
                 build_crt(clang, bionic, crt_src, sysroot, abi_name, api, crt_dir)
@@ -324,5 +380,21 @@ def build_sysroot(
                     system_libs=system_libs,
                 )
                 install_into_sysroot(sysroot, abi_name, api, crt_dir, stub_dir)
+            static_dir = work / f"static-{abi_name}"
+            built = build_static_for_abi(
+                clang,
+                llvm_ar,
+                bionic,
+                sysroot,
+                abi_name,
+                static_dir,
+                zlib_src=zlib_src,
+                llvm_src=llvm_src,
+                support=support,
+                arm_opt=arm_opt,
+                api=min_api,
+                ucd=ucd,
+            )
+            install_static_libs(sysroot, abi_name, built)
     finally:
         shutil.rmtree(work, ignore_errors=True)

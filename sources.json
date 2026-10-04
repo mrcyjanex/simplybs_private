@@ -35,6 +35,11 @@
                 "d84a5b9d746f241c3c77b16e8c6964b0f86f86e2"
             ]
         },
+        "https://android.googlesource.com/platform/external/arm-optimized-routines": {
+            "refs": [
+                "d7c644304e83c9bb92ede58c9c204d55f8157817"
+            ]
+        },
         "https://android.googlesource.com/platform/external/effcee": {
             "refs": [
                 "291037172dcb79318a7d0214a194e985c9ad0d7b"
@@ -6578,6 +6583,12 @@
             "url": "https://www.musl-libc.org/releases/musl-1.2.5.tar.gz",
             "sha256": "a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4",
             "path": "work/.build/tarballs/musl-1.2.5.tar.gz"
+        },
+        {
+            "kind": "blob",
+            "url": "https://www.unicode.org/Public/16.0.0/ucd/UCD.zip",
+            "sha256": "c86dd81f2b14a43b0cc064aa5f89aa7241386801e35c59c7984e579832634eb2",
+            "path": "UCD-16.0.0.zip"
         },
         {
             "kind": "tar.bz2",

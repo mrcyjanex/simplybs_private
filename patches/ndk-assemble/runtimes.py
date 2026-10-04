@@ -7,7 +7,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from layout import ABIS, MIN_API
+from layout import ABIS, MIN_API, abi_min_api, clang_has_arch
 
 
 def _run(cmd: list[str], cwd: Path | None = None) -> None:
@@ -50,22 +50,23 @@ def _first(paths: list[Path]) -> Path | None:
 
 
 def collect_abi(install_prefix: Path, abi_name: str, dest: Path) -> None:
-    info = ABIS[abi_name]
     lib_dest = dest / "lib"
     inc_dest = dest / "include" / "c++" / "v1"
     lib_dest.mkdir(parents=True, exist_ok=True)
 
-    builtins = list(install_prefix.rglob("libclang_rt.builtins*.a"))
-    if builtins:
-        shutil.copy2(builtins[0], lib_dest / f"libclang_rt.builtins-{info['builtin']}.a")
+    for lib in install_prefix.rglob("libclang_rt.*"):
+        if lib.suffix in {".a", ".so", ".o"} or ".so." in lib.name:
+            shutil.copy2(lib, lib_dest / lib.name)
 
     for name in (
         "libc++_shared.so",
         "libc++_static.a",
         "libc++abi.a",
+        "libc++experimental.a",
         "libunwind.a",
         "libc++.so",
         "libc++.a",
+        "libcompiler_rt-extras.a",
     ):
         found = _first(list(install_prefix.rglob(name)))
         if found is not None:
@@ -75,6 +76,10 @@ def collect_abi(install_prefix: Path, abi_name: str, dest: Path) -> None:
     script = lib_dest / "libc++.so"
     if shared.exists() and not script.exists():
         script.write_text("INPUT(-lc++_shared)\n")
+    static = lib_dest / "libc++_static.a"
+    static_script = lib_dest / "libc++.a"
+    if static.exists() and not static_script.exists():
+        static_script.write_text("INPUT(-lc++_static -lc++abi)\n")
 
     headers = _first(
         [
@@ -106,6 +111,9 @@ def build_builtins(
     target = f"{info['clang_triple']}{api}"
     extra = info.get("cflags", "")
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
+    sanitizers = "asan;ubsan"
+    if info["arch"] in {"aarch64", "x86_64"}:
+        sanitizers += ";hwasan;tsan"
     build = dest / "build-rt"
     install = dest / "install-rt"
     _cmake_configure(
@@ -114,7 +122,7 @@ def build_builtins(
             "-G",
             "Ninja",
             "-S",
-            str(llvm_src / "compiler-rt" / "lib" / "builtins"),
+            str(llvm_src / "compiler-rt"),
             "-DCMAKE_BUILD_TYPE=Release",
             f"-DCMAKE_C_COMPILER={clang}",
             f"-DCMAKE_CXX_COMPILER={clangxx}",
@@ -126,11 +134,20 @@ def build_builtins(
             f"-DCMAKE_C_FLAGS={flags}",
             f"-DCMAKE_CXX_FLAGS={flags}",
             f"-DCMAKE_ASM_FLAGS={flags}",
-            "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
             "-DLLVM_RUNTIMES_BUILD=ON",
             "-DANDROID=1",
             "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON",
             "-DCOMPILER_RT_BUILTINS_HIDE_SYMBOLS=ON",
+            "-DCOMPILER_RT_BUILD_BUILTINS=ON",
+            "-DCOMPILER_RT_BUILD_SANITIZERS=ON",
+            "-DCOMPILER_RT_BUILD_XRAY=OFF",
+            "-DCOMPILER_RT_BUILD_LIBFUZZER=ON",
+            "-DCOMPILER_RT_BUILD_PROFILE=ON",
+            "-DCOMPILER_RT_BUILD_MEMPROF=OFF",
+            "-DCOMPILER_RT_BUILD_ORC=OFF",
+            "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF",
+            "-DCOMPILER_RT_INCLUDE_TESTS=OFF",
+            f"-DCOMPILER_RT_SANITIZERS_TO_BUILD={sanitizers}",
             f"-DCMAKE_INSTALL_PREFIX={install}",
         ],
     )
@@ -184,6 +201,7 @@ def build_libcxx(
             "-DLIBCXXABI_USE_COMPILER_RT=ON",
             "-DLIBCXX_INCLUDE_TESTS=OFF",
             "-DLIBCXX_INCLUDE_BENCHMARKS=OFF",
+            "-DLIBCXX_ENABLE_EXPERIMENTAL_LIBRARY=ON",
             "-DLIBUNWIND_ENABLE_SHARED=OFF",
             "-DLIBUNWIND_USE_COMPILER_RT=ON",
             f"-DCMAKE_INSTALL_PREFIX={install}",
@@ -208,16 +226,24 @@ def build_runtimes(
         raise FileNotFoundError(clang)
     if jobs is None:
         jobs = int(os.environ.get("NUM_CORES", "4"))
-    if abis is None:
-        abis = list(ABIS)
+    requested = list(ABIS) if abis is None else list(abis)
+    implicit = abis is None
     output.mkdir(parents=True, exist_ok=True)
-    for abi_name in abis:
+    for abi_name in requested:
+        info = ABIS[abi_name]
+        if not clang_has_arch(clang, info["arch"]):
+            msg = f"clang has no backend for {info['arch']} ({abi_name})"
+            if not implicit:
+                raise RuntimeError(msg)
+            print("WARNING:", msg, "- skipped until android-clang includes that target", flush=True)
+            continue
+        abi_api = max(api, abi_min_api(abi_name))
         work = output / f".work-{abi_name}"
         staged = output / abi_name
         if staged.exists():
             shutil.rmtree(staged)
         staged.mkdir(parents=True)
-        build_builtins(llvm_src, clang, clangxx, sysroot, abi_name, api, work, jobs)
+        build_builtins(llvm_src, clang, clangxx, sysroot, abi_name, abi_api, work, jobs)
         builtin_libs = list((work / "install-rt").rglob("libclang_rt.builtins*.a"))
         builtins = builtin_libs[0] if builtin_libs else None
         build_libcxx(
@@ -226,7 +252,7 @@ def build_runtimes(
             clangxx,
             sysroot,
             abi_name,
-            api,
+            abi_api,
             work,
             jobs,
             builtins=builtins,

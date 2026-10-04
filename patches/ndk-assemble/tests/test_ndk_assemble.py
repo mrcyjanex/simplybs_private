@@ -18,7 +18,8 @@ from install import install  # noqa: E402
 from layout import Abi, api_levels, host_tag, toolchain_root  # noqa: E402
 from skeleton import detect_zip_host_tag, is_binary_artifact, prepare_skeleton  # noqa: E402
 from wrappers import clang_wrapper  # noqa: E402
-from bionic import parse_map_symbols, stub_source  # noqa: E402
+from bionic import install_into_sysroot, parse_map_symbols, stub_source  # noqa: E402
+from stubs import parse_ast_symbols  # noqa: E402
 
 
 def _touch(path: Path, text: str = "") -> None:
@@ -34,7 +35,7 @@ def fake_ndk(root: Path, tag: str = "linux-x86_64") -> Path:
     _touch(tc / "bin" / "python3", "#!/bin/sh\necho prebuilt-python\n")
     _touch(tc / "lib" / "clang" / "19" / "include" / "stddef.h", "// old\n")
     _touch(tc / "sysroot" / "usr" / "include" / "stdio.h", "#pragma once\n")
-    for triple in ("aarch64-linux-android", "arm-linux-androideabi", "x86_64-linux-android"):
+    for triple in ("aarch64-linux-android", "arm-linux-androideabi", "x86_64-linux-android", "i686-linux-android", "riscv64-linux-android"):
         _touch(tc / "sysroot" / "usr" / "lib" / triple / "21" / "libc.so", "stub\n")
         _touch(tc / "sysroot" / "usr" / "lib" / triple / "24" / "libc.so", "stub\n")
         _touch(tc / "sysroot" / "usr" / "lib" / triple / "libc.a", "archive\n")
@@ -45,6 +46,9 @@ def fake_ndk(root: Path, tag: str = "linux-x86_64") -> Path:
     )
     _touch(root / "source.properties", "Pkg.Desc = Android NDK\nPkg.Revision = 28.2.13676380\n")
     _touch(root / "meta" / "platforms.json", '{"min":21,"max":35}\n')
+    _touch(root / "prebuilt" / tag / "bin" / "make", "#!/bin/sh\necho make\n")
+    _touch(root / "shader-tools" / tag / "glslc", "#!/bin/sh\necho glslc\n")
+    _touch(root / "ndk-lldb", "#!/bin/sh\n")
     return root
 
 
@@ -90,6 +94,10 @@ class HostTagTests(unittest.TestCase):
         self.assertEqual(abi.cflags, "-mthumb")
         self.assertEqual(abi.lib_triple, "arm-linux-androideabi")
 
+    def test_unknown_triple_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            Abi.from_clang_triple("riscv64-linux-android")
+
 
 class WrapperTests(unittest.TestCase):
     def test_cc1_passthrough(self) -> None:
@@ -116,11 +124,16 @@ class SkeletonTests(unittest.TestCase):
         self.assertFalse(toolchain_root(out, "linux-x86_64").exists())
         self.assertTrue((out / "source.properties").exists())
         self.assertTrue((out / "build" / "cmake" / "android.toolchain.cmake").exists())
+        self.assertFalse((out / "prebuilt").exists())
+        self.assertFalse((out / "shader-tools").exists())
+        self.assertFalse((out / "ndk-lldb").exists())
         lib = tc / "sysroot" / "usr" / "lib" / "aarch64-linux-android"
         self.assertFalse((lib / "21" / "libc.so").exists())
         self.assertFalse((lib / "crtbegin_dynamic.o").exists())
         self.assertFalse((lib / "libc.a").exists())
         self.assertEqual(api_levels(tc / "sysroot"), [21, 24])
+        self.assertFalse((tc / "sysroot" / "usr" / "lib" / "i686-linux-android").exists())
+        self.assertFalse((tc / "sysroot" / "usr" / "lib" / "riscv64-linux-android").exists())
 
 
 class InstallTests(unittest.TestCase):
@@ -172,7 +185,7 @@ class InstallTests(unittest.TestCase):
         text = wrapper.read_text()
         self.assertIn("--target=aarch64-linux-android21", text)
         self.assertTrue((tc / "bin" / "aarch64-linux-android24-clang").exists())
-        self.assertTrue((tc / "bin" / "armv7a-linux-androideabi21-clang").exists())
+        self.assertFalse((tc / "bin" / "armv7a-linux-androideabi21-clang").exists())
         self.assertTrue((tc / "bin" / "aarch64-linux-android-ld").exists())
         self.assertTrue((tc / "lib" / "clang" / "21" / "include" / "stddef.h").exists())
         builtins = tc / "lib" / "clang" / "21" / "lib" / "linux" / "libclang_rt.builtins-aarch64-android.a"
@@ -227,6 +240,121 @@ LIBC {
         self.assertEqual(kinds["stdin"], "obj")
         src = stub_source(arm64)
         self.assertIn('__asm__("malloc")', src)
+        from bionic import version_script
+
+        vs = version_script("libc.so", arm64, text)
+        self.assertTrue(vs.startswith("LIBC {"))
+        self.assertNotIn("LIBC_SO", vs)
+
+    def test_header_ast_filters_path_and_inline(self) -> None:
+        dump = """
+|-FunctionDecl 0x1 </tmp/sysroot/usr/include/stdlib.h:1:1, col:8> col:5 malloc 'void *(size_t)'
+|-FunctionDecl 0x2 </tmp/sysroot/usr/include/android/log.h:102:1, col:68> col:5 __android_log_write 'int (int, const char *, const char *)'
+|-FunctionDecl 0x3 <line:41:1, col:42> col:42 android_get_device_api_level 'int ()' static inline
+|-VarDecl 0x4 </tmp/sysroot/usr/include/android/log.h:50:1> col:12 used android_log_id 'int' extern
+"""
+        symbols = parse_ast_symbols(dump, ("android/log.h",))
+        names = [n for n, _, _ in symbols]
+        self.assertIn("__android_log_write", names)
+        self.assertNotIn("malloc", names)
+        self.assertNotIn("android_get_device_api_level", names)
+        kinds = {n: k for n, k, _ in symbols}
+        self.assertEqual(kinds["android_log_id"], "obj")
+
+    def test_crt_and_stubs_only_in_api_dir(self) -> None:
+        d = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, d, True)
+        crt = d / "crt"
+        stub = d / "stub"
+        sysroot = d / "sysroot"
+        crt.mkdir()
+        stub.mkdir()
+        (crt / "crtbegin_dynamic.o").write_bytes(b"crt")
+        (stub / "libc.so").write_bytes(b"stub")
+        install_into_sysroot(sysroot, "arm64-v8a", 21, crt, stub)
+        lib = sysroot / "usr" / "lib" / "aarch64-linux-android"
+        self.assertTrue((lib / "21" / "crtbegin_dynamic.o").exists())
+        self.assertTrue((lib / "21" / "libc.so").exists())
+        self.assertFalse((lib / "crtbegin_dynamic.o").exists())
+        self.assertFalse((lib / "libc.so").exists())
+        self.assertIn("INPUT(-lc++_shared)", (lib / "21" / "libc++.so").read_text())
+
+    def test_bp_srcs_from_snippet(self) -> None:
+        from bp import module_srcs
+
+        bp = """
+cc_library_static {
+    srcs: ["a.c", "b.cpp"],
+    arch: { arm64: { srcs: ["c.S"] } },
+    name: "foo",
+}
+"""
+        self.assertEqual(module_srcs(bp, "foo"), ["a.c", "b.cpp"])
+        self.assertEqual(module_srcs(bp, "foo", "arm64"), ["a.c", "b.cpp", "c.S"])
+
+    def test_bp_glob_filegroup_defaults_and_nested_list(self) -> None:
+        from bp import index_blueprints, resolve_module_srcs, module_cflags
+
+        d = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, d, True)
+        (d / "tzcode").mkdir()
+        (d / "tzcode" / "a.c").write_text("int a;")
+        (d / "tzcode" / "b.c").write_text("int b;")
+        (d / "note.cpp").write_text("int n;")
+        (d / "Android.bp").write_text(
+            """
+filegroup {
+    name: "elf_note_sources",
+    srcs: ["note.cpp"],
+}
+cc_defaults {
+    name: "base",
+    cflags: ["-DFOO"],
+    arch: { arm64: { srcs: ["arch.c"] } },
+}
+cc_library_static {
+    name: "libc_tzcode",
+    defaults: ["base"],
+    srcs: [
+        "tzcode/**/*.c",
+        ":elf_note_sources",
+    ],
+    cflags: ["-DALL_STATE"],
+}
+"""
+        )
+        (d / "arch.c").write_text("int arch;")
+        mods = index_blueprints(d / "Android.bp")
+        srcs = {p.name for p in resolve_module_srcs(mods, "libc_tzcode", "arm64")}
+        self.assertEqual(srcs, {"a.c", "b.c", "note.cpp", "arch.c"})
+        flags = module_cflags(mods, "libc_tzcode", "arm64")
+        self.assertIn("-DFOO", flags)
+        self.assertIn("-DALL_STATE", flags)
+
+    def test_icu4x_tables_from_tiny_ucd(self) -> None:
+        from unicode import generate_icu4x_c
+
+        d = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, d, True)
+        (d / "UnicodeData.txt").write_text(
+            "0041;LATIN CAPITAL LETTER A;Lu;0;L;;;;;N;;;;0061;\n"
+            "0061;LATIN SMALL LETTER A;Ll;0;L;;;;;N;;;0041;;0041\n"
+            "0030;DIGIT ZERO;Nd;0;EN;;0;0;0;N;;;;;\n"
+        )
+        (d / "DerivedCoreProperties.txt").write_text(
+            "0041..005A ; Alphabetic # Lu\n0061..007A ; Alphabetic # Ll\n"
+            "0061..007A ; Lowercase # Ll\n0041..005A ; Uppercase # Lu\n"
+        )
+        (d / "PropList.txt").write_text("0009..000D ; White_Space # Cc\n0030..0039 ; Hex_Digit # Nd\n")
+        (d / "EastAsianWidth.txt").write_text("4E00..9FFF ; W # Lo\n")
+        (d / "HangulSyllableType.txt").write_text("AC00 ; LV # Lo\n")
+        out = d / "icu4x.c"
+        generate_icu4x_c(d, out)
+        text = out.read_text()
+        self.assertIn("__icu4x_bionic_general_category", text)
+        self.assertIn("0x41", text)
+        self.assertIn("kEastAsianWidth", text)
+
 
     def test_zip_elf_is_binary_text_script_is_not(self) -> None:
         d = Path(tempfile.mkdtemp())

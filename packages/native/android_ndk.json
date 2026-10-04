@@ -19,7 +19,6 @@
             "*:aarch64-linux-android:BUILDLIB_HOST=aarch64-linux-android",
             "*:x86_64-linux-android:BUILDLIB_HOST=x86_64-linux-android",
             "*:armv7a-linux-androideabi:BUILDLIB_HOST=armv7a-linux-androideabi",
-            "*:i686-linux-android:BUILDLIB_HOST=i686-linux-android",
             "*:*-android*:API_LEVEL=21"
         ],
         "steps": [

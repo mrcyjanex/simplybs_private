@@ -5,7 +5,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from layout import ZIP_HOST_TAGS, toolchain_root
+from layout import ABIS, ZIP_HOST_TAGS, prune_sysroot_abis, toolchain_root
 
 
 def detect_zip_host_tag(ndk: Path) -> str:
@@ -70,11 +70,60 @@ def strip_binaries(root: Path) -> None:
             path.unlink()
 
 
+# Zip copies of host tools simplybs already ships outside the NDK.
+DROP_HOST_DIRS = (
+    "prebuilt",  # GNU make, yasm
+    "shader-tools",
+)
+DROP_HOST_FILES = (
+    "ndk-lldb",
+)
+
+
+def strip_host_tools(ndk: Path) -> None:
+    """Drop zip copies of host tools that live outside the NDK in simplybs."""
+    for name in DROP_HOST_DIRS:
+        path = ndk / name
+        if path.exists():
+            shutil.rmtree(path)
+    for name in DROP_HOST_FILES:
+        path = ndk / name
+        if path.is_file() or path.is_symlink():
+            path.unlink()
+
+
+def patch_host_tag_scripts(ndk: Path, host_tag: str) -> None:
+    """Rewrite zip host-tag paths in text scripts to this build's host tag."""
+    for path in ndk.rglob("*"):
+        if not path.is_file() or path.is_symlink():
+            continue
+        if path.suffix.lower() in {".so", ".a", ".o", ".pyz", ".pyc"}:
+            continue
+        try:
+            data = path.read_bytes()
+        except OSError:
+            continue
+        if b"\0" in data[:256]:
+            continue
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        new = text
+        for old in ZIP_HOST_TAGS:
+            new = new.replace(f"toolchains/llvm/prebuilt/{old}", f"toolchains/llvm/prebuilt/{host_tag}")
+        if new != text:
+            path.write_text(new)
+
+
 def prepare_skeleton(input_ndk: Path, output: Path, host_tag: str) -> Path:
     if output.exists():
         shutil.rmtree(output)
     shutil.copytree(input_ndk, output, symlinks=True)
     toolchain = relocate_host_tag(output, host_tag)
     strip_compiler(toolchain)
+    strip_host_tools(output)
+    prune_sysroot_abis(toolchain / "sysroot", list(ABIS))
+    patch_host_tag_scripts(output, host_tag)
     strip_binaries(output)
     return output
