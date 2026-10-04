@@ -141,9 +141,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch2:
@@ -158,9 +157,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch3:
@@ -175,9 +173,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch4:
@@ -192,9 +189,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch5:
@@ -209,9 +205,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch6:
@@ -226,9 +221,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch7:
@@ -243,9 +237,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch8:
@@ -260,9 +253,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch9:
@@ -277,9 +269,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   batch10:
@@ -294,9 +285,8 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts). Includes Apple
-      # cross targets; 32-bit Android omitted for now.
-      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
+      # Linux CI hosts (same order as cmd/ciqueue.DefaultHosts).
+      hosts: x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi,x86_64-w64-mingw32,aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-amd64
   finish:
