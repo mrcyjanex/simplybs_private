@@ -324,24 +324,18 @@ func normalizeTarHeader(header *tar.Header) {
 	header.Xattrs = nil
 	header.Format = tar.FormatUnknown
 
+	// Keep the installed permission bits (including setuid/setgid/sticky).
+	// Do not rewrite modes — they are part of the staged tree.
+	header.Mode &= 07777
+
 	switch header.Typeflag {
 	case tar.TypeDir:
-		header.Mode = 0755
 		if !strings.HasSuffix(header.Name, "/") {
 			header.Name += "/"
 		}
-	case tar.TypeReg, tar.TypeRegA:
-		if header.Mode&0111 != 0 {
-			header.Mode = 0755
-		} else {
-			header.Mode = 0644
-		}
 	case tar.TypeSymlink:
-		header.Mode = 0777
 		header.Size = 0
 		header.Linkname = filepath.ToSlash(header.Linkname)
-	default:
-		header.Mode &= 0777
 	}
 }
 

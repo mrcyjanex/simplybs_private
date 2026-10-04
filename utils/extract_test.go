@@ -19,6 +19,9 @@ func TestCreateTarGzReproducible(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(src, "include"), 0700); err != nil {
 		t.Fatal(err)
 	}
+	if err := os.Chmod(filepath.Join(src, "include"), 0700); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.Symlink("../share/data.txt", filepath.Join(src, "include", "data.link")); err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +42,13 @@ func TestCreateTarGzReproducible(t *testing.T) {
 	}
 
 	assertReproducibleGzip(t, first)
-	assertReproducibleTar(t, first)
+	assertReproducibleTar(t, first, map[string]int64{
+		"bin/tool":          0755,
+		"share/data.txt":    0640,
+		"share/private.txt": 0600,
+		"include/":          0700,
+		"include/data.link": -1, // symlink mode is OS-dependent; just require present
+	})
 
 	out := t.TempDir()
 	if err := ExtractTarGz(first, out); err != nil {
@@ -61,7 +70,7 @@ func TestCreateTarGzReproducible(t *testing.T) {
 	}
 }
 
-func TestCreateTarGzIgnoresOwnerAndUmaskBits(t *testing.T) {
+func TestCreateTarGzPreservesPermissions(t *testing.T) {
 	srcA := t.TempDir()
 	srcB := t.TempDir()
 	mustWriteFile(t, filepath.Join(srcA, "lib", "foo.a"), []byte("obj"), 0664)
@@ -75,9 +84,12 @@ func TestCreateTarGzIgnoresOwnerAndUmaskBits(t *testing.T) {
 	if err := CreateTarGz(srcB, outB); err != nil {
 		t.Fatal(err)
 	}
-	if fileSHA256(t, outA) != fileSHA256(t, outB) {
-		t.Fatal("group-writable vs world-readable file produced different archives")
+	if fileSHA256(t, outA) == fileSHA256(t, outB) {
+		t.Fatal("0664 and 0644 trees must produce different archives")
 	}
+
+	assertReproducibleTar(t, outA, map[string]int64{"lib/foo.a": 0664})
+	assertReproducibleTar(t, outB, map[string]int64{"lib/foo.a": 0644})
 }
 
 func assertReproducibleGzip(t *testing.T, path string) {
@@ -103,7 +115,7 @@ func assertReproducibleGzip(t *testing.T, path string) {
 	}
 }
 
-func assertReproducibleTar(t *testing.T, path string) {
+func assertReproducibleTar(t *testing.T, path string, wantModes map[string]int64) {
 	t.Helper()
 	f, err := os.Open(path)
 	if err != nil {
@@ -138,20 +150,16 @@ func assertReproducibleTar(t *testing.T, path string) {
 		if !hdr.AccessTime.IsZero() || !hdr.ChangeTime.IsZero() {
 			t.Fatalf("%s: atime/ctime should be unset, got %v / %v", hdr.Name, hdr.AccessTime, hdr.ChangeTime)
 		}
-		switch hdr.Typeflag {
-		case tar.TypeDir:
-			if hdr.Mode&0777 != 0755 {
-				t.Fatalf("%s: dir mode %#o, want 0755", hdr.Name, hdr.Mode)
-			}
-		case tar.TypeReg:
-			perm := hdr.Mode & 0777
-			if perm != 0644 && perm != 0755 {
-				t.Fatalf("%s: file mode %#o, want 0644 or 0755", hdr.Name, hdr.Mode)
+		if want, ok := wantModes[hdr.Name]; ok && want >= 0 {
+			if got := hdr.Mode & 07777; got != want {
+				t.Fatalf("%s: mode %#o, want %#o", hdr.Name, got, want)
 			}
 		}
 	}
-	if !seen["share/private.txt"] || !seen["bin/tool"] || !seen["include/"] {
-		t.Fatalf("missing expected entries: %v", seen)
+	for name := range wantModes {
+		if !seen[name] {
+			t.Fatalf("missing expected entry %q in %v", name, seen)
+		}
 	}
 }
 
