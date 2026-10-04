@@ -9,6 +9,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from bionic import build_sysroot
 from install import install
 from layout import Abi, MIN_API, host_tag, sysroot_path
 from runtimes import build_runtimes
@@ -31,6 +32,22 @@ def _default_host_tag() -> str:
 def cmd_prepare_skeleton(args: argparse.Namespace) -> None:
     prepare_skeleton(args.input, args.output, args.host_tag)
     print(args.output)
+
+
+def cmd_build_sysroot(args: argparse.Namespace) -> None:
+    abis = [a.strip() for a in args.abis.split(",") if a.strip()] if args.abis else None
+    apis = [int(a) for a in args.apis.split(",") if a.strip()] if args.apis else None
+    crt_src = args.crt_src if args.crt_src else Path(__file__).resolve().parent / "crt"
+    build_sysroot(
+        bionic=args.bionic,
+        clang_prefix=args.clang_prefix,
+        sysroot=args.sysroot,
+        crt_src=crt_src,
+        ndk_meta=args.ndk_meta,
+        abis=abis,
+        apis=apis,
+    )
+    print(args.sysroot)
 
 
 def cmd_build_runtimes(args: argparse.Namespace) -> None:
@@ -99,6 +116,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", type=_path, required=True)
     p.add_argument("--host-tag", default=_default_host_tag())
     p.set_defaults(func=cmd_prepare_skeleton)
+
+    p = sub.add_parser("build-sysroot", help="compile CRT and stub .so from bionic source")
+    p.add_argument("--bionic", type=_path, required=True)
+    p.add_argument("--clang-prefix", type=_path, required=True)
+    p.add_argument("--sysroot", type=_path, required=True)
+    p.add_argument("--ndk-meta", type=_path, required=True)
+    p.add_argument("--crt-src", type=_path, default=None)
+    p.add_argument("--abis", default="")
+    p.add_argument("--apis", default="")
+    p.set_defaults(func=cmd_build_sysroot)
 
     p = sub.add_parser("build-runtimes", help="build compiler-rt builtins and libc++")
     p.add_argument("--llvm-src", type=_path, required=True)

@@ -26,6 +26,7 @@
         },
         "https://android.googlesource.com/platform/bionic": {
             "refs": [
+                "731631f300090436d7f5df80d50b6275c8c60a93",
                 "a63b21091ada240d92f8ceadb1cabbdedaaab81b"
             ]
         },

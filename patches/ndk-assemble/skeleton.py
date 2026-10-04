@@ -44,10 +44,37 @@ def strip_compiler(toolchain: Path) -> None:
             path.unlink()
 
 
+def _is_linker_script(path: Path) -> bool:
+    data = path.read_bytes()[:256]
+    if data.startswith(b"\x7fELF") or data.startswith(b"!<arch>\n"):
+        return False
+    text = data.decode("ascii", "replace")
+    return "INPUT(" in text or "GROUP(" in text or "OUTPUT_FORMAT(" in text
+
+
+def is_binary_artifact(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    data = path.read_bytes()[:8]
+    if data.startswith(b"\x7fELF") or data.startswith(b"!<arch>\n"):
+        return True
+    if path.suffix.lower() in {".o", ".obj", ".a", ".so", ".dylib", ".dll", ".bc"}:
+        return not _is_linker_script(path)
+    return False
+
+
+def strip_binaries(root: Path) -> None:
+    """Drop every ELF/archive copied from the zip. Linker scripts (text) stay."""
+    for path in list(root.rglob("*")):
+        if is_binary_artifact(path):
+            path.unlink()
+
+
 def prepare_skeleton(input_ndk: Path, output: Path, host_tag: str) -> Path:
     if output.exists():
         shutil.rmtree(output)
     shutil.copytree(input_ndk, output, symlinks=True)
     toolchain = relocate_host_tag(output, host_tag)
     strip_compiler(toolchain)
+    strip_binaries(output)
     return output

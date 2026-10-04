@@ -14,11 +14,18 @@
             "path": "android-ndk-r28c-linux.zip",
             "sha256": "dfb20d396df28ca02a8c708314b814a4d961dc9074f9a161932746f815aa552f",
             "url": "https://dl.google.com/android/repository/android-ndk-r28c-linux.zip"
+        },
+        {
+            "kind": "git",
+            "path": "bionic",
+            "sha256": "731631f300090436d7f5df80d50b6275c8c60a93",
+            "url": "https://android.googlesource.com/platform/bionic"
         }
     ],
     "dependencies": [
         "*:*-android*:native/7zip",
         "*:*-android*:native/_/_",
+        "*:*-android*:native/android-clang",
         "*:*-android*:native/python@3.11"
     ],
     "build": {
@@ -30,7 +37,8 @@
         "steps": [
             "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld || test -d android-ndk-r28c",
             "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld || test -d android-ndk-r28c",
-            "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG"
+            "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG",
+            "*:*-android*:python3 $PATCH_DIR/ndk-assemble build-sysroot --bionic $PWD/bionic --clang-prefix $NATIVEPREFIX/android-clang --sysroot $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --ndk-meta $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --crt-src $PATCH_DIR/ndk-assemble/crt"
         ]
     }
 }

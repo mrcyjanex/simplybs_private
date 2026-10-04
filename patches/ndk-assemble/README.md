@@ -15,9 +15,10 @@ $NDK/
     lib/clang/<ver>/lib/linux/libclang_rt.builtins-*-android.a
 ```
 
-This is the Apple-SDK analogue: the compiler and C++/compiler-rt runtimes are
-built from source; bionic headers, CRT objects, and per-API stub libraries
-come from the NDK sysroot (a platform dump). Clang is configured with
+The zip is headers, CMake, and other text only — every `.o` / `.so` / `.a` from
+the zip is deleted. CRT objects and stub shared libraries are assembled from
+bionic source (`crtbegin.c`, `*.map.txt`) plus the small assembler files under
+`crt/`. Clang is configured with
 `DEFAULT_SYSROOT=../sysroot`, `compiler-rt`, `libunwind`, and `libc++` so the
 assembled `bin/<triple><api>-clang` wrappers match the zip (target only; sysroot
 is implicit). libc++ is built with `_LIBCPP_ABI_NAMESPACE=__ndk1`.
@@ -29,6 +30,15 @@ python3 ndk-assemble prepare-skeleton \
   --input android-ndk-r28c \
   --output $SKELETON \
   --host-tag linux-x86_64
+
+python3 ndk-assemble build-sysroot \
+  --bionic bionic \
+  --clang-prefix $CLANG \
+  --sysroot $SKELETON/toolchains/llvm/prebuilt/$HOST_TAG/sysroot \
+  --ndk-meta $SKELETON \
+  --crt-src crt \
+  --abis arm64-v8a \
+  --apis 21
 
 python3 ndk-assemble build-runtimes \
   --llvm-src llvm-project \

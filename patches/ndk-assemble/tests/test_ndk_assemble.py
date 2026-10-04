@@ -16,8 +16,9 @@ sys.path.insert(0, str(ROOT))
 from cmake_patch import patch_cmake_host_tag  # noqa: E402
 from install import install  # noqa: E402
 from layout import Abi, api_levels, host_tag, toolchain_root  # noqa: E402
-from skeleton import detect_zip_host_tag, prepare_skeleton  # noqa: E402
+from skeleton import detect_zip_host_tag, is_binary_artifact, prepare_skeleton  # noqa: E402
 from wrappers import clang_wrapper  # noqa: E402
+from bionic import parse_map_symbols, stub_source  # noqa: E402
 
 
 def _touch(path: Path, text: str = "") -> None:
@@ -104,7 +105,7 @@ class SkeletonTests(unittest.TestCase):
         self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
-    def test_prepare_strips_compiler_and_renames_host(self) -> None:
+    def test_prepare_strips_compiler_and_zip_binaries(self) -> None:
         src = fake_ndk(self.tmp / "zip")
         self.assertEqual(detect_zip_host_tag(src), "linux-x86_64")
         out = prepare_skeleton(src, self.tmp / "skel", "linux-aarch64")
@@ -115,6 +116,11 @@ class SkeletonTests(unittest.TestCase):
         self.assertFalse(toolchain_root(out, "linux-x86_64").exists())
         self.assertTrue((out / "source.properties").exists())
         self.assertTrue((out / "build" / "cmake" / "android.toolchain.cmake").exists())
+        lib = tc / "sysroot" / "usr" / "lib" / "aarch64-linux-android"
+        self.assertFalse((lib / "21" / "libc.so").exists())
+        self.assertFalse((lib / "crtbegin_dynamic.o").exists())
+        self.assertFalse((lib / "libc.a").exists())
+        self.assertEqual(api_levels(tc / "sysroot"), [21, 24])
 
 
 class InstallTests(unittest.TestCase):
@@ -125,6 +131,20 @@ class InstallTests(unittest.TestCase):
     def test_install_zip_layout_and_compat_bin(self) -> None:
         src = fake_ndk(self.tmp / "zip")
         skel = prepare_skeleton(src, self.tmp / "skel", "linux-x86_64")
+        lib21 = (
+            skel
+            / "toolchains"
+            / "llvm"
+            / "prebuilt"
+            / "linux-x86_64"
+            / "sysroot"
+            / "usr"
+            / "lib"
+            / "aarch64-linux-android"
+            / "21"
+        )
+        _touch(lib21 / "libc.so", "from-source-stub\n")
+        _touch(lib21 / "crtbegin_dynamic.o", "from-source-crt\n")
         clang = fake_clang_prefix(self.tmp / "clang")
         runtimes = fake_runtimes(self.tmp / "rt")
         ndk = self.tmp / "ndk"
@@ -166,8 +186,8 @@ class InstallTests(unittest.TestCase):
         self.assertTrue(compat.exists())
         self.assertIn("toolchains/llvm/prebuilt", compat.read_text())
         self.assertTrue((prefix_lib / "libc.so").exists())
-        self.assertTrue((prefix_lib / "libc.a").exists())
         self.assertTrue((prefix_lib / "crtbegin_dynamic.o").exists())
+        self.assertFalse((prefix_lib / "libc.a").exists())
         self.assertTrue((tc / "lib" / "libc++abi.so.1").exists())
         self.assertTrue((tc / "lib" / "libunwind.so.1").exists())
         self.assertEqual(api_levels(tc / "sysroot"), [21, 24])
@@ -178,6 +198,45 @@ class InstallTests(unittest.TestCase):
         patch_cmake_host_tag(ndk, "linux-aarch64")
         text = (ndk / "build" / "cmake" / "android.toolchain.cmake").read_text()
         self.assertEqual(text.count("simplybs: pin the host tag"), 1)
+
+
+class MapTests(unittest.TestCase):
+    def test_filters_arch_and_api(self) -> None:
+        text = """
+LIBC {
+  global:
+    malloc;
+    foo; # introduced=24
+    bar; # arm
+    baz; # arm64 introduced=21
+    stdin; # var
+    hidden; # apex
+  local:
+    *;
+};
+"""
+        arm64 = parse_map_symbols(text, "arm64", 21)
+        names = [n for n, _, _ in arm64]
+        self.assertIn("malloc", names)
+        self.assertIn("baz", names)
+        self.assertIn("stdin", names)
+        self.assertNotIn("foo", names)
+        self.assertNotIn("bar", names)
+        self.assertNotIn("hidden", names)
+        kinds = {n: k for n, k, _ in arm64}
+        self.assertEqual(kinds["stdin"], "obj")
+        src = stub_source(arm64)
+        self.assertIn('__asm__("malloc")', src)
+
+    def test_zip_elf_is_binary_text_script_is_not(self) -> None:
+        d = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, d, True)
+        elf = d / "libc.so"
+        script = d / "libc++.so"
+        elf.write_bytes(b"\x7fELF" + b"\0" * 16)
+        script.write_text("INPUT(-lc++_shared)\n")
+        self.assertTrue(is_binary_artifact(elf))
+        self.assertFalse(is_binary_artifact(script))
 
 
 if __name__ == "__main__":
