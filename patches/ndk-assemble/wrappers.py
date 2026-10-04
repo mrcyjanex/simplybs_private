@@ -10,14 +10,8 @@ bin_dir=`dirname "$0"`
 if [ "$1" != "-cc1" ]; then
     exec "$bin_dir/{driver}" --target={target} "$@"
 else
-    # Target is already an argument.
     exec "$bin_dir/{driver}" "$@"
 fi
-"""
-
-COMPAT = """\
-#!/usr/bin/env bash
-exec "$(cd "$(dirname "$0")/{rel}" && pwd)/{name}" "$@"
 """
 
 LD_WRAPPER = """\
@@ -55,20 +49,3 @@ def write_clang_wrappers(bin_dir: Path, clang_triple: str, api_levels: list[int]
 
 def write_ld_wrapper(bin_dir: Path, lib_triple: str) -> None:
     write_executable(bin_dir / f"{lib_triple}-ld", LD_WRAPPER)
-
-
-def write_compat_wrapper(path: Path, toolchain_bin: Path, name: str) -> None:
-    rel = Path("..")
-    # path is typically $NDK/bin/<name>; toolchain_bin is
-    # $NDK/toolchains/llvm/prebuilt/<tag>/bin
-    try:
-        rel = Path(os_relpath(toolchain_bin, path.parent))
-    except ValueError:
-        rel = Path("..") / "toolchains" / "llvm" / "prebuilt"
-    write_executable(path, COMPAT.format(rel=rel.as_posix(), name=name))
-
-
-def os_relpath(target: Path, start: Path) -> str:
-    import os
-
-    return os.path.relpath(target, start)

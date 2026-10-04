@@ -8,41 +8,29 @@ from pathlib import Path
 
 MIN_API = 21
 
-# Only ABIs for simplybs SupportedHosts android triplets.
-# Per-target builds pass a single ABI; do not compile the rest.
 ABIS = {
     "arm64-v8a": {
         "abi": "arm64-v8a",
         "clang_triple": "aarch64-linux-android",
         "lib_triple": "aarch64-linux-android",
-        "builtin": "aarch64-android",
         "arch": "aarch64",
-        "processor": "aarch64",
-        "llvm_target": "AArch64",
     },
     "armeabi-v7a": {
         "abi": "armeabi-v7a",
         "clang_triple": "armv7a-linux-androideabi",
         "lib_triple": "arm-linux-androideabi",
-        "builtin": "arm-android",
         "arch": "arm",
-        "processor": "arm",
         "cflags": "-mthumb",
-        "llvm_target": "ARM",
     },
     "x86_64": {
         "abi": "x86_64",
         "clang_triple": "x86_64-linux-android",
         "lib_triple": "x86_64-linux-android",
-        "builtin": "x86_64-android",
         "arch": "x86_64",
-        "processor": "x86_64",
-        "llvm_target": "X86",
     },
 }
 
 CLANG_TRIPLE_TO_ABI = {info["clang_triple"]: info for info in ABIS.values()}
-LIB_TRIPLE_TO_ABI = {info["lib_triple"]: info for info in ABIS.values()}
 
 HOST_TAGS = {
     ("linux", "amd64"): "linux-x86_64",
@@ -60,12 +48,9 @@ class Abi:
     abi: str
     clang_triple: str
     lib_triple: str
-    builtin: str
     arch: str
-    processor: str
     cflags: str = ""
     min_api: int = MIN_API
-    llvm_target: str = ""
 
     @classmethod
     def from_clang_triple(cls, triple: str) -> Abi:
@@ -74,20 +59,9 @@ class Abi:
             raise ValueError(f"unknown clang triple {triple!r}")
         return cls(**{k: v for k, v in info.items() if k in cls.__dataclass_fields__})
 
-    @classmethod
-    def from_lib_triple(cls, triple: str) -> Abi:
-        info = LIB_TRIPLE_TO_ABI.get(triple)
-        if info is None:
-            raise ValueError(f"unknown lib triple {triple!r}")
-        return cls(**{k: v for k, v in info.items() if k in cls.__dataclass_fields__})
-
 
 def abi_min_api(abi_name: str) -> int:
     return int(ABIS[abi_name].get("min_api", MIN_API))
-
-
-def abi_name_for_triple(clang_triple: str) -> str:
-    return CLANG_TRIPLE_TO_ABI[clang_triple]["abi"]
 
 
 def clang_has_arch(clang: Path, arch: str) -> bool:
@@ -123,10 +97,6 @@ def toolchain_root(ndk: Path, tag: str) -> Path:
 
 def sysroot_path(ndk: Path, tag: str) -> Path:
     return toolchain_root(ndk, tag) / "sysroot"
-
-
-def clang_bin(ndk: Path, tag: str) -> Path:
-    return toolchain_root(ndk, tag) / "bin"
 
 
 def api_levels(sysroot: Path) -> list[int]:

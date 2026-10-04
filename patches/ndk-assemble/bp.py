@@ -289,20 +289,3 @@ def module_includes(mods: dict[str, Module], name: str, arch: str | None = None)
 
     walk(name)
     return dirs
-
-
-def module_srcs(bp: Path | str, name: str, arch: str | None = None) -> list[str]:
-    """Return srcs as written in the blueprint (globs unresolved). Test helper."""
-    path = Path(bp)
-    text = path.read_text() if path.is_file() else str(bp)
-    block = _enclosing_block(text, name)
-    if block is None:
-        return []
-    srcs = _list_after(block, "srcs")
-    srcs = [s for s in srcs if not s.startswith(":")]
-    if arch:
-        srcs.extend(s for s in _list_after(_arch_block(block, arch), "srcs") if not s.startswith(":"))
-        for extra in _list_after(_arch_block(block, arch), "exclude_srcs"):
-            if extra in srcs:
-                srcs.remove(extra)
-    return srcs

@@ -7,8 +7,8 @@ import subprocess
 from pathlib import Path
 
 from cmake_patch import patch_cmake_host_tag
-from layout import ABIS, Abi, api_levels, clang_bin, lib_dir, sysroot_path, toolchain_root
-from wrappers import write_clang_wrappers, write_compat_wrapper, write_ld_wrapper
+from layout import ABIS, Abi, api_levels, lib_dir, sysroot_path, toolchain_root
+from wrappers import write_clang_wrappers, write_ld_wrapper
 
 HOST_LIB_GLOBS = ("libc++.so*", "libc++abi.so*", "libunwind.so*")
 CLANG_TOOL_LINKS = {
@@ -159,39 +159,6 @@ def write_all_wrappers(bin_dir: Path, sysroot: Path, clang_triple: str | None = 
     return levels
 
 
-def install_compat_bin(ndk: Path, tag: str, clang_triple: str, api: int) -> None:
-    dest = ndk / "bin"
-    src = clang_bin(ndk, tag)
-    names = [
-        f"{clang_triple}{api}-clang",
-        f"{clang_triple}{api}-clang++",
-        f"{clang_triple}-clang",
-        f"{clang_triple}-clang++",
-        "clang",
-        "clang++",
-        "llvm-ar",
-        "llvm-ranlib",
-        "llvm-nm",
-        "llvm-strip",
-        "llvm-as",
-        "llvm-objcopy",
-        "llvm-objdump",
-        "llvm-readelf",
-        "ar",
-        "ranlib",
-        "nm",
-        "strip",
-        "as",
-        "ld",
-        "lld",
-    ]
-    abi = Abi.from_clang_triple(clang_triple)
-    names.append(f"{abi.lib_triple}-ld")
-    for name in names:
-        if (src / name).exists():
-            write_compat_wrapper(dest / name, src, name)
-
-
 def copy_prefix_libs(sysroot: Path, lib_triple: str, api: int, dest: Path) -> None:
     dest.mkdir(parents=True, exist_ok=True)
     generic = lib_dir(sysroot, lib_triple)
@@ -236,10 +203,8 @@ def install(
         write_clang_wrappers(dest_bin, ABIS["arm64-v8a"]["clang_triple"], [api])
     patch_cmake_host_tag(ndk_out, host_tag)
 
-    if target_triple:
+    if target_triple and prefix_lib_dir is not None:
         abi = Abi.from_clang_triple(target_triple)
-        install_compat_bin(ndk_out, host_tag, abi.clang_triple, api)
-        if prefix_lib_dir is not None:
-            copy_prefix_libs(sysroot, abi.lib_triple, api, prefix_lib_dir)
+        copy_prefix_libs(sysroot, abi.lib_triple, api, prefix_lib_dir)
 
     return ndk_out
