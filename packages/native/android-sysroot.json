@@ -1,0 +1,36 @@
+{
+    "package": "native/android-sysroot",
+    "version": "r28c",
+    "type": "native",
+    "download": [
+        {
+            "kind": "blob",
+            "path": "android-ndk-r28c-darwin.zip",
+            "sha256": "0d4599e8bbf1a1668a0d51a541729b2246360f350018a2081d0b302dbb594f2a",
+            "url": "https://dl.google.com/android/repository/android-ndk-r28c-darwin.zip"
+        },
+        {
+            "kind": "blob",
+            "path": "android-ndk-r28c-linux.zip",
+            "sha256": "dfb20d396df28ca02a8c708314b814a4d961dc9074f9a161932746f815aa552f",
+            "url": "https://dl.google.com/android/repository/android-ndk-r28c-linux.zip"
+        }
+    ],
+    "dependencies": [
+        "*:*-android*:native/7zip",
+        "*:*-android*:native/_/_",
+        "*:*-android*:native/python@3.11"
+    ],
+    "build": {
+        "env": [
+            "linux_amd64:*-android*:ANDROID_HOST_TAG=linux-x86_64",
+            "linux_arm64:*-android*:ANDROID_HOST_TAG=linux-aarch64",
+            "darwin_arm64:*-android*:ANDROID_HOST_TAG=darwin-arm64"
+        ],
+        "steps": [
+            "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld",
+            "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld",
+            "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG"
+        ]
+    }
+}
