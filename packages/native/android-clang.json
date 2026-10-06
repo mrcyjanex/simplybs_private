@@ -27,6 +27,7 @@
             "*:*-android*:config_opts=$config_opts -DLLVM_INCLUDE_TESTS=OFF",
             "*:*-android*:config_opts=$config_opts -DLLVM_INCLUDE_BENCHMARKS=OFF",
             "*:*-android*:config_opts=$config_opts -DLLVM_ENABLE_ASSERTIONS=OFF",
+            "*:*-android*:config_opts=$config_opts -DLLVM_ENABLE_ZSTD=OFF",
             "*:*-android*:config_opts=$config_opts -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON",
             "*:*-android*:config_opts=$config_opts -DLLVM_INSTALL_BINUTILS_SYMLINKS=ON",
             "*:*-android*:config_opts=$config_opts -DLLVM_TOOLCHAIN_TOOLS='dsymutil;llvm-ar;llvm-as;llvm-config;llvm-cov;llvm-cxxfilt;llvm-dlltool;llvm-dwp;llvm-ifs;llvm-lib;llvm-link;llvm-lipo;llvm-ml;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-size;llvm-strings;llvm-strip;llvm-symbolizer;llvm-windres'",
@@ -55,7 +56,11 @@
             "linux_*:*-android*:CMAKE_EXE_LINKER_FLAGS=-L$NATIVEPREFIX/lib -stdlib=libc++ -lc++ -lc++abi -lunwind -latomic -Wl,-rpath,$NATIVEPREFIX/lib",
             "linux_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-L$NATIVEPREFIX/lib -stdlib=libc++ -lc++ -lc++abi -lunwind -Wl,-rpath,$NATIVEPREFIX/lib",
             "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_C_COMPILER=$NATIVEPREFIX/_/bin/clang",
-            "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_CXX_COMPILER=$NATIVEPREFIX/_/bin/clang++"
+            "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_CXX_COMPILER=$NATIVEPREFIX/_/bin/clang++",
+            "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_IGNORE_PREFIX_PATH=/opt/homebrew",
+            "darwin_*:*-android*:CMAKE_CXX_FLAGS=-stdlib=libc++",
+            "darwin_*:*-android*:CMAKE_EXE_LINKER_FLAGS=-stdlib=libc++ -L$NATIVEPREFIX/lib -L$NATIVEPREFIX/_/lib -lc++ -lc++abi -lunwind -Wl,-rpath,$NATIVEPREFIX/lib -Wl,-rpath,$NATIVEPREFIX/_/lib",
+            "darwin_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-stdlib=libc++ -L$NATIVEPREFIX/lib -L$NATIVEPREFIX/_/lib -lc++ -lc++abi -lunwind -Wl,-rpath,$NATIVEPREFIX/lib -Wl,-rpath,$NATIVEPREFIX/_/lib"
         ],
         "steps": [
             "linux_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
@@ -63,7 +68,7 @@
             "darwin_*:*-android*:chmod +x $NATIVEPREFIX/bin/xcrun",
             "darwin_*:*-android*:printf '#!/bin/sh\\ncase \"$1\" in\\n  -productVersion) echo %s ;;\\n  *) echo %s ;;\\nesac\\n' \"$SDK_VERSION\" \"$SDK_VERSION\" > $NATIVEPREFIX/bin/sw_vers",
             "darwin_*:*-android*:chmod +x $NATIVEPREFIX/bin/sw_vers",
-            "darwin_*:*-android*:cmake $config_opts",
+            "darwin_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
             "*:*-android*:DESTDIR=$STAGING_DIR cmake --build build --target install -j$NUM_CORES"
         ]
     }
