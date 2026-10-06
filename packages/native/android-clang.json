@@ -60,9 +60,7 @@
             "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_IGNORE_PREFIX_PATH=/opt/homebrew",
             "darwin_*:*-android*:CMAKE_CXX_FLAGS=-stdlib=libc++ -I$NATIVEPREFIX/include/c++/v1",
             "darwin_*:*-android*:CMAKE_EXE_LINKER_FLAGS=-nostdlib++ -L$NATIVEPREFIX/lib -lc++ -lc++abi -lunwind",
-            "darwin_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-nostdlib++ -L$NATIVEPREFIX/lib -lc++ -lc++abi -lunwind",
-            "darwin_*:*-android*:DYLD_LIBRARY_PATH=$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib",
-            "darwin_*:*-android*:DYLD_FALLBACK_LIBRARY_PATH=/usr/lib:$NATIVEPREFIX/_/lib:$NATIVEPREFIX/lib"
+            "darwin_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-nostdlib++ -L$NATIVEPREFIX/lib -lc++ -lc++abi -lunwind"
         ],
         "steps": [
             "linux_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
