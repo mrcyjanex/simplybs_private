@@ -221,7 +221,8 @@ def _link_stub(
         str(dest),
         str(src),
     ]
-    if crt_dir is not None:
+    if crt_dir is not None and soname != "libc.so":
+        # libc.so already exports pthread_atfork; crtbegin_so.o does too (API 23+).
         cmd.extend([str(crt_dir / "crtbegin_so.o"), str(crt_dir / "crtend_so.o")])
     _run(cmd)
 
