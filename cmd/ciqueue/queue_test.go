@@ -38,6 +38,20 @@ func missCache(t *testing.T) cacheFn {
 	return func(*pack.Package, *host.Host) (bool, error) { return false, nil }
 }
 
+// linuxArm64CIHosts matches packages-linux-arm64.yml: every SupportedHosts triplet.
+var linuxArm64CIHosts = []string{
+	"aarch64-apple-darwin",
+	"x86_64-apple-darwin",
+	"aarch64-apple-ios",
+	"aarch64-apple-ios-simulator",
+	"x86_64-w64-mingw32",
+	"x86_64-linux-gnu",
+	"aarch64-linux-gnu",
+	"aarch64-linux-android",
+	"x86_64-linux-android",
+	"armv7a-linux-androideabi",
+}
+
 func TestPackagesFromPaths(t *testing.T) {
 	chdirRepoRoot(t)
 	names := []string{}
@@ -180,6 +194,21 @@ func TestPackagesYmlHostsMatchDefaultHosts(t *testing.T) {
 	}
 }
 
+func TestPackagesLinuxArm64YmlHostsIncludeAndroid(t *testing.T) {
+	chdirRepoRoot(t)
+	b, err := os.ReadFile(filepath.Join(".github", "workflows", "packages-linux-arm64.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := "hosts: " + strings.Join(linuxArm64CIHosts, ",")
+	if !bytes.Contains(b, []byte(want)) {
+		t.Fatalf("packages-linux-arm64.yml missing %q", want)
+	}
+	if n := bytes.Count(b, []byte(want)); n != 10 {
+		t.Fatalf("expected 10 batch host lists, found %d", n)
+	}
+}
+
 func TestNextQueueZlibDarwinHost(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
@@ -274,20 +303,11 @@ func TestRenderCommentQueueMarkersDoNotCollide(t *testing.T) {
 	}
 }
 
-func TestNextQueueZlibLinuxArm64HostsSkipAndroid(t *testing.T) {
+func TestNextQueueZlibLinuxArm64HostsIncludeAndroid(t *testing.T) {
 	chdirRepoRoot(t)
-	hosts := []string{
-		"aarch64-apple-darwin",
-		"x86_64-apple-darwin",
-		"aarch64-apple-ios",
-		"aarch64-apple-ios-simulator",
-		"x86_64-w64-mingw32",
-		"x86_64-linux-gnu",
-		"aarch64-linux-gnu",
-	}
 	res, err := nextQueue(queueOpts{
 		changedFiles: []string{"packages/zlib.json"},
-		hosts:        hosts,
+		hosts:        linuxArm64CIHosts,
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return p.Package != "zlib", nil
 		},
@@ -298,16 +318,19 @@ func TestNextQueueZlibLinuxArm64HostsSkipAndroid(t *testing.T) {
 	if res.Status != "next" || res.Package != "zlib" {
 		t.Fatalf("got %+v", res)
 	}
-	if res.Host != hosts[0] {
-		t.Fatalf("expected first non-android host %s, got %s", hosts[0], res.Host)
+	if res.Host != linuxArm64CIHosts[0] {
+		t.Fatalf("expected first host %s, got %s", linuxArm64CIHosts[0], res.Host)
 	}
+	seen := map[string]bool{res.Host: true}
 	for _, it := range res.Remaining {
-		if strings.Contains(it.Host, "android") {
-			t.Fatalf("android host leaked into remaining: %+v", it)
+		if it.Package == "zlib" {
+			seen[it.Host] = true
 		}
 	}
-	if strings.Contains(res.Host, "android") {
-		t.Fatalf("android host selected: %s", res.Host)
+	for _, h := range []string{"aarch64-linux-android", "x86_64-linux-android", "armv7a-linux-androideabi"} {
+		if !seen[h] {
+			t.Fatalf("android host %s missing from zlib queue", h)
+		}
 	}
 }
 
