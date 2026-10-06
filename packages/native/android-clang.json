@@ -68,6 +68,8 @@
             "darwin_*:*-android*:chmod +x $NATIVEPREFIX/bin/xcrun",
             "darwin_*:*-android*:printf '#!/bin/sh\\ncase \"$1\" in\\n  -productVersion) echo %s ;;\\n  *) echo %s ;;\\nesac\\n' \"$SDK_VERSION\" \"$SDK_VERSION\" > $NATIVEPREFIX/bin/sw_vers",
             "darwin_*:*-android*:chmod +x $NATIVEPREFIX/bin/sw_vers",
+            "darwin_*:*-android*:sed -i.bak 's/check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)/set(HAVE_CXX_ATOMICS_WITHOUT_LIB TRUE)/' llvm/cmake/modules/CheckAtomic.cmake",
+            "darwin_*:*-android*:sed -i.bak 's/check_working_cxx_atomics64(HAVE_CXX_ATOMICS64_WITHOUT_LIB)/set(HAVE_CXX_ATOMICS64_WITHOUT_LIB TRUE)/' llvm/cmake/modules/CheckAtomic.cmake",
             "darwin_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
             "*:*-android*:DESTDIR=$STAGING_DIR cmake --build build --target install -j$NUM_CORES"
         ]
