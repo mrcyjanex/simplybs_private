@@ -59,9 +59,9 @@
             "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_CXX_COMPILER=$NATIVEPREFIX/_/bin/clang++",
             "darwin_*:*-android*:config_opts=$config_opts -DCMAKE_IGNORE_PREFIX_PATH=/opt/homebrew",
             "darwin_*:*-android*:LDFLAGS=-L$NATIVEPREFIX/lib",
-            "darwin_*:*-android*:CMAKE_CXX_FLAGS=-nostdinc++ -isystem $NATIVEPREFIX/include/c++/v1 -fno-typed-cxx-new-delete",
-            "darwin_*:*-android*:CMAKE_EXE_LINKER_FLAGS=-nostdlib++ $NATIVEPREFIX/lib/libc++.a $NATIVEPREFIX/lib/libc++abi.a $NATIVEPREFIX/lib/libunwind.a",
-            "darwin_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-nostdlib++ $NATIVEPREFIX/lib/libc++.a $NATIVEPREFIX/lib/libc++abi.a $NATIVEPREFIX/lib/libunwind.a"
+            "darwin_*:*-android*:CMAKE_CXX_FLAGS=-nostdinc++ -isystem $SDK_PATH/usr/include/c++/v1",
+            "darwin_*:*-android*:CMAKE_EXE_LINKER_FLAGS=-nostdlib++ $SDK_PATH/usr/lib/libc++.tbd $SDK_PATH/usr/lib/libc++abi.tbd",
+            "darwin_*:*-android*:CMAKE_SHARED_LINKER_FLAGS=-nostdlib++ $SDK_PATH/usr/lib/libc++.tbd $SDK_PATH/usr/lib/libc++abi.tbd"
         ],
         "steps": [
             "linux_*:*-android*:cmake $config_opts -DCMAKE_CXX_FLAGS=\"$CMAKE_CXX_FLAGS\" -DCMAKE_EXE_LINKER_FLAGS=\"$CMAKE_EXE_LINKER_FLAGS\" -DCMAKE_SHARED_LINKER_FLAGS=\"$CMAKE_SHARED_LINKER_FLAGS\"",
