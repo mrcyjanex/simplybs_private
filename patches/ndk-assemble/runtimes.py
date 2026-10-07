@@ -15,6 +15,9 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
     env = os.environ.copy()
     # Bootstrap $NATIVEPREFIX/_/bin/sh is toybox; llvm config.guess needs bash.
     env.pop("LLVM_DIR", None)
+    # Host export-env leaks -L$NATIVEPREFIX/lib into Android link lines.
+    for key in ("LDFLAGS", "CFLAGS", "CXXFLAGS", "CPPFLAGS", "LIBRARY_PATH"):
+        env.pop(key, None)
     bash = Path(env.get("NATIVEPREFIX", "")) / "bin" / "bash"
     if bash.exists():
         sh = bash.parent / "sh"
@@ -24,15 +27,25 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
     subprocess.check_call(cmd, cwd=cwd, env=env)
 
 
-def _install_builtins_for_clang(clang: Path, builtins: Path, target: str) -> None:
-    wanted = Path(
+def _libgcc_file(clang: Path, target: str) -> Path:
+    return Path(
         subprocess.check_output(
             [str(clang), f"--target={target}", "-print-libgcc-file-name"],
             text=True,
         ).strip()
     )
+
+
+def _install_builtins_for_clang(clang: Path, builtins: Path, target: str) -> None:
+    wanted = _libgcc_file(clang, target)
     wanted.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(builtins, wanted)
+
+
+def _install_lib_for_clang(clang: Path, lib: Path, target: str) -> None:
+    dest = _libgcc_file(clang, target).parent
+    dest.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(lib, dest / lib.name)
 
 
 def _cmake_configure(build: Path, args: list[str]) -> None:
@@ -97,6 +110,96 @@ def collect_abi(install_prefix: Path, abi_name: str, dest: Path) -> None:
             shutil.copytree(headers, inc_dest, symlinks=True)
 
 
+def _crt_cmake_args(
+    llvm_src: Path,
+    clang: Path,
+    clangxx: Path,
+    sysroot: Path,
+    target: str,
+    flags: str,
+    install: Path,
+) -> list[str]:
+    return [
+        "-G",
+        "Ninja",
+        "-S",
+        str(llvm_src / "compiler-rt"),
+        "-DCMAKE_BUILD_TYPE=Release",
+        f"-DCMAKE_C_COMPILER={clang}",
+        f"-DCMAKE_CXX_COMPILER={clangxx}",
+        f"-DCMAKE_ASM_COMPILER={clang}",
+        f"-DCMAKE_C_COMPILER_TARGET={target}",
+        f"-DCMAKE_CXX_COMPILER_TARGET={target}",
+        f"-DCMAKE_ASM_COMPILER_TARGET={target}",
+        f"-DCMAKE_SYSROOT={sysroot}",
+        f"-DCMAKE_C_FLAGS={flags}",
+        f"-DCMAKE_CXX_FLAGS={flags}",
+        f"-DCMAKE_ASM_FLAGS={flags}",
+        "-DANDROID=1",
+        # Bootstrap $NATIVEPREFIX/_ ships a partial LLVMConfig (no llvm-tblgen).
+        # Skip it so compiler-rt mocks AddLLVM from this monorepo.
+        "-DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON",
+        "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON",
+        "-DCOMPILER_RT_BUILTINS_HIDE_SYMBOLS=ON",
+        "-DCOMPILER_RT_BUILD_XRAY=OFF",
+        "-DCOMPILER_RT_BUILD_MEMPROF=OFF",
+        "-DCOMPILER_RT_BUILD_ORC=OFF",
+        "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF",
+        "-DCOMPILER_RT_INCLUDE_TESTS=OFF",
+        f"-DCMAKE_INSTALL_PREFIX={install}",
+    ]
+
+
+def _build_libunwind(
+    llvm_src: Path,
+    clang: Path,
+    clangxx: Path,
+    sysroot: Path,
+    target: str,
+    flags: str,
+    dest: Path,
+    jobs: int,
+) -> None:
+    # The driver would otherwise ask for libunwind while it is being built.
+    unwind_flags = f"{flags} --unwindlib=none"
+    install = dest / "install-unwind"
+    build = dest / "build-unwind"
+    _cmake_configure(
+        build,
+        [
+            "-G",
+            "Ninja",
+            "-S",
+            str(llvm_src / "runtimes"),
+            "-DLLVM_ENABLE_RUNTIMES=libunwind",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+            f"-DCMAKE_C_COMPILER={clang}",
+            f"-DCMAKE_CXX_COMPILER={clangxx}",
+            f"-DCMAKE_ASM_COMPILER={clang}",
+            f"-DCMAKE_C_COMPILER_TARGET={target}",
+            f"-DCMAKE_CXX_COMPILER_TARGET={target}",
+            f"-DCMAKE_ASM_COMPILER_TARGET={target}",
+            f"-DCMAKE_SYSROOT={sysroot}",
+            f"-DCMAKE_C_FLAGS={unwind_flags}",
+            f"-DCMAKE_CXX_FLAGS={unwind_flags}",
+            f"-DCMAKE_ASM_FLAGS={unwind_flags}",
+            f"-DCMAKE_EXE_LINKER_FLAGS={unwind_flags}",
+            f"-DCMAKE_SHARED_LINKER_FLAGS={unwind_flags}",
+            "-DLIBUNWIND_USE_COMPILER_RT=ON",
+            "-DLIBUNWIND_ENABLE_SHARED=OFF",
+            "-DLIBUNWIND_ENABLE_STATIC=ON",
+            "-DLIBUNWIND_INCLUDE_TESTS=OFF",
+            f"-DCMAKE_INSTALL_PREFIX={install}",
+        ],
+    )
+    _run(["ninja", "-C", str(build), f"-j{jobs}", "install"])
+    libs = list(install.rglob("libunwind.a"))
+    if not libs:
+        raise FileNotFoundError(install / "libunwind.a")
+    _install_lib_for_clang(clang, libs[0], target)
+
+
 def build_builtins(
     llvm_src: Path,
     clang: Path,
@@ -111,48 +214,47 @@ def build_builtins(
     target = f"{info['clang_triple']}{api}"
     extra = info.get("cflags", "")
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
-    sanitizers = "asan;ubsan"
-    if info["arch"] in {"aarch64", "x86_64"}:
-        sanitizers += ";hwasan;tsan"
-    build = dest / "build-rt"
     install = dest / "install-rt"
+    base = _crt_cmake_args(llvm_src, clang, clangxx, sysroot, target, flags, install)
+    # android-clang defaults to compiler-rt, so an executable try_compile looks
+    # for libclang_rt.builtins before this build can produce it.
+    builtins_build = dest / "build-rt-builtins"
     _cmake_configure(
-        build,
-        [
-            "-G",
-            "Ninja",
-            "-S",
-            str(llvm_src / "compiler-rt"),
-            "-DCMAKE_BUILD_TYPE=Release",
-            f"-DCMAKE_C_COMPILER={clang}",
-            f"-DCMAKE_CXX_COMPILER={clangxx}",
-            f"-DCMAKE_ASM_COMPILER={clang}",
-            f"-DCMAKE_C_COMPILER_TARGET={target}",
-            f"-DCMAKE_CXX_COMPILER_TARGET={target}",
-            f"-DCMAKE_ASM_COMPILER_TARGET={target}",
-            f"-DCMAKE_SYSROOT={sysroot}",
-            f"-DCMAKE_C_FLAGS={flags}",
-            f"-DCMAKE_CXX_FLAGS={flags}",
-            f"-DCMAKE_ASM_FLAGS={flags}",
-            "-DLLVM_RUNTIMES_BUILD=ON",
-            "-DANDROID=1",
-            "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON",
-            "-DCOMPILER_RT_BUILTINS_HIDE_SYMBOLS=ON",
+        builtins_build,
+        base
+        + [
+            "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
             "-DCOMPILER_RT_BUILD_BUILTINS=ON",
-            "-DCOMPILER_RT_BUILD_SANITIZERS=ON",
-            "-DCOMPILER_RT_BUILD_XRAY=OFF",
-            "-DCOMPILER_RT_BUILD_LIBFUZZER=ON",
-            "-DCOMPILER_RT_BUILD_PROFILE=ON",
-            "-DCOMPILER_RT_BUILD_MEMPROF=OFF",
-            "-DCOMPILER_RT_BUILD_ORC=OFF",
-            "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF",
-            "-DCOMPILER_RT_INCLUDE_TESTS=OFF",
-            f"-DCOMPILER_RT_SANITIZERS_TO_BUILD={sanitizers}",
-            f"-DCMAKE_INSTALL_PREFIX={install}",
+            "-DCOMPILER_RT_BUILD_SANITIZERS=OFF",
+            "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF",
+            "-DCOMPILER_RT_BUILD_PROFILE=OFF",
         ],
     )
-    _run(["ninja", "-C", str(build), f"-j{jobs}"])
-    _run(["ninja", "-C", str(build), "install"])
+    _run(["ninja", "-C", str(builtins_build), f"-j{jobs}", "install"])
+    builtin_libs = list(install.rglob("libclang_rt.builtins*.a"))
+    if not builtin_libs:
+        raise FileNotFoundError(install / "libclang_rt.builtins.a")
+    _install_builtins_for_clang(clang, builtin_libs[0], target)
+    # android-clang links every executable with -l:libunwind.a. Build that
+    # archive before sanitizers so their compiler test can link.
+    _build_libunwind(llvm_src, clang, clangxx, sysroot, target, flags, dest, jobs)
+    rest_build = dest / "build-rt"
+    # The sysroot libc++.so script points at libc++_shared, which this stage
+    # does not build. Keep the C++ compiler test off that library.
+    nostd = f"{flags} -nostdlib++"
+    _cmake_configure(
+        rest_build,
+        base
+        + [
+            "-DCOMPILER_RT_BUILD_BUILTINS=OFF",
+            "-DCOMPILER_RT_BUILD_SANITIZERS=ON",
+            "-DCOMPILER_RT_BUILD_LIBFUZZER=ON",
+            "-DCOMPILER_RT_BUILD_PROFILE=ON",
+            f"-DCMAKE_EXE_LINKER_FLAGS={nostd}",
+            f"-DCMAKE_SHARED_LINKER_FLAGS={nostd}",
+        ],
+    )
+    _run(["ninja", "-C", str(rest_build), f"-j{jobs}", "install"])
 
 
 def build_libcxx(
@@ -170,6 +272,7 @@ def build_libcxx(
     target = f"{info['clang_triple']}{api}"
     extra = info.get("cflags", "")
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
+    link_flags = f"{flags} -nostdlib++"
     if builtins is not None:
         _install_builtins_for_clang(clang, builtins, target)
     build = dest / "build-cxx"
@@ -194,8 +297,8 @@ def build_libcxx(
             f"-DCMAKE_C_FLAGS={flags}",
             f"-DCMAKE_CXX_FLAGS={flags}",
             f"-DCMAKE_ASM_FLAGS={flags}",
-            f"-DCMAKE_SHARED_LINKER_FLAGS={flags}",
-            f"-DCMAKE_EXE_LINKER_FLAGS={flags}",
+            f"-DCMAKE_SHARED_LINKER_FLAGS={link_flags}",
+            f"-DCMAKE_EXE_LINKER_FLAGS={link_flags}",
             "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
             "-DLIBCXX_USE_COMPILER_RT=ON",
             "-DLIBCXXABI_USE_COMPILER_RT=ON",
