@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import platform
 import shutil
 import subprocess
 from pathlib import Path
@@ -46,6 +47,18 @@ def _install_lib_for_clang(clang: Path, lib: Path, target: str) -> None:
     dest = _libgcc_file(clang, target).parent
     dest.mkdir(parents=True, exist_ok=True)
     shutil.copy2(lib, dest / lib.name)
+
+
+def _host_system_args(arch: str) -> list[str]:
+    # CMake sets CMAKE_SYSTEM_NAME from the host when it is unset. On Darwin
+    # that enables APPLE, and compiler-rt then requires a macOS SDK version
+    # while this build is targeting Android.
+    if platform.system() != "Darwin":
+        return []
+    return [
+        "-DCMAKE_SYSTEM_NAME=Linux",
+        f"-DCMAKE_SYSTEM_PROCESSOR={arch}",
+    ]
 
 
 def _cmake_configure(build: Path, args: list[str]) -> None:
@@ -116,6 +129,7 @@ def _crt_cmake_args(
     clangxx: Path,
     sysroot: Path,
     target: str,
+    arch: str,
     flags: str,
     install: Path,
 ) -> list[str]:
@@ -132,6 +146,7 @@ def _crt_cmake_args(
         f"-DCMAKE_CXX_COMPILER_TARGET={target}",
         f"-DCMAKE_ASM_COMPILER_TARGET={target}",
         f"-DCMAKE_SYSROOT={sysroot}",
+        *_host_system_args(arch),
         f"-DCMAKE_C_FLAGS={flags}",
         f"-DCMAKE_CXX_FLAGS={flags}",
         f"-DCMAKE_ASM_FLAGS={flags}",
@@ -156,6 +171,7 @@ def _build_libunwind(
     clangxx: Path,
     sysroot: Path,
     target: str,
+    arch: str,
     flags: str,
     dest: Path,
     jobs: int,
@@ -181,6 +197,7 @@ def _build_libunwind(
             f"-DCMAKE_CXX_COMPILER_TARGET={target}",
             f"-DCMAKE_ASM_COMPILER_TARGET={target}",
             f"-DCMAKE_SYSROOT={sysroot}",
+            *_host_system_args(arch),
             f"-DCMAKE_C_FLAGS={unwind_flags}",
             f"-DCMAKE_CXX_FLAGS={unwind_flags}",
             f"-DCMAKE_ASM_FLAGS={unwind_flags}",
@@ -215,7 +232,9 @@ def build_builtins(
     extra = info.get("cflags", "")
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
     install = dest / "install-rt"
-    base = _crt_cmake_args(llvm_src, clang, clangxx, sysroot, target, flags, install)
+    base = _crt_cmake_args(
+        llvm_src, clang, clangxx, sysroot, target, info["arch"], flags, install
+    )
     # android-clang defaults to compiler-rt, so an executable try_compile looks
     # for libclang_rt.builtins before this build can produce it.
     builtins_build = dest / "build-rt-builtins"
@@ -237,7 +256,9 @@ def build_builtins(
     _install_builtins_for_clang(clang, builtin_libs[0], target)
     # android-clang links every executable with -l:libunwind.a. Build that
     # archive before sanitizers so their compiler test can link.
-    _build_libunwind(llvm_src, clang, clangxx, sysroot, target, flags, dest, jobs)
+    _build_libunwind(
+        llvm_src, clang, clangxx, sysroot, target, info["arch"], flags, dest, jobs
+    )
     rest_build = dest / "build-rt"
     # The sysroot libc++.so script points at libc++_shared, which this stage
     # does not build. Keep the C++ compiler test off that library.
@@ -294,6 +315,7 @@ def build_libcxx(
             f"-DCMAKE_CXX_COMPILER_TARGET={target}",
             f"-DCMAKE_ASM_COMPILER_TARGET={target}",
             f"-DCMAKE_SYSROOT={sysroot}",
+            *_host_system_args(info["arch"]),
             f"-DCMAKE_C_FLAGS={flags}",
             f"-DCMAKE_CXX_FLAGS={flags}",
             f"-DCMAKE_ASM_FLAGS={flags}",
