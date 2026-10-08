@@ -29,7 +29,8 @@
             "*:*:config_opts=$config_opts -DFILAMENT_SUPPORTS_XCB=OFF",
             "*:*:config_opts=$config_opts -DFILAMENT_SUPPORTS_XLIB=OFF",
             "*:*:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF",
-            "*:*:config_opts=$config_opts -DUSE_STATIC_LIBCXX=OFF"
+            "*:*:config_opts=$config_opts -DUSE_STATIC_LIBCXX=OFF",
+            "darwin_*:*:config_opts=$config_opts -DCMAKE_RANLIB=$RANLIB"
         ],
         "steps": [
             "*:*:env -u CMAKE_TOOLCHAIN_FILE cmake -S . -B build $config_opts",

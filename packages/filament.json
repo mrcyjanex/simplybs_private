@@ -56,7 +56,8 @@
             "*:*:config_opts=$config_opts -DUSE_STATIC_LIBCXX=OFF",
             "*:*-apple-ios*:config_opts=$config_opts $config_opts_ios",
             "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_ENABLE_EXPERIMENTAL_GCC_SUPPORT=ON",
-            "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF"
+            "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF",
+            "*:*-apple-*:config_opts=$config_opts -DCMAKE_RANLIB=$RANLIB"
         ],
         "steps": [
             "*:*:mkdir -p out",
