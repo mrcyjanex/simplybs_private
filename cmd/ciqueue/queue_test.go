@@ -90,6 +90,26 @@ func TestNextQueueEmptyDiffIsDone(t *testing.T) {
 	}
 }
 
+func TestNextQueueNativeToolchainRebuildsDirectDependents(t *testing.T) {
+	chdirRepoRoot(t)
+	res, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/native/_.json"},
+		hosts:        []string{"aarch64-linux-android", "x86_64-linux-gnu"},
+		cached: func(p *pack.Package, h *host.Host) (bool, error) {
+			return !(p.Package == "zlib" && h.Triplet == "aarch64-linux-android"), nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Status != "next" || res.Package != "zlib" || res.Host != "aarch64-linux-android" {
+		t.Fatalf("got status=%s pkg=%s host=%s msg=%s needed=%d", res.Status, res.Package, res.Host, res.Message, res.Needed)
+	}
+	if res.Needed != 1 {
+		t.Fatalf("needed=%d, want only the android zlib rebuild", res.Needed)
+	}
+}
+
 func TestNextQueueZlibPicksNativeFirst(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
