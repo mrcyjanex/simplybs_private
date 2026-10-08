@@ -24,6 +24,7 @@
     ],
     "dependencies": [
         "*:*:native/_/_",
+        "darwin_*:*:native/bash",
         "*:*:native/cmake",
         "*:*:native/ninja",
         "*:*:native/patch",
