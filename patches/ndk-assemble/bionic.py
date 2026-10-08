@@ -22,6 +22,9 @@ MAP_ARCH = {
 
 ARCH_TAGS = {"arm", "arm64", "x86", "x86_64", "riscv64"}
 SKIP_TAGS = {"apex", "platform-only", "future"}
+# Not part of the NDK stub ABI. LIBC_PRIVATE repeats public ARM EABI names
+# (__aeabi_atexit and the rest) and also lists compiler-rt helpers.
+SKIP_NODES = {"LIBC_PRIVATE", "LIBC_PLATFORM", "LIBC_DEPRECATED"}
 
 BIONIC_MAPS = {
     "libc.so": "libc/libc.map.txt",
@@ -48,7 +51,9 @@ def _run(cmd: list[str], cwd: Path | None = None) -> None:
 def parse_map_symbols(text: str, arch: str, api: int) -> list[tuple[str, str, bool]]:
     """Return (name, kind, weak) for symbols visible on this arch/API."""
     out: list[tuple[str, str, bool]] = []
+    seen: set[str] = set()
     in_global = False
+    node = ""
     for raw in text.splitlines():
         line, _, comment = raw.partition("#")
         line = line.strip()
@@ -56,6 +61,7 @@ def parse_map_symbols(text: str, arch: str, api: int) -> list[tuple[str, str, bo
         if not line:
             continue
         if line.endswith("{"):
+            node = line[:-1].strip().split()[0]
             in_global = False
             continue
         if line.startswith("global:"):
@@ -67,7 +73,7 @@ def parse_map_symbols(text: str, arch: str, api: int) -> list[tuple[str, str, bo
         if line.startswith("}"):
             in_global = False
             continue
-        if not in_global:
+        if not in_global or node in SKIP_NODES:
             continue
         name = line.rstrip(";").strip()
         if not name or name == "*":
@@ -105,6 +111,9 @@ def parse_map_symbols(text: str, arch: str, api: int) -> list[tuple[str, str, bo
             continue
         if arch in introduced_arch and api < introduced_arch[arch]:
             continue
+        if name in seen:
+            continue
+        seen.add(name)
         out.append((name, kind, weak))
     return out
 
