@@ -132,6 +132,7 @@ def _crt_cmake_args(
     arch: str,
     flags: str,
     install: Path,
+    api: int,
 ) -> list[str]:
     return [
         "-G",
@@ -151,6 +152,9 @@ def _crt_cmake_args(
         f"-DCMAKE_CXX_FLAGS={flags}",
         f"-DCMAKE_ASM_FLAGS={flags}",
         "-DANDROID=1",
+        # 32-bit LLVM adds _FILE_OFFSET_BITS=64 unless this API is below 24.
+        # Bionic hides fseeko/ftello in that mode until API 24.
+        f"-DANDROID_NATIVE_API_LEVEL={api}",
         # Bootstrap $NATIVEPREFIX/_ ships a partial LLVMConfig (no llvm-tblgen).
         # Skip it so compiler-rt mocks AddLLVM from this monorepo.
         "-DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON",
@@ -233,7 +237,7 @@ def build_builtins(
     flags = f"--target={target} --sysroot={sysroot} -fPIC {extra}".strip()
     install = dest / "install-rt"
     base = _crt_cmake_args(
-        llvm_src, clang, clangxx, sysroot, target, info["arch"], flags, install
+        llvm_src, clang, clangxx, sysroot, target, info["arch"], flags, install, api
     )
     # android-clang defaults to compiler-rt, so an executable try_compile looks
     # for libclang_rt.builtins before this build can produce it.
@@ -321,6 +325,8 @@ def build_libcxx(
             f"-DCMAKE_ASM_FLAGS={flags}",
             f"-DCMAKE_SHARED_LINKER_FLAGS={link_flags}",
             f"-DCMAKE_EXE_LINKER_FLAGS={link_flags}",
+            "-DANDROID=1",
+            f"-DANDROID_NATIVE_API_LEVEL={api}",
             "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
             "-DLIBCXX_USE_COMPILER_RT=ON",
             "-DLIBCXXABI_USE_COMPILER_RT=ON",
