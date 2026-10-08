@@ -56,10 +56,10 @@
             "*:*:config_opts=$config_opts -DUSE_STATIC_LIBCXX=OFF",
             "*:*-apple-ios*:config_opts=$config_opts $config_opts_ios",
             "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_ENABLE_EXPERIMENTAL_GCC_SUPPORT=ON",
-            "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF",
-            "*:*-apple-*:config_opts=$config_opts -DCMAKE_RANLIB=$RANLIB"
+            "*:*-linux-gnu:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF"
         ],
         "steps": [
+            "*:*:sed -i.bak 's/ -no_warning_for_no_symbols//' CMakeLists.txt",
             "*:*:mkdir -p out",
             "*:*:printf '%s\\n' 'foreach(_filament_tool IN ITEMS matc cmgen filamesh mipgen resgen uberz glslminifier)' '  if(NOT TARGET ${_filament_tool})' '    add_executable(${_filament_tool} IMPORTED)' '    set_property(TARGET ${_filament_tool} APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)' '    set_target_properties(${_filament_tool} PROPERTIES IMPORTED_LOCATION_RELEASE \"'$NATIVEPREFIX'/bin/${_filament_tool}\")' '  endif()' 'endforeach()' > out/ImportExecutables-Prebuilt.cmake",
             "*:*:sed -i '/add_subdirectory(\\${TOOLS}\\/cmgen)/i\\if (NOT FILAMENT_IMPORT_PREBUILT_EXECUTABLES)' CMakeLists.txt",
