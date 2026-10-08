@@ -20,7 +20,9 @@ ABIS = {
         "clang_triple": "armv7a-linux-androideabi",
         "lib_triple": "arm-linux-androideabi",
         "arch": "arm",
-        "cflags": "-mthumb",
+        # Thumb keeps r7 as the frame pointer, and bionic's swi asm writes r7.
+        # .cfi_undefined is rejected unless the function has a CFI prologue.
+        "cflags": "-mthumb -fomit-frame-pointer -gline-tables-only",
     },
     "x86_64": {
         "abi": "x86_64",
