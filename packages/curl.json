@@ -11,8 +11,13 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/diffutils",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/make",
+        "*:*:native/perl",
         "*:*:native/pkgconf",
+        "*:*:native/sed",
         "*:*:openssl",
         "*:*:zlib"
     ],
