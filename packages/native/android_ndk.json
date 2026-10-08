@@ -23,6 +23,7 @@
         ],
         "steps": [
             "*:*-android*:python3 $PATCH_DIR/ndk-assemble install --skeleton $NATIVEPREFIX/android-ndk-skeleton --clang-prefix $NATIVEPREFIX/android-clang --runtimes $NATIVEPREFIX/android-runtimes --ndk-out $STAGING_DIR$NATIVEPREFIX --host-tag $ANDROID_HOST_TAG --host-lib-dir $NATIVEPREFIX/lib --prefix-lib-dir $STAGING_DIR$PREFIX/lib --target-triple $BUILDLIB_HOST --api $API_LEVEL",
+            "*:*-android*:resource=$($STAGING_DIR$NATIVEPREFIX/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/bin/clang -print-resource-dir) && mkdir -p $resource/lib/linux && $STAGING_DIR$NATIVEPREFIX/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/bin/llvm-ar rc $resource/lib/linux/libatomic.a && for d in $STAGING_DIR$NATIVEPREFIX/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot/usr/lib/*/; do cp $resource/lib/linux/libatomic.a ${d}libatomic.a; done",
             "*:*-android*:python3 $PATCH_DIR/android_ndk/symlink_same.py $STAGING_DIR$PREFIX",
             "*:*-android*:python3 $PATCH_DIR/ndk-assemble smoke-test --ndk $STAGING_DIR$NATIVEPREFIX --host-tag $ANDROID_HOST_TAG --target-triple $BUILDLIB_HOST --api $API_LEVEL"
         ]

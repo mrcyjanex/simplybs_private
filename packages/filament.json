@@ -61,7 +61,8 @@
             "*:x86_64-w64-mingw32:CXXFLAGS=$CXXFLAGS -DWIN32 -Wno-error=shadow -Wno-shadow -Wno-error=undef",
             "*:x86_64-w64-mingw32:config_opts=$config_opts -DFILAMENT_ENABLE_EXPERIMENTAL_GCC_SUPPORT=ON",
             "*:x86_64-w64-mingw32:config_opts=$config_opts -DFILAMENT_SUPPORTS_OPENGL=OFF",
-            "*:x86_64-w64-mingw32:config_opts=$config_opts -DFILAMENT_SUPPORTS_VULKAN=ON"
+            "*:x86_64-w64-mingw32:config_opts=$config_opts -DFILAMENT_SUPPORTS_VULKAN=ON",
+            "*:*-android*:config_opts=$config_opts -DEGL=TRUE"
         ],
         "steps": [
             "*:*:sed -i.bak 's/ -no_warning_for_no_symbols//' CMakeLists.txt",
@@ -82,6 +83,7 @@
             "*:x86_64-w64-mingw32:sed -i 's/return GetProcAddress(library, \"vkGetInstanceProcAddr\");/return (void*)GetProcAddress(library, \"vkGetInstanceProcAddr\");/' libs/bluevk/src/BlueVKWindows.cpp",
             "*:x86_64-w64-mingw32:sed -i 's/Shlwapi/shlwapi/' libs/utils/CMakeLists.txt",
             "*:x86_64-w64-mingw32:find . -type f \\( -name '*.h' -o -name '*.hpp' -o -name '*.cpp' -o -name '*.cc' -o -name '*.c' \\) -print0 | xargs -0 sed -i -e 's/<Winsock2.h>/<winsock2.h>/g' -e 's/<WinSock2.h>/<winsock2.h>/g' -e 's/<WS2tcpip.h>/<ws2tcpip.h>/g' -e 's/<Windows.h>/<windows.h>/g' -e 's/\"Windows.h\"/\"windows.h\"/g' -e 's/<Winbase.h>/<winbase.h>/g' -e 's/<Wingdi.h>/<wingdi.h>/g' -e 's/<Strsafe.h>/<strsafe.h>/g' -e 's/<Basetsd.h>/<basetsd.h>/g' -e 's/<Shlwapi.h>/<shlwapi.h>/g'",
+            "*:*-android*:sed -i 's/elseif(_host MATCHES \"linux\")/elseif(_host MATCHES \"linux\" AND NOT _host MATCHES \"android\")/' $NATIVEPREFIX/toolchain.cmake",
             "*:*:cmake -S . -B build $config_opts",
             "*:*:cmake --build build -j$NUM_CORES",
             "*:*:DESTDIR=$STAGING_DIR cmake --install build"

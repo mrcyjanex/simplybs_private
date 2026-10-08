@@ -102,6 +102,36 @@ def copy_host_libs(sources: list[Path], toolchain: Path) -> None:
                 _copy_file(src, dest / src.name)
 
 
+def write_libatomic(toolchain: Path, sysroot: Path) -> None:
+    """compiler-rt builtins contain the atomic helpers. The NDK still ships an
+    empty libatomic.a so -latomic, added by CMake's Android platform, resolves.
+    The driver searches the sysroot library directories, not the resource dir.
+    """
+    resource_root = toolchain / "lib" / "clang"
+    if not resource_root.is_dir():
+        raise FileNotFoundError(resource_root)
+    version_dirs = sorted(p for p in resource_root.iterdir() if p.is_dir())
+    if not version_dirs:
+        raise FileNotFoundError(resource_root)
+    linux_dir = version_dirs[0] / "lib" / "linux"
+    linux_dir.mkdir(parents=True, exist_ok=True)
+    dest = linux_dir / "libatomic.a"
+    if dest.exists() or dest.is_symlink():
+        dest.unlink()
+    ar = toolchain / "bin" / "llvm-ar"
+    subprocess.check_call([str(ar), "rc", str(dest)])
+    libroot = sysroot / "usr" / "lib"
+    if not libroot.is_dir():
+        return
+    for triple_dir in libroot.iterdir():
+        if not triple_dir.is_dir():
+            continue
+        shutil.copy2(dest, triple_dir / "libatomic.a")
+        for child in triple_dir.iterdir():
+            if child.is_dir() and child.name.isdigit():
+                shutil.copy2(dest, child / "libatomic.a")
+
+
 def overlay_runtimes(runtimes: Path, toolchain: Path, sysroot: Path) -> None:
     if not runtimes.is_dir():
         return
@@ -196,6 +226,7 @@ def install(
         copy_host_libs([host_lib_dir], toolchain)
     if runtimes is not None:
         overlay_runtimes(runtimes, toolchain, sysroot)
+    write_libatomic(toolchain, sysroot)
     levels = write_all_wrappers(dest_bin, sysroot, clang_triple=target_triple)
     if api not in levels and target_triple:
         write_clang_wrappers(dest_bin, Abi.from_clang_triple(target_triple).clang_triple, [api])

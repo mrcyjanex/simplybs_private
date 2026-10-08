@@ -109,7 +109,9 @@ def cmd_smoke_test(args: argparse.Namespace) -> None:
         subprocess.check_call(
             [str(clang), "-c", str(src), "-o", str(obj), f"--sysroot={sysroot}"]
         )
-        subprocess.check_call([str(clang), str(obj), "-o", str(exe), f"--sysroot={sysroot}"])
+        subprocess.check_call(
+            [str(clang), str(obj), "-o", str(exe), f"--sysroot={sysroot}", "-latomic"]
+        )
     print("ok", clang)
 
 
