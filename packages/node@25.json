@@ -19,7 +19,7 @@
     ],
     "build": {
         "env": [
-            "*:*:CC_target=$CC",
+            "*:*:CC_target=",
             "*:*:GYP_LINK_CONCURRENCY=$NUM_CORES",
             "*:*:config_opts=--ninja",
             "*:*:config_opts=$config_opts --prefix=$PREFIX"
