@@ -10,7 +10,11 @@
         }
     ],
     "dependencies": [
-        "*:*-linux-gnu:native/_"
+        "*:*-linux-gnu:native/_",
+        "*:*-linux-gnu:native/gawk",
+        "*:*-linux-gnu:native/grep",
+        "*:*-linux-gnu:native/make",
+        "*:*-linux-gnu:native/sed"
     ],
     "build": {
         "steps": [

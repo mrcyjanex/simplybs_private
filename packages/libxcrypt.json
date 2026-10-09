@@ -13,10 +13,13 @@
         "*:*:native/_",
         "*:*:native/autoconf",
         "*:*:native/automake",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/libtool",
         "*:*:native/m4",
         "*:*:native/make",
-        "*:*:native/perl"
+        "*:*:native/perl",
+        "*:*:native/sed"
     ],
     "build": {
         "env": [

@@ -12,7 +12,10 @@
     "dependencies": [
         "*:*:native/_",
         "*:*:native/config",
-        "*:*:native/make"
+        "*:*:native/gawk",
+        "*:*:native/grep",
+        "*:*:native/make",
+        "*:*:native/sed"
     ],
     "build": {
         "env": [
