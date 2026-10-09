@@ -28,7 +28,7 @@
             "*:*:config_opts=$config_opts --enable-static --disable-shared --with-pic"
         ],
         "steps": [
-            "*:*:./autogen.sh",
+            "*:*:autoreconf -fiv -Wall,error",
             "*:*:./configure $config_opts",
             "*:*:make -j$NUM_CORES",
             "*:*:make install DESTDIR=$STAGING_DIR"
