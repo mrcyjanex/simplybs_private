@@ -26,7 +26,8 @@
         ],
         "steps": [
             "*:*:./configure $config_opts",
-            "*:*:ninja -j$NUM_CORES"
+            "*:*:ninja -C out/Release -j$NUM_CORES",
+            "*:*:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX"
         ]
     }
 }
