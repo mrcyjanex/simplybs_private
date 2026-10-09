@@ -24,7 +24,7 @@
     "build": {
         "env": [
             "*:*:config_opts=--host=$HOST --prefix=$PREFIX",
-            "*:*-linux-gnu:cf_cv_ar_flags=",
+            "*:*-linux-gnu:cf_cv_ar_flags=cr",
             "*:*:config_opts=$config_opts --disable-shared",
             "*:*:config_opts=$config_opts --with-build-cc=gcc",
             "*:*:config_opts=$config_opts --without-debug",
@@ -65,6 +65,7 @@
         ],
         "steps": [
             "*:*:$SHOULD_BUILD cp $PATCH_DIR/ncurses/fallback.c ncurses",
+            "*:*-w64-mingw32:$SHOULD_BUILD sed -i '/#include <curses.priv.h>/a #include <windows.h>' ncurses/tinfo/lib_napms.c",
             "*:*:$SHOULD_BUILD bash ./configure $config_opts",
             "*:*:$SHOULD_BUILD make -j$NUM_CORES $build_opts",
             "*:*:$SHOULD_BUILD make install.libs DESTDIR=$STAGING_DIR"
