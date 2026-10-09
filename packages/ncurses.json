@@ -66,7 +66,13 @@
         "steps": [
             "*:*:$SHOULD_BUILD cp $PATCH_DIR/ncurses/fallback.c ncurses",
             "*:*-w64-mingw32:$SHOULD_BUILD sed -i '/#include <curses.priv.h>/a #include <windows.h>' ncurses/tinfo/lib_napms.c",
+            "*:*-w64-mingw32:$SHOULD_BUILD sed -i 's|#define wcwidth(ucs) _nc_wcwidth(ucs)|extern NCURSES_EXPORT(int) _nc_wcwidth(wchar_t);\\n#define wcwidth(ucs) _nc_wcwidth(ucs)|' ncurses/curses.priv.h",
             "*:*:$SHOULD_BUILD bash ./configure $config_opts",
+            "*:*-w64-mingw32:$SHOULD_BUILD sed -i 's|^NORMAL_OBJS =|NORMAL_OBJS = ../objects/wcwidth.o|' ncurses/Makefile",
+            "*:*-w64-mingw32:$SHOULD_BUILD sed -i 's|^NORMAL_T_OBJS =|NORMAL_T_OBJS = ../objects/wcwidth.o|' ncurses/Makefile",
+            "*:*-w64-mingw32:$SHOULD_BUILD grep -q '^NORMAL_OBJS = ../objects/wcwidth.o' ncurses/Makefile",
+            "*:*-w64-mingw32:$SHOULD_BUILD grep -q '^NORMAL_T_OBJS = ../objects/wcwidth.o' ncurses/Makefile",
+            "*:*-w64-mingw32:$SHOULD_BUILD printf '%s\\n' '../objects/wcwidth.o: $(srcdir)/win32con/wcwidth.c $(HEADER_DEPS)' \"$(printf '\\tmkdir -p ../objects')\" \"$(printf '\\t$(CC) -c $(CFLAGS_NORMAL) $(srcdir)/win32con/wcwidth.c -o ../objects/wcwidth.o')\" >> ncurses/Makefile",
             "*:*:$SHOULD_BUILD make -j$NUM_CORES $build_opts",
             "*:*:$SHOULD_BUILD make install.libs DESTDIR=$STAGING_DIR"
         ]
