@@ -21,6 +21,7 @@
     "build": {
         "env": [],
         "steps": [
+            "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-lipo $NATIVEPREFIX/bin/lipo",
             "*:*:$NATIVEPREFIX/bin/meson setup build --prefix=$NATIVEPREFIX -Ddtd_validation=false -Ddocumentation=false -Dtests=false",
             "*:*:ninja -C build",
             "*:*:DESTDIR=$STAGING_DIR ninja -C build install"
