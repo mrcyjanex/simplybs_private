@@ -19,6 +19,7 @@
     ],
     "build": {
         "env": [
+            "*:*:CC_target=$CC",
             "*:*:config_opts=--ninja",
             "*:*:config_opts=$config_opts --prefix=$PREFIX"
         ],
