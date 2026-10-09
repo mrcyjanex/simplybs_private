@@ -12,8 +12,7 @@
     "dependencies": [
         "*:*:native/_",
         "*:*:native/ninja",
-        "*:*:native/python@3.14",
-        "*:*:native/sed"
+        "*:*:native/python@3.14"
     ],
     "patches": [
         "fallback.c"
@@ -21,11 +20,11 @@
     "build": {
         "env": [
             "*:*:CC_target=$CC",
+            "*:*:GYP_LINK_CONCURRENCY=$NUM_CORES",
             "*:*:config_opts=--ninja",
             "*:*:config_opts=$config_opts --prefix=$PREFIX"
         ],
         "steps": [
-            "*:*:sed -i 's/^import ctypes$/exec(\"try:\\\\n import ctypes\\\\nexcept ImportError:\\\\n ctypes=None\", globals())/' tools/gyp/pylib/gyp/generator/ninja.py",
             "*:*:./configure $config_opts",
             "*:*:ninja -j$NUM_CORES"
         ]
