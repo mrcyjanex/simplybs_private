@@ -95,12 +95,7 @@ jobs:
         id: img
         run: echo "name=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')/ci" >> "$GITHUB_OUTPUT"
 
-      # The container driver pulls moby/buildkit from Docker Hub. That auth
-      # request times out from Actions. The docker driver uses the engine
-      # already on the runner.
       - uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker
 
       - uses: docker/login-action@v3
         with:
@@ -117,6 +112,8 @@ jobs:
           provenance: false
           sbom: false
           tags: ${{ steps.img.outputs.name }}:${{ steps.meta.outputs.sha }}
+          cache-from: type=registry,ref=${{ steps.img.outputs.name }}:buildcache
+          cache-to: type=registry,ref=${{ steps.img.outputs.name }}:buildcache,mode=max
 
       - name: Output image
         id: out
