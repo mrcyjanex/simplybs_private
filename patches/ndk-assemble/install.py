@@ -102,6 +102,21 @@ def copy_host_libs(sources: list[Path], toolchain: Path) -> None:
                 _copy_file(src, dest / src.name)
 
 
+def link_cmake_host_tag(toolchain: Path) -> None:
+    """CMake 4 maps aarch64 Linux to linux-x86 and arm64 Darwin to darwin-x86_64."""
+    aliases = {
+        "linux-aarch64": "linux-x86",
+        "darwin-arm64": "darwin-x86_64",
+    }
+    alias = aliases.get(toolchain.name)
+    if alias is None:
+        return
+    dest = toolchain.parent / alias
+    if dest.exists() or dest.is_symlink():
+        return
+    dest.symlink_to(toolchain.name)
+
+
 def write_libatomic(toolchain: Path, sysroot: Path) -> None:
     """compiler-rt builtins contain the atomic helpers. The NDK still ships an
     empty libatomic.a so -latomic, added by CMake's Android platform, resolves.
@@ -227,6 +242,7 @@ def install(
     if runtimes is not None:
         overlay_runtimes(runtimes, toolchain, sysroot)
     write_libatomic(toolchain, sysroot)
+    link_cmake_host_tag(toolchain)
     levels = write_all_wrappers(dest_bin, sysroot, clang_triple=target_triple)
     if api not in levels and target_triple:
         write_clang_wrappers(dest_bin, Abi.from_clang_triple(target_triple).clang_triple, [api])

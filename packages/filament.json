@@ -84,6 +84,8 @@
             "*:x86_64-w64-mingw32:sed -i 's/Shlwapi/shlwapi/' libs/utils/CMakeLists.txt",
             "*:x86_64-w64-mingw32:find . -type f \\( -name '*.h' -o -name '*.hpp' -o -name '*.cpp' -o -name '*.cc' -o -name '*.c' \\) -print0 | xargs -0 sed -i -e 's/<Winsock2.h>/<winsock2.h>/g' -e 's/<WinSock2.h>/<winsock2.h>/g' -e 's/<WS2tcpip.h>/<ws2tcpip.h>/g' -e 's/<Windows.h>/<windows.h>/g' -e 's/\"Windows.h\"/\"windows.h\"/g' -e 's/<Winbase.h>/<winbase.h>/g' -e 's/<Wingdi.h>/<wingdi.h>/g' -e 's/<Strsafe.h>/<strsafe.h>/g' -e 's/<Basetsd.h>/<basetsd.h>/g' -e 's/<Shlwapi.h>/<shlwapi.h>/g'",
             "*:*-android*:sed -i 's/elseif(_host MATCHES \"linux\")/elseif(_host MATCHES \"linux\" AND NOT _host MATCHES \"android\")/' $NATIVEPREFIX/toolchain.cmake",
+            "*:*-android*:sed -i 's/set(CMAKE_SYSTEM_PROCESSOR armv7)/set(CMAKE_SYSTEM_PROCESSOR armv7-a)/' $NATIVEPREFIX/toolchain.cmake",
+            "*:*-android*:prebuilt=$NATIVEPREFIX/toolchains/llvm/prebuilt; if [ -d $prebuilt/linux-aarch64 ] && [ ! -e $prebuilt/linux-x86 ]; then ln -s linux-aarch64 $prebuilt/linux-x86; fi; if [ -d $prebuilt/darwin-arm64 ] && [ ! -e $prebuilt/darwin-x86_64 ]; then ln -s darwin-arm64 $prebuilt/darwin-x86_64; fi",
             "*:*:cmake -S . -B build $config_opts",
             "*:*:cmake --build build -j$NUM_CORES",
             "*:*:DESTDIR=$STAGING_DIR cmake --install build"
