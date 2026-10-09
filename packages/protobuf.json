@@ -32,6 +32,7 @@
             "*:*:CPP_FOR_BUILD=$CPP",
             "*:*:CXXCPP_FOR_BUILD=$CXXCPP",
             "*:*:CXXFLAGS=$CXXFLAGS -std=c++11",
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--host=$HOST --prefix=$PREFIX",
             "*:*:config_opts=$config_opts --disable-shared --with-protoc=$NATIVEPREFIX/bin/protoc",
             "*:*-linux-gnu:config_opts=$config_opts --with-pic"
