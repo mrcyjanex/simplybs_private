@@ -25,7 +25,7 @@
         "env": [
             "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--host=$HOST --prefix=$PREFIX",
-            "*:*:config_opts=$config_opts --enable-static --disable-shared --with-pic"
+            "*:*:config_opts=$config_opts --enable-static --disable-shared --with-pic --disable-werror"
         ],
         "steps": [
             "*:*:autoreconf -fiv -Wall,error",
