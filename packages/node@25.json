@@ -19,13 +19,12 @@
     ],
     "build": {
         "env": [
-            "*:*:CC_target=",
             "*:*:GYP_LINK_CONCURRENCY=$NUM_CORES",
             "*:*:config_opts=--ninja",
             "*:*:config_opts=$config_opts --prefix=$PREFIX"
         ],
         "steps": [
-            "*:*:./configure $config_opts",
+            "*:*:env -u CC_target ./configure $config_opts",
             "*:*:ninja -C out/Release -j$NUM_CORES",
             "*:*:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX"
         ]
