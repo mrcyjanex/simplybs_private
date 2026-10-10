@@ -24,9 +24,15 @@
             "*:*:config_opts=$config_opts --prefix=$PREFIX"
         ],
         "steps": [
-            "*:*:env -u CC_target ./configure $config_opts",
-            "*:*:ninja -C out/Release -j$NUM_CORES",
-            "*:*:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX"
+            "linux_amd64:x86_64-linux-gnu:env -u CC_target ./configure $config_opts",
+            "linux_amd64:x86_64-linux-gnu:ninja -C out/Release -j$NUM_CORES",
+            "linux_amd64:x86_64-linux-gnu:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX",
+            "linux_arm64:aarch64-linux-gnu:env -u CC_target ./configure $config_opts",
+            "linux_arm64:aarch64-linux-gnu:ninja -C out/Release -j$NUM_CORES",
+            "linux_arm64:aarch64-linux-gnu:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX",
+            "darwin_arm64:*-apple-darwin:env -u CC_target ./configure $config_opts",
+            "darwin_arm64:*-apple-darwin:ninja -C out/Release -j$NUM_CORES",
+            "darwin_arm64:*-apple-darwin:python3 tools/install.py install --dest-dir $STAGING_DIR --prefix $PREFIX"
         ]
     }
 }
