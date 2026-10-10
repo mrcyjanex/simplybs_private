@@ -11,6 +11,7 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/_/_",
         "*:*:native/gawk",
         "*:*:native/grep",
         "*:*:native/make",
