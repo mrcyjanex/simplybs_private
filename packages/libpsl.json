@@ -10,7 +10,13 @@
         }
     ],
     "dependencies": [
+        "*:*:native/_",
+        "*:*:native/coreutils",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/make",
+        "*:*:native/python@3.11",
+        "*:*:native/sed",
         "*:*:unistring"
     ],
     "build": {
