@@ -11,6 +11,10 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/findutils",
+        "*:*:native/gawk",
+        "*:*:native/grep",
+        "*:*:native/gzip",
         "*:*:native/make",
         "*:*:native/sed",
         "*:*:libiconv",
@@ -18,6 +22,7 @@
     ],
     "build": {
         "env": [
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--prefix=$PREFIX",
             "*:*:config_opts=$config_opts --host=$HOST",
             "*:*:config_opts=$config_opts --with-libiconv-prefix=$PREFIX",
@@ -27,6 +32,7 @@
             "*:*:LIBS=-lunistring"
         ],
         "steps": [
+            "*:*-apple-ios*:sed -i.bak 's/defined __APPLE__ && defined __MACH__/defined __APPLE__ \\&\\& defined __MACH__ \\&\\& !defined __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__/' libtextstyle/lib/get_ppid_of.c libtextstyle/lib/get_progname_of.c",
             "*:*:./configure $config_opts",
             "*:*:make -j$NUM_CORES",
             "*:*:make DESTDIR=$STAGING_DIR install"

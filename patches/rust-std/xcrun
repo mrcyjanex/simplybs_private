@@ -11,6 +11,7 @@ find_tool=""
 toolchain_tool=""
 output_file=""
 want_version=0
+xcodebuild=0
 i=0
 args=("$@")
 
@@ -39,6 +40,10 @@ while [ $i -lt ${#args[@]} ]; do
 		;;
 	metal | metallib)
 		toolchain_tool=$a
+		;;
+	xcodebuild)
+		# Qt runs `xcrun xcodebuild -version` and reads "Xcode <ver>".
+		xcodebuild=1
 		;;
 	esac
 	i=$((i + 1))
@@ -73,7 +78,7 @@ if [ -n "$find_tool" ]; then
 	case "$find_tool" in
 	cc) find_tool=clang ;;
 	c++) find_tool=clang++ ;;
-	metal | metallib)
+	metal | metallib | xcodebuild)
 		echo "$0"
 		exit 0
 		;;
@@ -98,6 +103,12 @@ if [ -n "$toolchain_tool" ]; then
 	fi
 	echo "xcrun: $toolchain_tool requires -o <output>" >&2
 	exit 1
+fi
+
+if [ "$xcodebuild" -eq 1 ]; then
+	ver=${SDK_VERSION:-26.1}
+	printf 'Xcode %s\nBuild version 17B55\n' "$ver"
+	exit 0
 fi
 
 if [ "$want_version" -eq 1 ]; then

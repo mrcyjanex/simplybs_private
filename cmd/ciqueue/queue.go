@@ -112,10 +112,17 @@ func nextQueue(opts queueOpts) (Result, error) {
 
 	for _, h := range hosts {
 		ht := host.SupportedHosts[h]
-		if len(roots) == 0 {
+		// CollectNeededPackages walks dependencies. Packages that list a
+		// changed package directly embed that package in their cache hash, so
+		// they are roots as well (native/_ export-env → zlib, openssl, …).
+		hostRoots := make([]*pack.Package, 0, len(roots)+8)
+		hostRoots = append(hostRoots, roots...)
+		dependents := pack.DirectDependents(allPkgs, changed, ht)
+		hostRoots = append(hostRoots, dependents...)
+		if len(hostRoots) == 0 {
 			continue
 		}
-		tree := pack.CollectNeededPackages(roots, ht)
+		tree := pack.CollectNeededPackages(hostRoots, ht)
 		cacheHits := 0
 		added := 0
 		for _, p := range tree {
@@ -137,7 +144,7 @@ func nextQueue(opts queueOpts) (Result, error) {
 			queuedArt[art] = it.key()
 			added++
 		}
-		log.Printf("ciqueue: %s tree=%d queued+=%d cache-hit=%d needed=%d", h, len(tree), added, cacheHits, len(needed))
+		log.Printf("ciqueue: %s tree=%d dependents=%d queued+=%d cache-hit=%d needed=%d", h, len(tree), len(dependents), added, cacheHits, len(needed))
 	}
 
 	if len(needed) == 0 {

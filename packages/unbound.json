@@ -40,6 +40,9 @@
             "*:*-w64-*:config_opts=$config_opts --with-conf-file=$PREFIX/etc/unbound/unbound.conf --with-run-dir=$PREFIX/var/lib/unbound --with-rootkey-file=$PREFIX/etc/unbound/root.key --with-rootcert-file=$PREFIX/etc/unbound/icannbundle.pem",
             "*:x86_64-apple-darwin:config_opts=$config_opts ac_cv_func_SHA384_Init=yes",
             "*:*-linux-android*:config_opts=$config_opts ac_cv_type_pthread_spinlock_t=no",
+            "*:*-android*:LDFLAGS=-fPIC -L$PREFIX/lib -lc++abi",
+            "*:*-android*:ac_cv_func_glob=no",
+            "*:*-android*:ac_cv_func_endprotoent=no",
             "*:*:config_opts=$config_opts ac_cv_func_getentropy=no"
         ],
         "steps": [

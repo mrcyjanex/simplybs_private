@@ -1,0 +1,72 @@
+{
+    "package": "native/android-sysroot",
+    "version": "r28c",
+    "type": "native",
+    "download": [
+        {
+            "kind": "blob",
+            "path": "android-ndk-r28c-darwin.zip",
+            "sha256": "0d4599e8bbf1a1668a0d51a541729b2246360f350018a2081d0b302dbb594f2a",
+            "url": "https://dl.google.com/android/repository/android-ndk-r28c-darwin.zip"
+        },
+        {
+            "kind": "blob",
+            "path": "android-ndk-r28c-linux.zip",
+            "sha256": "dfb20d396df28ca02a8c708314b814a4d961dc9074f9a161932746f815aa552f",
+            "url": "https://dl.google.com/android/repository/android-ndk-r28c-linux.zip"
+        },
+        {
+            "kind": "git",
+            "path": "bionic",
+            "sha256": "731631f300090436d7f5df80d50b6275c8c60a93",
+            "url": "https://android.googlesource.com/platform/bionic"
+        },
+        {
+            "kind": "git",
+            "path": "llvm-project",
+            "sha256": "450f52eec88f728c89a9efd667dbeaf2dad93826",
+            "url": "https://github.com/llvm/llvm-project"
+        },
+        {
+            "kind": "tar.gz",
+            "path": "zlib-1.3.1",
+            "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23",
+            "url": "https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz"
+        },
+        {
+            "kind": "git",
+            "path": "arm-optimized-routines",
+            "sha256": "d7c644304e83c9bb92ede58c9c204d55f8157817",
+            "url": "https://android.googlesource.com/platform/external/arm-optimized-routines"
+        },
+        {
+            "kind": "blob",
+            "path": "UCD-16.0.0.zip",
+            "sha256": "c86dd81f2b14a43b0cc064aa5f89aa7241386801e35c59c7984e579832634eb2",
+            "url": "https://www.unicode.org/Public/16.0.0/ucd/UCD.zip"
+        }
+    ],
+    "dependencies": [
+        "*:*-android*:native/7zip",
+        "*:*-android*:native/_/_",
+        "*:*-android*:native/android-clang",
+        "*:*-android*:native/libc++",
+        "*:*-android*:native/python@3.11"
+    ],
+    "build": {
+        "env": [
+            "linux_amd64:*-android*:ANDROID_HOST_TAG=linux-x86_64",
+            "linux_arm64:*-android*:ANDROID_HOST_TAG=linux-aarch64",
+            "darwin_arm64:*-android*:ANDROID_HOST_TAG=darwin-arm64",
+            "*:aarch64-linux-android:NDK_ABI=arm64-v8a",
+            "*:x86_64-linux-android:NDK_ABI=x86_64",
+            "*:armv7a-linux-androideabi:NDK_ABI=armeabi-v7a"
+        ],
+        "steps": [
+            "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld || test -d android-ndk-r28c",
+            "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld || test -d android-ndk-r28c",
+            "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG",
+            "*:*-android*:python3 $PATCH_DIR/ndk-assemble build-sysroot --bionic $PWD/bionic --clang-prefix $NATIVEPREFIX/android-clang --sysroot $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --ndk-meta $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --crt-src $PATCH_DIR/ndk-assemble/crt --zlib $PWD/zlib-1.3.1 --llvm-src $PWD/llvm-project --support $PATCH_DIR/ndk-assemble/support --arm-opt $PWD/arm-optimized-routines --ucd $PWD/UCD-16.0.0.zip --abis $NDK_ABI"
+        ]
+    }
+}

@@ -13,7 +13,8 @@
         "*:*:native/_",
         "*:*:native/cmake",
         "*:*:native/cmake-toolchain",
-        "*:*:native/make"
+        "*:*:native/make",
+        "*:armv7a-linux-androideabi:native/sed"
     ],
     "patches": [
         "fix_declaration.patch"
@@ -24,6 +25,7 @@
             "*:*:config_opts=$config_opts -DCMAKE_INSTALL_PREFIX=$PREFIX"
         ],
         "steps": [
+            "*:armv7a-linux-androideabi:sed -i 's/#  define UTIL_fseek fseeko/#  define UTIL_fseek fseek/' programs/util.h",
             "*:*:mkdir -p build/cmake/build",
             "*:*:cd build/cmake/build && cmake .. $config_opts",
             "*:*:cd build/cmake/build && make -j$NUM_CORES",

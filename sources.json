@@ -26,12 +26,18 @@
         },
         "https://android.googlesource.com/platform/bionic": {
             "refs": [
+                "731631f300090436d7f5df80d50b6275c8c60a93",
                 "a63b21091ada240d92f8ceadb1cabbdedaaab81b"
             ]
         },
         "https://android.googlesource.com/platform/development": {
             "refs": [
                 "d84a5b9d746f241c3c77b16e8c6964b0f86f86e2"
+            ]
+        },
+        "https://android.googlesource.com/platform/external/arm-optimized-routines": {
+            "refs": [
+                "d7c644304e83c9bb92ede58c9c204d55f8157817"
             ]
         },
         "https://android.googlesource.com/platform/external/effcee": {
@@ -6579,6 +6585,12 @@
             "path": "work/.build/tarballs/musl-1.2.5.tar.gz"
         },
         {
+            "kind": "blob",
+            "url": "https://www.unicode.org/Public/16.0.0/ucd/UCD.zip",
+            "sha256": "c86dd81f2b14a43b0cc064aa5f89aa7241386801e35c59c7984e579832634eb2",
+            "path": "UCD-16.0.0.zip"
+        },
+        {
             "kind": "tar.bz2",
             "url": "http://downloads.sourceforge.net/project/boost/boost/1.83.0/boost_1_83_0.tar.bz2",
             "sha256": "6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e"
@@ -7259,6 +7271,12 @@
             "kind": "tar.gz",
             "url": "https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz",
             "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz",
+            "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23",
+            "path": "zlib-1.3.1"
         },
         {
             "kind": "tar.gz",

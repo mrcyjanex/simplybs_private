@@ -10,12 +10,15 @@
         }
     ],
     "dependencies": [
-        "*:*:native/_"
+        "*:*:native/_",
+        "*:*:native/cmake",
+        "*:*:native/cmake-toolchain",
+        "*:*:native/make"
     ],
     "build": {
         "env": [],
         "steps": [
-            "*:*:cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DSTATIC=ON .",
+            "*:*:cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSTATIC=ON .",
             "*:*:make -j$NUM_CORES DESTDIR=$STAGING_DIR install"
         ]
     }

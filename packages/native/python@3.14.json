@@ -12,7 +12,9 @@
     "dependencies": [
         "*:*:native/_/_",
         "*:*:native/bash",
+        "*:*:native/bzip2",
         "*:*:native/gettext",
+        "*:*:native/libffi@3_5_2",
         "*:*:native/libiconv",
         "*:*:native/make",
         "*:*:native/openssl",
@@ -22,6 +24,10 @@
     ],
     "build": {
         "env": [
+            "*:*:BZIP2_CFLAGS=-I$NATIVEPREFIX/include",
+            "*:*:BZIP2_LIBS=-L$NATIVEPREFIX/lib -lbz2",
+            "*:*:LIBFFI_CFLAGS=-I$NATIVEPREFIX/include",
+            "*:*:LIBFFI_LIBS=-L$NATIVEPREFIX/lib -lffi",
             "*:*:config_opts=--prefix=$NATIVEPREFIX",
             "*:*:config_opts=$config_opts --disable-test-modules",
             "*:*:config_opts=$config_opts --enable-static",

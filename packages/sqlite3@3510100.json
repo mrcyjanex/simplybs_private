@@ -11,10 +11,15 @@
     ],
     "dependencies": [
         "*:*:native/_",
-        "*:*:native/make"
+        "*:*:native/_/_",
+        "*:*:native/gawk",
+        "*:*:native/grep",
+        "*:*:native/make",
+        "*:*:native/sed"
     ],
     "build": {
         "env": [
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:CFLAGS=$CFLAGS -O2 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_FTS5 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_RTREE -DSQLITE_THREADSAFE=1",
             "*:*:CPPFLAGS=$CPPFLAGS -I$PREFIX/include",
             "*:*:LDFLAGS=$LDFLAGS -L$PREFIX/lib",

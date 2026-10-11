@@ -13,9 +13,13 @@
         "*:*-linux-gnu:native/_",
         "*:*-linux-gnu:native/autoconf",
         "*:*-linux-gnu:native/automake",
+        "*:*-linux-gnu:native/gawk",
+        "*:*-linux-gnu:native/grep",
         "*:*-linux-gnu:native/libtool",
         "*:*-linux-gnu:native/m4",
-        "*:*-linux-gnu:native/perl"
+        "*:*-linux-gnu:native/make",
+        "*:*-linux-gnu:native/perl",
+        "*:*-linux-gnu:native/sed"
     ],
     "build": {
         "steps": [

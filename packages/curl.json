@@ -11,13 +11,19 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/diffutils",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/make",
+        "*:*:native/perl",
         "*:*:native/pkgconf",
+        "*:*:native/sed",
         "*:*:openssl",
         "*:*:zlib"
     ],
     "build": {
         "env": [
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--with-openssl --with-zlib --without-libpsl --disable-shared --enable-static --enable-static --disable-ldap --host=$HOST --prefix=$PREFIX"
         ],
         "steps": [

@@ -12,7 +12,12 @@
     "dependencies": [
         "*:*:native/_",
         "*:*:native/config",
-        "*:*:native/gettext"
+        "*:*:native/gawk",
+        "*:*:native/gettext",
+        "*:*:native/grep",
+        "*:*:native/make",
+        "*:*:native/patch",
+        "*:*:native/sed"
     ],
     "patches": [
         "fix_obj_order.patch"

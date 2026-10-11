@@ -24,7 +24,7 @@ on:
         type: string
 
 # Linux arm64 package queue, parallel with packages.yml (linux amd64) and
-# packages-macos.yml. Builds every SupportedHosts triplet except Android.
+# packages-macos.yml. Builds every SupportedHosts triplet.
 # Ten batches of 24 slots (240 packages per run) so the GraalVM/maven tree
 # fits without failing the finish job on the old 72-slot cap.
 # Release cache tag is CI-only (v0-sbs-ci-linux-arm64, overflowing to
@@ -143,7 +143,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch2:
@@ -159,7 +159,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch3:
@@ -175,7 +175,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch4:
@@ -191,7 +191,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch5:
@@ -207,7 +207,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch6:
@@ -223,7 +223,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch7:
@@ -239,7 +239,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch8:
@@ -255,7 +255,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch9:
@@ -271,7 +271,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   batch10:
@@ -287,7 +287,7 @@ jobs:
       pr: ${{ needs.image.outputs.pr }}
       cache_tag: ${{ needs.image.outputs.cache_tag }}
       cache_repo: ${{ github.repository }}
-      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu
+      hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.image.outputs.extra_package }}
       comment_queue: linux-arm64
   finish:

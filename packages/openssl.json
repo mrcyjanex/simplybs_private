@@ -23,9 +23,6 @@
     ],
     "build": {
         "env": [
-            "*:*-android*:CC=clang",
-            "*:*-android*:AR=ar",
-            "*:*-android*:RANLIB=ranlib",
             "*:*:config_opts=--prefix=$PREFIX --openssldir=$PREFIX/etc/openssl --libdir=lib",
             "*:*:config_opts=$config_opts no-ec_nistp_64_gcc_128",
             "*:*:config_opts=$config_opts no-gost",
@@ -52,9 +49,9 @@
             "*:*:sed -i.bak 's/#define DATE \"built on: \\$date\"/#define DATE \"built on: Jan  1 1970 00:00:01\"/' util/mkbuildinf.pl",
             "*:*:sed -i.bak 's|crypto ssl apps util tools fuzz providers doc|crypto ssl util tools providers|' build.info",
             "*:armv7a-linux-androideabi:sed -i.bak s/arm-linux-androideabi/armv7a-linux-androideabi/g ./Configurations/15-android.conf",
-            "*:*:./Configure $config_opts",
-            "*:*:make -j$NUM_CORES build_libs",
-            "*:*:make -j$NUM_CORES DESTDIR=$STAGING_DIR install_sw"
+            "*:*:PATH=${ANDROID_TOOLCHAIN_ROOT:+$ANDROID_TOOLCHAIN_ROOT/bin:}$PATH ./Configure $config_opts",
+            "*:*:PATH=${ANDROID_TOOLCHAIN_ROOT:+$ANDROID_TOOLCHAIN_ROOT/bin:}$PATH make -j$NUM_CORES build_libs",
+            "*:*:PATH=${ANDROID_TOOLCHAIN_ROOT:+$ANDROID_TOOLCHAIN_ROOT/bin:}$PATH make -j$NUM_CORES DESTDIR=$STAGING_DIR install_sw"
         ]
     }
 }

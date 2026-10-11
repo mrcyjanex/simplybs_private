@@ -12,7 +12,8 @@
     "dependencies": [
         "*:*:native/_",
         "*:*:native/cmake",
-        "*:*:native/cmake-toolchain"
+        "*:*:native/cmake-toolchain",
+        "*:*:native/make"
     ],
     "build": {
         "env": [
