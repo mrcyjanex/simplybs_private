@@ -11,8 +11,10 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/findutils",
         "*:*:native/gawk",
         "*:*:native/grep",
+        "*:*:native/gzip",
         "*:*:native/make",
         "*:*:native/sed",
         "*:*:libiconv",
