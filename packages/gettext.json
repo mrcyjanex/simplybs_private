@@ -23,6 +23,7 @@
     "build": {
         "env": [
             "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
+            "*:*-w64-mingw32:RC=$RC $RCFLAGS",
             "*:*:config_opts=--prefix=$PREFIX",
             "*:*:config_opts=$config_opts --host=$HOST",
             "*:*:config_opts=$config_opts --with-libiconv-prefix=$PREFIX",
