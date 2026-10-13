@@ -39,6 +39,7 @@
             "*:armv7a-linux-androideabi:config_opts=$config_opts android-arm",
             "*:aarch64-linux-android:config_opts=$config_opts android-arm64",
             "*:x86_64-linux-android:config_opts=$config_opts android-x86_64",
+            "*:*-android*:config_opts=$config_opts -D__ANDROID_API__=21",
             "*:aarch64-apple-darwin:config_opts=$config_opts darwin64-arm64-cc",
             "*:aarch64-apple-ios*:config_opts=$config_opts darwin64-arm64-cc",
             "*:x86_64-apple-darwin:config_opts=$config_opts darwin64-x86_64-cc",
