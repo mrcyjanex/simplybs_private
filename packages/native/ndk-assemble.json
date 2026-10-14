@@ -20,7 +20,7 @@
         "steps": [
             "*:*-android*:mkdir -p $STAGING_DIR$NATIVEPREFIX/libexec/ndk-assemble $STAGING_DIR$NATIVEPREFIX/bin",
             "*:*-android*:cp -a *.py crt support $STAGING_DIR$NATIVEPREFIX/libexec/ndk-assemble/",
-            "*:*-android*:printf '%s\\n' '#!/usr/bin/env bash' 'export PYTHONDONTWRITEBYTECODE=1' 'exec python3 \"$(dirname \"$0\")/../libexec/ndk-assemble/__main__.py\" \"$@\"' > $STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble",
+            "*:*-android*:printf '%s\\n' '#!/usr/bin/env python3' 'import os, sys' 'os.environ[\"PYTHONDONTWRITEBYTECODE\"] = \"1\"' 'here = os.path.dirname(os.path.realpath(__file__))' 'main = os.path.normpath(os.path.join(here, \"..\", \"libexec\", \"ndk-assemble\", \"__main__.py\"))' 'os.execv(sys.executable, [sys.executable, main, *sys.argv[1:]])' > $STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble",
             "*:*-android*:chmod +x $STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble",
             "*:*-android*:$STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble prepare-skeleton -h"
         ]
