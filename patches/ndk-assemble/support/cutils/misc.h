@@ -1,4 +1,0 @@
-#pragma once
-
-#define FIRST_APPLICATION_UID 10000
-#define LAST_APPLICATION_UID 99999

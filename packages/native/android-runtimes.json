@@ -16,6 +16,7 @@
         "*:*-android*:native/bash",
         "*:*-android*:native/cmake",
         "*:*-android*:native/libc++",
+        "*:*-android*:native/ndk-assemble",
         "*:*-android*:native/ninja",
         "*:*-android*:native/python@3.11"
     ],
@@ -30,7 +31,7 @@
             "*:*-android*:API_LEVEL=21"
         ],
         "steps": [
-            "*:*-android*:python3 $PATCH_DIR/ndk-assemble build-runtimes --llvm-src $PWD --clang-prefix $NATIVEPREFIX/android-clang --sysroot $NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --output $STAGING_DIR$NATIVEPREFIX/android-runtimes --api $API_LEVEL --abis $NDK_ABI --jobs $NUM_CORES"
+            "*:*-android*:ndk-assemble build-runtimes --llvm-src $PWD --clang-prefix $NATIVEPREFIX/android-clang --sysroot $NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --output $STAGING_DIR$NATIVEPREFIX/android-runtimes --api $API_LEVEL --abis $NDK_ABI --jobs $NUM_CORES"
         ]
     }
 }

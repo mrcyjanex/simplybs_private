@@ -51,6 +51,7 @@
         "*:*-android*:native/_/_",
         "*:*-android*:native/android-clang",
         "*:*-android*:native/libc++",
+        "*:*-android*:native/ndk-assemble",
         "*:*-android*:native/python@3.11"
     ],
     "build": {
@@ -65,8 +66,8 @@
         "steps": [
             "darwin_*:*-android*:7zz x $PWD/android-ndk-r28c-darwin.zip -snld || test -d android-ndk-r28c",
             "linux_*:*-android*:7zz x $PWD/android-ndk-r28c-linux.zip -snld || test -d android-ndk-r28c",
-            "*:*-android*:python3 $PATCH_DIR/ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG",
-            "*:*-android*:python3 $PATCH_DIR/ndk-assemble build-sysroot --bionic $PWD/bionic --clang-prefix $NATIVEPREFIX/android-clang --sysroot $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --ndk-meta $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --crt-src $PATCH_DIR/ndk-assemble/crt --zlib $PWD/zlib-1.3.1 --llvm-src $PWD/llvm-project --support $PATCH_DIR/ndk-assemble/support --arm-opt $PWD/arm-optimized-routines --ucd $PWD/UCD-16.0.0.zip --abis $NDK_ABI"
+            "*:*-android*:ndk-assemble prepare-skeleton --input $PWD/android-ndk-r28c --output $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --host-tag $ANDROID_HOST_TAG",
+            "*:*-android*:ndk-assemble build-sysroot --bionic $PWD/bionic --clang-prefix $NATIVEPREFIX/android-clang --sysroot $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton/toolchains/llvm/prebuilt/$ANDROID_HOST_TAG/sysroot --ndk-meta $STAGING_DIR$NATIVEPREFIX/android-ndk-skeleton --zlib $PWD/zlib-1.3.1 --llvm-src $PWD/llvm-project --arm-opt $PWD/arm-optimized-routines --ucd $PWD/UCD-16.0.0.zip --abis $NDK_ABI"
         ]
     }
 }

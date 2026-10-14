@@ -1028,6 +1028,11 @@
                 "930328fc3afcb87d6122b9c470cb205c13012aab"
             ]
         },
+        "https://github.com/MrCyjaneK/ndk-assemble.git": {
+            "refs": [
+                "8f829878fec2d221398563e9f550c8c1b030b197"
+            ]
+        },
         "https://github.com/MrCyjaneK/osxcross.git": {
             "refs": [
                 "0d1b14468187636f5a23d4adb4f3e5830570bd49",
