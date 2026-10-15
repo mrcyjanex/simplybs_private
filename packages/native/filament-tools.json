@@ -32,6 +32,7 @@
             "*:*:config_opts=$config_opts -DUSE_STATIC_LIBCXX=OFF"
         ],
         "steps": [
+            "*:*:sed -i.bak 's/ -no_warning_for_no_symbols//' CMakeLists.txt",
             "*:*:env -u CMAKE_TOOLCHAIN_FILE cmake -S . -B build $config_opts",
             "*:*:cmake --build build -j$NUM_CORES --target matc resgen cmgen filamesh mipgen uberz glslminifier",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/bin",

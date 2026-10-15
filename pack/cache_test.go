@@ -633,6 +633,43 @@ func TestTryPushDisabledWithoutCacheEnv(t *testing.T) {
 	TryPushPackageCache(&Package{Package: "zlib", Version: "1.0"}, host.SupportedHosts["x86_64-linux-gnu"])
 }
 
+func TestDirectDependentsOfNativeToolchain(t *testing.T) {
+	chdirRepoRoot(t)
+	all := GetAllPackages()
+	names := map[string]bool{"native/_": true}
+	android := packageNameSet(DirectDependents(all, names, host.SupportedHosts["aarch64-linux-android"]))
+	linux := packageNameSet(DirectDependents(all, names, host.SupportedHosts["x86_64-linux-gnu"]))
+
+	if !android["zlib"] || !linux["zlib"] {
+		t.Fatal("zlib lists native/_ on every host")
+	}
+	if android["native/android-clang"] || linux["native/android-clang"] {
+		t.Fatal("native/android-clang depends on native/_/_, not native/_")
+	}
+	if android["libxcb@1_17_0"] {
+		t.Fatal("libxcb@1_17_0 depends on native/_ only for linux-gnu")
+	}
+	if !linux["libxcb@1_17_0"] {
+		t.Fatal("libxcb@1_17_0 should be a linux-gnu dependent of native/_")
+	}
+}
+
+func TestAndroidToolchainEnvIsHostScoped(t *testing.T) {
+	chdirRepoRoot(t)
+	zlib, err := FindPackage("zlib")
+	if err != nil {
+		t.Fatal(err)
+	}
+	android := zlib.GeneratePackageInfo(host.SupportedHosts["aarch64-linux-android"])
+	linux := zlib.GeneratePackageInfo(host.SupportedHosts["x86_64-linux-gnu"])
+	if !strings.Contains(android, "ANDROID_TOOLCHAIN_ROOT") {
+		t.Fatal("android zlib package info missing ANDROID_TOOLCHAIN_ROOT from native/_")
+	}
+	if strings.Contains(linux, "ANDROID_TOOLCHAIN_ROOT") {
+		t.Fatal("linux-gnu zlib package info includes ANDROID_TOOLCHAIN_ROOT")
+	}
+}
+
 func TestCollectNeededPackagesIncludesDeps(t *testing.T) {
 	chdirRepoRoot(t)
 	pkg, err := FindPackage("zlib")

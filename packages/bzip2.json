@@ -11,6 +11,9 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/coreutils",
+        "*:*:native/make",
+        "*:*:native/sed",
         "*:*:openssl"
     ],
     "build": {
@@ -20,6 +23,7 @@
             "*:*:sed -i.bak 's|^RANLIB=.*|RANLIB ?= $RANLIB|' Makefile",
             "*:*:sed -i.bak 's|^CFLAGS=.*|CFLAGS ?= $CFLAGS $BIGFILES|' Makefile",
             "*:*:make libbz2.a bzip2 bzip2recover -j$NUM_CORES",
+            "*:*-w64-mingw32:sed -i.bak -e 's/cp -f bzip2 /cp -f bzip2.exe /' -e 's/cp -f bzip2recover /cp -f bzip2recover.exe /' Makefile",
             "*:*:make install PREFIX=$STAGING_DIR$PREFIX"
         ]
     }

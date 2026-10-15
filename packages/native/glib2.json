@@ -14,6 +14,7 @@
         "*:*:native/bison",
         "*:*:native/flex",
         "*:*:native/gettext",
+        "*:*:native/libffi@3_5_2",
         "*:*:native/libiconv",
         "*:*:native/meson",
         "*:*:native/ninja",
@@ -24,6 +25,7 @@
     "build": {
         "env": [],
         "steps": [
+            "darwin_arm64:*:ln -sf $NATIVEPREFIX/_/bin/llvm-lipo $NATIVEPREFIX/bin/lipo",
             "*:*:meson setup _build --prefix=$NATIVEPREFIX",
             "*:*:meson compile -C _build",
             "*:*:DESTDIR=$STAGING_DIR meson install -C _build"

@@ -10,7 +10,8 @@
         }
     ],
     "dependencies": [
-        "*:*:native/_/_"
+        "*:*:native/_/_",
+        "*:*:native/sed"
     ],
     "export-env": [
         "*:*:CMAKE_TOOLCHAIN_FILE=$NATIVEPREFIX/toolchain.cmake"
@@ -18,6 +19,8 @@
     "build": {
         "env": [],
         "steps": [
+            "*:*:sed -i.bak 's/elseif(_host MATCHES \"linux\")/elseif(_host MATCHES \"linux\" AND NOT _host MATCHES \"android\")/' toolchain.cmake",
+            "*:*:sed -i.bak 's/set(CMAKE_SYSTEM_PROCESSOR armv7)/set(CMAKE_SYSTEM_PROCESSOR armv7-a)/g' toolchain.cmake",
             "*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/",
             "*:*:cp toolchain.cmake $STAGING_DIR$NATIVEPREFIX/toolchain.cmake"
         ]

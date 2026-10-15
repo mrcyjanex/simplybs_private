@@ -1,0 +1,28 @@
+{
+    "package": "native/ndk-assemble",
+    "version": "8f829878",
+    "type": "native",
+    "download": [
+        {
+            "kind": "git",
+            "sha256": "8f829878fec2d221398563e9f550c8c1b030b197",
+            "url": "https://github.com/MrCyjaneK/ndk-assemble.git"
+        }
+    ],
+    "dependencies": [
+        "*:*-android*:native/_/_",
+        "*:*-android*:native/bash",
+        "*:*-android*:native/coreutils",
+        "*:*-android*:native/python@3.11"
+    ],
+    "build": {
+        "env": [],
+        "steps": [
+            "*:*-android*:mkdir -p $STAGING_DIR$NATIVEPREFIX/libexec/ndk-assemble $STAGING_DIR$NATIVEPREFIX/bin",
+            "*:*-android*:cp -a *.py crt support $STAGING_DIR$NATIVEPREFIX/libexec/ndk-assemble/",
+            "*:*-android*:printf '%s\\n' '#!/usr/bin/env python3' 'import os, sys' 'os.environ[\"PYTHONDONTWRITEBYTECODE\"] = \"1\"' 'here = os.path.dirname(os.path.realpath(__file__))' 'main = os.path.normpath(os.path.join(here, \"..\", \"libexec\", \"ndk-assemble\", \"__main__.py\"))' 'os.execv(sys.executable, [sys.executable, main, *sys.argv[1:]])' > $STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble",
+            "*:*-android*:chmod +x $STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble",
+            "*:*-android*:$STAGING_DIR$NATIVEPREFIX/bin/ndk-assemble prepare-skeleton -h"
+        ]
+    }
+}

@@ -16,7 +16,7 @@
     "build": {
         "env": [],
         "steps": [
-            "*:*:./configure --prefix=$NATIVEPREFIX --enable-static --disable-shared --disable-docs --with-pic",
+            "*:*:./configure --prefix=$NATIVEPREFIX --libdir=$NATIVEPREFIX/lib --enable-static --disable-shared --disable-docs --disable-multi-os-directory --with-pic",
             "*:*:make -j$NUM_CORES",
             "*:*:make DESTDIR=$STAGING_DIR install"
         ]

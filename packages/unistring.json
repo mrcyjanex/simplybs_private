@@ -11,11 +11,14 @@
     ],
     "dependencies": [
         "*:*:native/_",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/make",
         "*:*:native/sed"
     ],
     "build": {
         "env": [
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--prefix=$PREFIX",
             "*:*:config_opts=$config_opts --host=$HOST",
             "*:*:config_opts=$config_opts --disable-shared",

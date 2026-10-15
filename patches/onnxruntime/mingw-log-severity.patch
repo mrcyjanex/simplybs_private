@@ -1,0 +1,192 @@
+--- a/include/onnxruntime/core/common/logging/macros.h
++++ b/include/onnxruntime/core/common/logging/macros.h
+@@ -63,6 +63,35 @@
+  * ensures that the `if` does not unintentionally associate with a subsequent `else`.
+  */
+ 
++
++#define LOGS_CATEGORY_SEV(logger, sev, category)                                                                 \
++  if (!(logger).OutputIsEnabled(sev, ::onnxruntime::logging::DataType::SYSTEM)) {                               \
++    /* do nothing */                                                                                             \
++  } else                                                                                                         \
++    ::onnxruntime::logging::Capture(logger, sev, category, ::onnxruntime::logging::DataType::SYSTEM, ORT_WHERE) \
++        .Stream()
++
++#define LOGS_USER_CATEGORY_SEV(logger, sev, category)                                                          \
++  if (!(logger).OutputIsEnabled(sev, ::onnxruntime::logging::DataType::USER)) {                               \
++    /* do nothing */                                                                                           \
++  } else                                                                                                       \
++    ::onnxruntime::logging::Capture(logger, sev, category, ::onnxruntime::logging::DataType::USER, ORT_WHERE) \
++        .Stream()
++
++#define LOGF_CATEGORY_SEV(logger, sev, category, format_str, ...)                                                      \
++  do {                                                                                                                 \
++    if ((logger).OutputIsEnabled(sev, ::onnxruntime::logging::DataType::SYSTEM))                                       \
++      ::onnxruntime::logging::Capture(logger, sev, category, ::onnxruntime::logging::DataType::SYSTEM, ORT_WHERE)      \
++          .CapturePrintf(format_str, ##__VA_ARGS__);                                                                   \
++  } while (0)
++
++#define LOGF_USER_CATEGORY_SEV(logger, sev, category, format_str, ...)                                               \
++  do {                                                                                                               \
++    if ((logger).OutputIsEnabled(sev, ::onnxruntime::logging::DataType::USER))                                       \
++      ::onnxruntime::logging::Capture(logger, sev, category, ::onnxruntime::logging::DataType::USER, ORT_WHERE)      \
++          .CapturePrintf(format_str, ##__VA_ARGS__);                                                                 \
++  } while (0)
++
+ // Logging with explicit category
+ 
+ // iostream style logging. Capture log info in Message, and push to the logger in ~Message.
+@@ -100,17 +129,17 @@
+ // Logging with category of "onnxruntime"
+ 
+ #define LOGS(logger, severity) \
+-  LOGS_CATEGORY(logger, severity, ::onnxruntime::logging::Category::onnxruntime)
++  LOGS_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGS_USER(logger, severity) \
+-  LOGS_USER_CATEGORY(logger, severity, ::onnxruntime::logging::Category::onnxruntime)
++  LOGS_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ // printf style logging. Capture log info in Message, and push to the logger in ~Message.
+ #define LOGF(logger, severity, format_str, ...) \
+-  LOGF_CATEGORY(logger, severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  LOGF_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
+ 
+ #define LOGF_USER(logger, severity, format_str, ...) \
+-  LOGF_USER_CATEGORY(logger, severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  LOGF_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
+ 
+ /*
+   Macros that use the default logger.
+@@ -120,30 +149,30 @@
+ // Logging with explicit category
+ 
+ #define LOGS_DEFAULT_CATEGORY(severity, category) \
+-  LOGS_CATEGORY(::onnxruntime::logging::LoggingManager::DefaultLogger(), severity, category)
++  LOGS_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGS_USER_DEFAULT_CATEGORY(severity, category) \
+-  LOGS_USER_CATEGORY(::onnxruntime::logging::LoggingManager::DefaultLogger(), severity, category)
++  LOGS_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGF_DEFAULT_CATEGORY(severity, category, format_str, ...) \
+-  LOGF_CATEGORY(::onnxruntime::logging::LoggingManager::DefaultLogger(), severity, category, format_str, ##__VA_ARGS__)
++  LOGF_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__)
+ 
+ #define LOGF_USER_DEFAULT_CATEGORY(severity, category, format_str, ...) \
+-  LOGF_USER_CATEGORY(::onnxruntime::logging::LoggingManager::DefaultLogger(), severity, category, format_str, ##__VA_ARGS__)
++  LOGF_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__)
+ 
+ // Logging with category of "onnxruntime"
+ 
+ #define LOGS_DEFAULT(severity) \
+-  LOGS_DEFAULT_CATEGORY(severity, ::onnxruntime::logging::Category::onnxruntime)
++  LOGS_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGS_USER_DEFAULT(severity) \
+-  LOGS_USER_DEFAULT_CATEGORY(severity, ::onnxruntime::logging::Category::onnxruntime)
++  LOGS_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGF_DEFAULT(severity, format_str, ...) \
+-  LOGF_DEFAULT_CATEGORY(severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  LOGF_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
+ 
+ #define LOGF_USER_DEFAULT(severity, format_str, ...) \
+-  LOGF_USER_DEFAULT_CATEGORY(severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  LOGF_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
+ 
+ /*
+   Conditional logging
+@@ -155,73 +184,71 @@
+   if (!((boolean_expression) == true)) {                                 \
+     /* do nothing */                                                     \
+   } else                                                                 \
+-    LOGS_CATEGORY(logger, severity, category)
++    LOGS_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGS_DEFAULT_CATEGORY_IF(boolean_expression, severity, category) \
+   if (!((boolean_expression) == true)) {                                 \
+     /* do nothing */                                                     \
+   } else                                                                 \
+-    LOGS_DEFAULT_CATEGORY(severity, category)
++    LOGS_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGS_USER_CATEGORY_IF(boolean_expression, logger, severity, category) \
+   if (!((boolean_expression) == true)) {                                      \
+     /* do nothing */                                                          \
+   } else                                                                      \
+-    LOGS_USER_CATEGORY(logger, severity, category)
++    LOGS_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGS_USER_DEFAULT_CATEGORY_IF(boolean_expression, severity, category) \
+   if (!((boolean_expression) == true)) {                                      \
+     /* do nothing */                                                          \
+   } else                                                                      \
+-    LOGS_USER_DEFAULT_CATEGORY(severity, category)
++    LOGS_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category)
+ 
+ #define LOGF_CATEGORY_IF(boolean_expression, logger, severity, category, format_str, ...)                   \
+   do {                                                                                                      \
+-    if ((boolean_expression) == true) LOGF_CATEGORY(logger, severity, category, format_str, ##__VA_ARGS__); \
++    if ((boolean_expression) == true) LOGF_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__); \
+   } while (0)
+ 
+ #define LOGF_DEFAULT_CATEGORY_IF(boolean_expression, severity, category, format_str, ...)                   \
+   do {                                                                                                      \
+-    if ((boolean_expression) == true) LOGF_DEFAULT_CATEGORY(severity, category, format_str, ##__VA_ARGS__); \
++    if ((boolean_expression) == true) LOGF_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__); \
+   } while (0)
+ 
+ #define LOGF_USER_CATEGORY_IF(boolean_expression, logger, severity, category, format_str, ...)                   \
+   do {                                                                                                           \
+-    if ((boolean_expression) == true) LOGF_USER_CATEGORY(logger, severity, category, format_str, ##__VA_ARGS__); \
++    if ((boolean_expression) == true) LOGF_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__); \
+   } while (0)
+ 
+ #define LOGF_USER_DEFAULT_CATEGORY_IF(boolean_expression, severity, category, format_str, ...)                   \
+   do {                                                                                                           \
+-    if ((boolean_expression) == true) LOGF_USER_DEFAULT_CATEGORY(severity, category, format_str, ##__VA_ARGS__); \
++    if ((boolean_expression) == true) LOGF_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, category, format_str, ##__VA_ARGS__); \
+   } while (0)
+ 
+ // Logging with category of "onnxruntime"
+ 
+ #define LOGS_IF(boolean_expression, logger, severity) \
+-  LOGS_CATEGORY_IF(boolean_expression, logger, severity, ::onnxruntime::logging::Category::onnxruntime)
++  if (!((boolean_expression) == true)) { } else LOGS_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGS_DEFAULT_IF(boolean_expression, severity) \
+-  LOGS_DEFAULT_CATEGORY_IF(boolean_expression, severity, ::onnxruntime::logging::Category::onnxruntime)
++  if (!((boolean_expression) == true)) { } else LOGS_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGS_USER_IF(boolean_expression, logger, severity) \
+-  LOGS_USER_CATEGORY_IF(boolean_expression, logger, severity, ::onnxruntime::logging::Category::onnxruntime)
++  if (!((boolean_expression) == true)) { } else LOGS_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGS_USER_DEFAULT_IF(boolean_expression, severity) \
+-  LOGS_USER_DEFAULT_CATEGORY_IF(boolean_expression, severity, ::onnxruntime::logging::Category::onnxruntime)
++  if (!((boolean_expression) == true)) { } else LOGS_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime)
+ 
+ #define LOGF_IF(boolean_expression, logger, severity, format_str, ...) \
+-  LOGF_CATEGORY_IF(boolean_expression, logger, severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  do { if ((boolean_expression) == true) LOGF_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__); } while (0)
+ 
+ #define LOGF_DEFAULT_IF(boolean_expression, severity, format_str, ...) \
+-  LOGF_DEFAULT_CATEGORY_IF(boolean_expression, severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__)
++  do { if ((boolean_expression) == true) LOGF_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__); } while (0)
++
++#define LOGF_USER_IF(boolean_expression, logger, severity, format_str, ...) \
++  do { if ((boolean_expression) == true) LOGF_USER_CATEGORY_SEV(logger, ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__); } while (0)
+ 
+-#define LOGF_USER_IF(boolean_expression, logger, severity, format_str, ...)                                  \
+-  LOGF_USER_CATEGORY_IF(boolean_expression, logger, severity, ::onnxruntime::logging::Category::onnxruntime, \
+-                        format_str, ##__VA_ARGS__)
+-
+-#define LOGF_USER_DEFAULT_IF(boolean_expression, severity, format_str, ...)                                  \
+-  LOGF_USER_DEFAULT_CATEGORY_IF(boolean_expression, severity, ::onnxruntime::logging::Category::onnxruntime, \
+-                                format_str, ##__VA_ARGS__)
++#define LOGF_USER_DEFAULT_IF(boolean_expression, severity, format_str, ...) \
++  do { if ((boolean_expression) == true) LOGF_USER_CATEGORY_SEV(::onnxruntime::logging::LoggingManager::DefaultLogger(), ::onnxruntime::logging::Severity::k##severity, ::onnxruntime::logging::Category::onnxruntime, format_str, ##__VA_ARGS__); } while (0)
+ 
+ /*
+   Debug verbose logging of caller provided level.

@@ -141,6 +141,34 @@ func filteredDependencyPackages(deps []string, h *host.Host) []*Package {
 	return pkgs
 }
 
+// DirectDependents returns packages that list a name from names as a direct
+// dependency on h. Packages named in names are omitted. The builder:host:
+// filter is applied, so a linux-gnu-only dependency is not a dependent on
+// an Android host.
+func DirectDependents(all []*Package, names map[string]bool, h *host.Host) []*Package {
+	if len(names) == 0 || h == nil {
+		return nil
+	}
+	builderName := builder.GetName()
+	var out []*Package
+	seen := map[string]bool{}
+	for _, p := range all {
+		if p == nil || names[p.Package] || seen[p.Package] {
+			continue
+		}
+		for _, dep := range p.Dependencies {
+			is := ifstring.ParseIfString(dep)
+			if !names[is.Content] || !is.Matches(h.Triplet, builderName) {
+				continue
+			}
+			seen[p.Package] = true
+			out = append(out, p)
+			break
+		}
+	}
+	return out
+}
+
 func wipeDirContents(dir string) {
 	if entries, err := os.ReadDir(dir); err == nil {
 		for _, entry := range entries {

@@ -55,7 +55,8 @@
             "*:{*-linux-*,*-w64-*}:ARFLAGS=rcs",
             "none:*-apple-darwin:config_opts=$config_opts define=BOOST_LOG_WITHOUT_SYSLOG",
             "none:*-apple-darwin:config_opts=$config_opts define=BOOST_LOG_WITHOUT_IPC",
-            "*:*-apple-*:config_opts=$config_opts define=_DARWIN_C_SOURCE"
+            "*:*-apple-*:config_opts=$config_opts define=_DARWIN_C_SOURCE",
+            "*:*-linux-android*:config_opts=$config_opts define=BOOST_ASIO_DISABLE_STD_ALIGNED_ALLOC"
         ],
         "steps": [
             "*:*:echo \"using $toolset : $toolset2 : $CXX $CXXFLAGS : <CXXFLAGS>\"$CXXFLAGS\" <linkflags>\"$LDFLAGS\" <archiver>\"$AR\" <arflags>\"$ARFLAGS\" <striper>\"$STRIP\" <ranlib>\"$RANLIB\" <rc>\"$WINDRES\" <target-os>\"$target_os\" : ;\" > user-config.jam",

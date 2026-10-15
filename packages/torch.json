@@ -15,6 +15,7 @@
         "*:*:native/cmake-toolchain",
         "*:*:native/coreutils",
         "*:*:native/make",
+        "*:*:native/sed",
         "*:*:libevent",
         "*:*:openssl",
         "*:*:tor",
@@ -31,6 +32,7 @@
             "*:*-android*:LDFLAGS=$LDFLAGS -static-libstdc++ -llog"
         ],
         "steps": [
+            "*:*-w64-mingw32:sed -i.bak 's|Threads::Threads|Threads::Threads ${TOR_BUILD_DIR}/lib/libcrypto.a ws2_32 iphlpapi shlwapi crypt32|' CMakeLists.txt",
             "*:*:mkdir build",
             "*:*:cd build && cmake .. $config_opts",
             "*:*:cd build && make -j$NUM_CORES",

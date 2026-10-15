@@ -10,12 +10,20 @@
         }
     ],
     "dependencies": [
+        "*:*:native/_",
+        "*:*:native/coreutils",
+        "*:*:native/gawk",
+        "*:*:native/grep",
         "*:*:native/make",
+        "*:*:native/python@3.11",
+        "*:*:native/sed",
         "*:*:unistring"
     ],
     "build": {
         "env": [
+            "*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios",
             "*:*:config_opts=--prefix=$PREFIX",
+            "*:*:config_opts=$config_opts --host=$HOST",
             "windows_*:*:config_opts=$config_opts --disable-builtin"
         ],
         "steps": [

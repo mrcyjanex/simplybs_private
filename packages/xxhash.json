@@ -18,7 +18,8 @@
     "build": {
         "env": [
             "*:*:config_opts=-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE",
-            "*:*:config_opts=$config_opts -DCMAKE_INSTALL_PREFIX=$PREFIX"
+            "*:*:config_opts=$config_opts -DCMAKE_INSTALL_PREFIX=$PREFIX",
+            "*:*-apple-ios*:config_opts=$config_opts -DCMAKE_MACOSX_BUNDLE=OFF"
         ],
         "steps": [
             "*:*:cmake -S build/cmake -B cmake_build $config_opts",

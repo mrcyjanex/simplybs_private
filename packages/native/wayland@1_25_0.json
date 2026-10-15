@@ -10,20 +10,20 @@
         }
     ],
     "dependencies": [
-        "*:*:native/_/_",
-        "*:*:native/expat",
-        "*:*:native/libffi@3_5_2",
-        "*:*:native/meson",
-        "*:*:native/ninja",
-        "*:*:native/pkgconf",
-        "*:*:native/python@3.11"
+        "linux_*:*:native/_/_",
+        "linux_*:*:native/expat",
+        "linux_*:*:native/libffi@3_5_2",
+        "linux_*:*:native/meson",
+        "linux_*:*:native/ninja",
+        "linux_*:*:native/pkgconf",
+        "linux_*:*:native/python@3.11"
     ],
     "build": {
         "env": [],
         "steps": [
-            "*:*:$NATIVEPREFIX/bin/meson setup build --prefix=$NATIVEPREFIX -Ddtd_validation=false -Ddocumentation=false -Dtests=false",
-            "*:*:ninja -C build",
-            "*:*:DESTDIR=$STAGING_DIR ninja -C build install"
+            "linux_*:*:$NATIVEPREFIX/bin/meson setup build --prefix=$NATIVEPREFIX -Ddtd_validation=false -Ddocumentation=false -Dtests=false",
+            "linux_*:*:ninja -C build",
+            "linux_*:*:DESTDIR=$STAGING_DIR ninja -C build install"
         ]
     }
 }

@@ -39,6 +39,11 @@
             "*:*:config_opts=$config_opts --disable-tool-name-check",
             "*:*-linux-android*:config_opts=$config_opts --enable-android",
             "*:*-linux-android*:config_opts=$config_opts ac_cv_member_struct_tcp_info_tcpi_snd_mss=no",
+            "*:*-android*:ac_cv_func_glob=no",
+            "*:*-android*:ac_cv_func_getentropy=no",
+            "*:*-android*:ac_cv_func_backtrace=no",
+            "*:*-android*:ac_cv_func_backtrace_symbols=no",
+            "*:*-android*:ac_cv_func_backtrace_symbols_fd=no",
             "*:*:config_opts=$config_opts --enable-pic",
             "*:*:config_opts=$config_opts --enable-static-openssl",
             "*:*:config_opts=$config_opts --enable-static-libevent",
@@ -53,6 +58,7 @@
             "*:*:config_opts=$config_opts tor_cv_library_libevent_dir=$PREFIX"
         ],
         "steps": [
+            "*:*-w64-mingw32:sed -i.bak 's/^#ifdef _WIN32$/#include <winsock2.h>\\n#ifdef _WIN32/' src/feature/api/tor_api.h",
             "*:*:./autogen.sh",
             "*:*:./configure $config_opts",
             "*:*:make -j$NUM_CORES libtor.a",
