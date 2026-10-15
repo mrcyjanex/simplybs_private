@@ -12,9 +12,11 @@ type Host struct {
 	Triplet string
 }
 
-// GetPackagesDir is /opt/_/packages.
+// GetPackagesDir is the checkout packages/ tree when that tree is on disk
+// or this process was started with go run. Otherwise it is the packages
+// directory inside the ~/.local clone from `simplybs packages sync`.
 func GetPackagesDir() string {
-	return filepath.Join(OptRoot, "packages")
+	return resolvePackagesDir()
 }
 
 func cacheRoot() string {

@@ -83,11 +83,18 @@ $ go run . -host armv7a-linux-androideabi -package tor -build
 
 ## Paths
 
-Install prefixes and package definitions live under `/opt/_`:
+Install prefixes live under `/opt/_`:
 
 - `/opt/_/native` — native prefix
 - `/opt/_/<triplet>` — target prefix
-- `/opt/_/packages` — package definitions
+
+Package definitions are read from the checkout `packages/` directory when that tree is on disk, or when simplybs was started with `go run`. Otherwise they are read from `$HOME/.local/share/simplybs/repo/packages`.
+
+```bash
+go run . packages sync
+```
+
+clones `https://github.com/mrcyjanex/simplybs_private` into `$HOME/.local/share/simplybs/repo`, or fast-forwards an existing clone. A checkout and `go run` keep using the local `packages/` directory. If the installed tree is missing, simplybs exits and tells you to run `packages sync`.
 
 Local cache directories:
 

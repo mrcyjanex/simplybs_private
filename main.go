@@ -44,6 +44,14 @@ func main() {
 			crash.Handle(err)
 		}
 		return
+	case "packages":
+		if flag.Arg(1) != "sync" {
+			crash.Handle(fmt.Errorf("usage: simplybs packages sync"))
+		}
+		if err := host.SyncPackages(); err != nil {
+			crash.Handle(err)
+		}
+		return
 	}
 	if *argVersion {
 		fmt.Println("simplybs version 0.0.0")

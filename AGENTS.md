@@ -2,6 +2,8 @@
 
 `simplybs` is a cross-compilation build system written in Go. Package definitions
 live in `packages/*.json` (and `packages/native/*.json`); patches live in `patches/`.
+A checkout and `go run` read that `packages/` tree. Otherwise definitions come from
+`$HOME/.local/share/simplybs/repo/packages`, filled by `go run . packages sync`.
 
 ## Dev loop
 
