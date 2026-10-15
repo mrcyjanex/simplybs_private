@@ -268,7 +268,7 @@ func getRepoURLFromBundlePath(bundlePath string) (string, error) {
 	}
 
 	// Extract the URL pattern from the bundle path
-	// Bundle path format: .buildlib/source/<url-path>.bundle
+	// Bundle path format: $HOME/.cache/simplybs/sources/<url-path>.bundle
 	bundleName := filepath.Base(bundlePath)
 	bundleName = strings.TrimSuffix(bundleName, ".bundle")
 

@@ -70,10 +70,10 @@ already fail on a clean checkout — unrelated to environment setup.
 
 ## Cache
 
-Cache is on. Do not dig for it. No `gh release`, no listing assets, no
-inspecting tags, no probing `SIMPLYBS_CACHE_*`. `install.sh` already exports
-`SIMPLYBS_CACHE_TAG` and `SIMPLYBS_CACHE_REPO` box-wide; `-build` auto-pulls
-what it needs and auto-pushes what it built. It just works. Run the command:
+Cache is on. Do not dig for it. No `gh release`, no listing objects, no
+inspecting tags, no probing `SIMPLYBS_TOKEN` or `SIMPLYBS_CACHE_*`. The API
+is `https://sbs.mrcyjanek.net`. `-build` auto-pulls what it needs and
+auto-pushes what it built. It just works. Run the command:
 
 ```bash
 go run . -host x86_64-linux-gnu -package zlib -build

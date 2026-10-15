@@ -23,6 +23,9 @@ func (p *Package) EnsureBuilt(h *host.Host, buildDependencies bool) {
 		TryPullPackageCache(p, h)
 	}
 	if p.localBuiltCacheHit(h) {
+		if err := p.verifyLocalSignature(h); err != nil {
+			exitSignatureMismatch(err)
+		}
 		log.Printf("[%s][%s] Build cache found, skipping build...", h.Triplet, p.Package)
 		return
 	}
@@ -179,8 +182,8 @@ func wipeDirContents(dir string) {
 
 func resetBuildDirs() {
 	for _, dir := range []string{
-		filepath.Join(host.DataDir(), "work"),
-		filepath.Join(host.DataDir(), "staging"),
+		host.WorkDir(),
+		host.StagingDir(),
 	} {
 		utils.RemoveAll(dir)
 	}
@@ -328,6 +331,9 @@ func (p *Package) buildPackageInternal(h *host.Host, buildDependencies bool) {
 	err = os.WriteFile(infoPath, []byte(p.GeneratePackageInfo(h)), 0644)
 	if err != nil {
 		log.Fatalf("Failed to write build info %s: %v", infoPath, err)
+	}
+	if err := p.writePackSignature(h); err != nil {
+		log.Fatalf("Failed to sign build %s: %v", builtArchivePath, err)
 	}
 
 	log.Printf("Package built successfully: %s", builtArchivePath)

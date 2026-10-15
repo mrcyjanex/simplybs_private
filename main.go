@@ -8,6 +8,7 @@ import (
 
 	"github.com/mrcyjanek/simplybs/cmd/archive"
 	"github.com/mrcyjanek/simplybs/cmd/lint"
+	sbsconfig "github.com/mrcyjanek/simplybs/config"
 	"github.com/mrcyjanek/simplybs/crash"
 	"github.com/mrcyjanek/simplybs/host"
 	"github.com/mrcyjanek/simplybs/pack"
@@ -27,10 +28,23 @@ func main() {
 	argVersion := flag.Bool("v", false, "Show version")
 	argShell := flag.Bool("shell", false, "Extract source and start shell with build environment")
 	argCleanup := flag.Bool("cleanup", false, "Remove everything except current built archives")
-	argCachePull := flag.Bool("cache-pull", false, "Download needed build-cache artifacts (requires SIMPLYBS_CACHE_TAG and SIMPLYBS_CACHE_REPO)")
-	argCachePush := flag.Bool("cache-push", false, "Upload new/changed local build-cache artifacts (requires SIMPLYBS_CACHE_TAG and SIMPLYBS_CACHE_REPO)")
+	argCachePull := flag.Bool("cache-pull", false, "Download needed build-cache artifacts when a cloud token is configured")
+	argCachePush := flag.Bool("cache-push", false, "Upload new local build-cache artifacts when a cloud token is configured")
 	// argQuiet := flag.Bool("quiet", false, "Redirect stdout and stderr to /dev/null")
 	flag.Parse()
+	switch flag.Arg(0) {
+	case "status":
+		pack.Status()
+		return
+	case "clean":
+		pack.CleanLocal()
+		return
+	case "sync":
+		if err := pack.Sync(); err != nil {
+			crash.Handle(err)
+		}
+		return
+	}
 	if *argVersion {
 		fmt.Println("simplybs version 0.0.0")
 		return
@@ -120,7 +134,7 @@ func buildForHost(host *host.Host, packageNames []*pack.Package, list bool, extr
 
 	if build {
 		if pack.CacheEnabled() {
-			log.Printf("cache: enabled (tag=%s repo=%s); auto pull/push", pack.CacheTag(), pack.CacheRepo())
+			log.Printf("cache: enabled (tag=%s url=%s); auto pull/push", pack.CacheTag(), sbsconfig.CacheURL)
 			if err := pack.CachePull(packageNames, host); err != nil {
 				log.Printf("cache: auto-pull failed: %v", err)
 			}

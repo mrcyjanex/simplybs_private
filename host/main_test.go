@@ -13,6 +13,27 @@ import (
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
 )
 
+func TestMain(m *testing.M) {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+			break
+		}
+		parent := filepath.Dir(wd)
+		if parent == wd {
+			panic("could not find repo root")
+		}
+		wd = parent
+	}
+	if err := os.Chdir(wd); err != nil {
+		panic(err)
+	}
+	os.Exit(m.Run())
+}
+
 func chdirRepoRoot(t *testing.T) {
 	t.Helper()
 	wd, err := os.Getwd()

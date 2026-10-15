@@ -117,12 +117,27 @@ func (p *Package) GenerateSourceBuildPath(download *Download) string {
 	return utils.SourcePathForFileURL(download.URL)
 }
 
+func buildKindRoot(kind string) string {
+	switch kind {
+	case "built":
+		return host.BuiltDir()
+	case "work":
+		return host.WorkDir()
+	case "staging":
+		return host.StagingDir()
+	default:
+		log.Fatalf("unknown build path kind %q", kind)
+		return ""
+	}
+}
+
 func (p *Package) baseBuildPath(h *host.Host, kind string) string {
 	safeName := strings.ReplaceAll(p.Package+"-"+p.Version, "/", "_")
+	root := buildKindRoot(kind)
 	if p.Type == "native" {
-		return filepath.Join(host.DataDir(), kind, safeName)
+		return filepath.Join(root, safeName)
 	}
-	return filepath.Join(host.DataDir(), kind, h.Triplet, safeName)
+	return filepath.Join(root, h.Triplet, safeName)
 }
 
 func (p *Package) GenerateBuildPath(h *host.Host, kind string) string {
@@ -130,10 +145,11 @@ func (p *Package) GenerateBuildPath(h *host.Host, kind string) string {
 		log.Fatalf("Source build path is not supported")
 	}
 	safeName := strings.ReplaceAll(p.ShortName(h), "/", "_")
+	root := buildKindRoot(kind)
 	if p.Type == "native" {
-		return filepath.Join(host.DataDir(), kind, safeName)
+		return filepath.Join(root, safeName)
 	}
-	return filepath.Join(host.DataDir(), kind, h.Triplet, safeName)
+	return filepath.Join(root, h.Triplet, safeName)
 }
 
 func getNumCores() int {

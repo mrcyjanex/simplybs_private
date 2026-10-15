@@ -126,7 +126,7 @@ func ensureSaneDependencies() {
 }
 
 func ensureValidName(pkg *pack.Package) {
-	content, err := os.ReadFile(filepath.Join(host.GetPackagesDir(), pkg.Package+".json"))
+	content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".json"))
 	if err != nil {
 		log.Println(pkg.Package, "not found")
 		return
@@ -257,7 +257,7 @@ func createSourcesFile() {
 
 	pkgs := pack.GetAllPackages()
 	for _, pkg := range pkgs {
-		content, err := os.ReadFile(filepath.Join(host.GetPackagesDir(), pkg.Package+".json"))
+		content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".json"))
 		if err != nil {
 			log.Printf("Failed to read package %s: %v", pkg.Package, err)
 			continue

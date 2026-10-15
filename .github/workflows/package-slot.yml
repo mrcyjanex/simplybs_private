@@ -63,7 +63,7 @@ jobs:
     container: ${{ inputs.image != '' && fromJSON(format('{{"image":"{0}","options":"--user 1001:1001","credentials":{{"username":"{1}","password":"{2}"}}}}', inputs.image, github.actor, github.token)) || fromJSON('null') }}
     env:
       SIMPLYBS_CACHE_TAG: ${{ inputs.cache_tag }}
-      SIMPLYBS_CACHE_REPO: ${{ inputs.cache_repo }}
+      SIMPLYBS_TOKEN: ${{ secrets.SIMPLYBS_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GOCACHE: /tmp/go-cache
