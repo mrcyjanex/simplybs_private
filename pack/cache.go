@@ -108,7 +108,7 @@ func warnCacheDisabled() {
 		if err != nil {
 			path = "$HOME/.config/simplybs/config.json"
 		}
-		log.Printf("cache: cloud cache not configured (no token in %s or SIMPLYBS_TOKEN); skipping", path)
+		log.Printf("cache: cloud cache not configured (no token in %s or SIMPLYBS_TOKEN).", path)
 	})
 }
 
@@ -638,8 +638,8 @@ func keepNames(names []string) error {
 func Status() {
 	bn, bb := dirStats(host.BuiltDir())
 	sn, sb := dirStats(host.SourcesDir())
-	fmt.Printf("local built: %d files, %d bytes (%s)\n", bn, bb, host.BuiltDir())
-	fmt.Printf("local sources: %d files, %d bytes (%s)\n", sn, sb, host.SourcesDir())
+	fmt.Printf("local built: %d files, %s (%s)\n", bn, humanBytes(bb), host.BuiltDir())
+	fmt.Printf("local sources: %d files, %s (%s)\n", sn, humanBytes(sb), host.SourcesDir())
 	if !CacheEnabled() {
 		warnCacheDisabled()
 		fmt.Println("cloud: not configured")
@@ -651,7 +651,7 @@ func Status() {
 		return
 	}
 	n, b := idx.stats()
-	fmt.Printf("cloud: %d objects, %d bytes (tag %s)\n", n, b, CacheTag())
+	fmt.Printf("cloud: %d objects, %s (tag %s)\n", n, humanBytes(b), CacheTag())
 }
 
 // CleanLocal removes local cache trees. It does not touch /opt/_.
@@ -668,6 +668,19 @@ func CleanLocal() {
 // retention for every local object name.
 func Sync() error {
 	return CachePush(nil, nil)
+}
+
+func humanBytes(n int64) string {
+	const unit = 1024
+	if n < unit {
+		return fmt.Sprintf("%d B", n)
+	}
+	div, exp := int64(unit), 0
+	for v := n / unit; v >= unit; v /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(n)/float64(div), "KMGTPE"[exp])
 }
 
 func dirStats(root string) (n int, bytes int64) {
