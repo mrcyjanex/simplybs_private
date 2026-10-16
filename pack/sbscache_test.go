@@ -201,6 +201,12 @@ func (f *fakeCache) serve(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+	if len(parts) >= 5 && parts[3] == "objects" && !validCacheObjectName(parts[4]) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error":"invalid object name"}`))
+		return
+	}
 	switch {
 	case len(parts) == 4 && parts[3] == "keep" && r.Method == http.MethodPost:
 		f.serveKeep(w, r)
@@ -472,6 +478,88 @@ func TestObjectNameEscapesPlus(t *testing.T) {
 	got := c.objectURL("v0-sbs-test", "x86_64-linux-gnu+zlib.tar.gz")
 	if !strings.Contains(got, "x86_64-linux-gnu%2Bzlib.tar.gz") {
 		t.Fatalf("url %s", got)
+	}
+}
+
+func TestCacheObjectNameRoundTrip(t *testing.T) {
+	cases := []string{
+		"x86_64-linux-gnu+zlib-1.3.1-deadbeef.tar.gz",
+		"native_libc++-21.1.3-deadbeef.tar.gz",
+		"native_rust@1_91_0-1.91.0-4c3e595e.info.txt",
+		"aarch64-linux-android+monero@fcmp-stage-fcmp-stage-3c051e42.info.txt",
+		"foo.at.bar.tar.gz",
+		"foo.at.bar@baz.tar.gz",
+		"foo.at.at.bar.tar.gz",
+		"foo@bar@baz.info.txt",
+	}
+	for _, logical := range cases {
+		wire := cacheObjectName(logical)
+		if !validCacheObjectName(wire) {
+			t.Fatalf("wire name %q from %q is not a valid object name", wire, logical)
+		}
+		if strings.Contains(wire, "@") {
+			t.Fatalf("wire name still has @: %q", wire)
+		}
+		if got := cacheNameFromObject(wire); got != logical {
+			t.Fatalf("round-trip %q -> %q -> %q", logical, wire, got)
+		}
+	}
+	if got := cacheObjectName("native_zlib-1.3.1-deadbeef.tar.gz"); got != "native_zlib-1.3.1-deadbeef.tar.gz" {
+		t.Fatalf("name without @ changed: %q", got)
+	}
+}
+
+func TestAtSignObjectNameRoundTrip(t *testing.T) {
+	enableCache(t)
+	f := newFakeCache()
+	useFakeCache(t, f)
+	c, err := cacheClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	logical := "native_rust@1_91_0-1.91.0-4c3e595e.info.txt"
+	wire := "native_rust.at.1_91_0-1.91.0-4c3e595e.info.txt"
+	path := filepath.Join(t.TempDir(), "info.txt")
+	if err := os.WriteFile(path, []byte("info"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.Upload("v0-sbs-test", logical, path); err != nil {
+		t.Fatal(err)
+	}
+	f.mu.Lock()
+	if _, ok := f.objects[wire]; !ok {
+		t.Fatalf("stored %#v", f.objects)
+	}
+	if _, ok := f.objects[logical]; ok {
+		t.Fatal("stored the name that contains @")
+	}
+	f.mu.Unlock()
+
+	listed, err := c.List("v0-sbs-test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(listed) != 1 || listed[0].Name != logical {
+		t.Fatalf("list %#v", listed)
+	}
+	dest := filepath.Join(t.TempDir(), "out.txt")
+	if err := c.Download("v0-sbs-test", logical, dest); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(dest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "info" {
+		t.Fatalf("body %q", got)
+	}
+	if err := c.Keep("v0-sbs-test", []string{logical}); err != nil {
+		t.Fatal(err)
+	}
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if len(f.keeps) != 1 || len(f.keeps[0]) != 1 || f.keeps[0][0] != wire {
+		t.Fatalf("keep %#v", f.keeps)
 	}
 }
 

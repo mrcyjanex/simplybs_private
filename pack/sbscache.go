@@ -83,6 +83,61 @@ func pathEscape(s string) string {
 	return strings.ReplaceAll(url.PathEscape(s), "+", "%2B")
 }
 
+// cacheObjectName maps an asset name onto the sbscache alphabet
+// [A-Za-z0-9._+-]. Package names use '@' (monero@fcmp-stage), which the
+// server rejects. '.at.' stands for '@'. An existing '.at.' is written
+// '.at.at.' first, so the mapping round-trips. Names with neither stay
+// unchanged, and signed manifests keep the original '@'.
+func cacheObjectName(name string) string {
+	name = strings.ReplaceAll(name, ".at.", ".at.at.")
+	return strings.ReplaceAll(name, "@", ".at.")
+}
+
+func cacheNameFromObject(name string) string {
+	const escaped = ".at.at."
+	const at = ".at."
+	var b strings.Builder
+	b.Grow(len(name))
+	for len(name) > 0 {
+		switch {
+		case strings.HasPrefix(name, escaped):
+			b.WriteString(at)
+			name = name[len(escaped):]
+		case strings.HasPrefix(name, at):
+			b.WriteByte('@')
+			name = name[len(at):]
+		default:
+			b.WriteByte(name[0])
+			name = name[1:]
+		}
+	}
+	return b.String()
+}
+
+func validCacheObjectName(name string) bool {
+	if name == "" || len(name) > 512 {
+		return false
+	}
+	for i := 0; i < len(name); i++ {
+		c := name[i]
+		switch {
+		case c >= 'A' && c <= 'Z', c >= 'a' && c <= 'z', c >= '0' && c <= '9':
+		case c == '.' || c == '_' || c == '+' || c == '-':
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+func wireObjectName(name string) (string, error) {
+	wire := cacheObjectName(name)
+	if !validCacheObjectName(wire) {
+		return "", fmt.Errorf("cache: invalid object name %q", name)
+	}
+	return wire, nil
+}
+
 func (c *sbsClient) tagURL(tag string, rest string) string {
 	u := c.base + "/v1/tags/" + pathEscape(tag)
 	if rest != "" {
@@ -131,10 +186,17 @@ func (c *sbsClient) List(tag string) ([]remoteObject, error) {
 	if parsed.Objects == nil {
 		parsed.Objects = []remoteObject{}
 	}
+	for i := range parsed.Objects {
+		parsed.Objects[i].Name = cacheNameFromObject(parsed.Objects[i].Name)
+	}
 	return parsed.Objects, nil
 }
 
 func (c *sbsClient) Upload(tag, name, path string) error {
+	name, err := wireObjectName(name)
+	if err != nil {
+		return err
+	}
 	f, err := os.Open(path)
 	if err != nil {
 		return err
@@ -299,6 +361,10 @@ func (c *sbsClient) abortUpload(tag, name, uploadID string) error {
 }
 
 func (c *sbsClient) Download(tag, name, dest string) error {
+	name, err := wireObjectName(name)
+	if err != nil {
+		return err
+	}
 	if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
 		return err
 	}
@@ -376,7 +442,14 @@ func (c *sbsClient) Keep(tag string, names []string) error {
 		if n > cacheKeepBatch {
 			n = cacheKeepBatch
 		}
-		batch := names[:n]
+		batch := make([]string, n)
+		for i, logical := range names[:n] {
+			wire, err := wireObjectName(logical)
+			if err != nil {
+				return err
+			}
+			batch[i] = wire
+		}
 		names = names[n:]
 		body, err := json.Marshal(map[string][]string{"names": batch})
 		if err != nil {

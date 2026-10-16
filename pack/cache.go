@@ -20,7 +20,8 @@ import (
 //
 // One tag holds every object. Cache is enabled when a token is configured.
 // A missing token logs a warning and skips the cloud. A signature mismatch
-// exits 1.
+// exits 1. Signed manifests use these names, including '@' in package names.
+// The HTTP client encodes '@' before it talks to sbscache.
 
 const cacheAssetSuffixes = 3 // .info.txt, .tar.gz, _native.tar.gz
 
