@@ -159,6 +159,9 @@ func TestRetryableStatus(t *testing.T) {
 	if !retryable(fmt.Errorf("unexpected EOF")) {
 		t.Fatal("EOF should retry")
 	}
+	if !retryable(fmt.Errorf(`Put "https://sbs.example/parts/2": remote error: tls: bad record MAC`)) {
+		t.Fatal("tls bad record MAC should retry")
+	}
 }
 
 type fakeCache struct {

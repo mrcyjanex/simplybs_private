@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -75,6 +76,14 @@ func cacheClient() (*sbsClient, error) {
 		token: tok,
 		http:  &http.Client{},
 	}, nil
+}
+
+func (c *sbsClient) pauseRetry(attempt int, err error) {
+	if c != nil && c.http != nil {
+		c.http.CloseIdleConnections()
+	}
+	log.Printf("cache: %v; retry %d/%d", err, attempt, cacheDownloadRetries)
+	time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
 }
 
 func pathEscape(s string) string {
@@ -265,7 +274,7 @@ func (c *sbsClient) createUpload(tag, name string) (string, error) {
 			if !retryable(err) || attempt == cacheDownloadRetries {
 				return "", err
 			}
-			time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
+			c.pauseRetry(attempt, err)
 			continue
 		}
 		if resp.StatusCode != http.StatusCreated {
@@ -274,7 +283,7 @@ func (c *sbsClient) createUpload(tag, name string) (string, error) {
 				return "", err
 			}
 			last = err
-			time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
+			c.pauseRetry(attempt, err)
 			continue
 		}
 		var parsed struct {
@@ -308,7 +317,7 @@ func (c *sbsClient) putPart(tag, name, uploadID string, part int, body []byte) e
 			if !retryable(err) || attempt == cacheDownloadRetries {
 				return err
 			}
-			time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
+			c.pauseRetry(attempt, err)
 			continue
 		}
 		if resp.StatusCode != http.StatusOK {
@@ -317,7 +326,7 @@ func (c *sbsClient) putPart(tag, name, uploadID string, part int, body []byte) e
 				return err
 			}
 			last = err
-			time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
+			c.pauseRetry(attempt, err)
 			continue
 		}
 		resp.Body.Close()
@@ -381,7 +390,7 @@ func (c *sbsClient) Download(tag, name, dest string) error {
 			return err
 		}
 		if attempt < cacheDownloadRetries {
-			time.Sleep(cacheDownloadBackoff * time.Duration(1<<(attempt-1)))
+			c.pauseRetry(attempt, err)
 		}
 	}
 	return last
@@ -486,5 +495,7 @@ func retryable(err error) bool {
 		strings.Contains(msg, "connection reset") ||
 		strings.Contains(msg, "eof") ||
 		strings.Contains(msg, "temporarily") ||
-		strings.Contains(msg, "broken pipe")
+		strings.Contains(msg, "broken pipe") ||
+		strings.Contains(msg, "tls:") ||
+		strings.Contains(msg, "http2:")
 }
