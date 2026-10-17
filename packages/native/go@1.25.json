@@ -14,11 +14,12 @@
         "*:*:native/_/_",
         "*:*:native/bash",
         "*:*:native/sed",
-        "darwin_arm64:*:native/go-bin@1.25"
+        "*:*:native/go-bin@1.25"
     ],
     "build": {
         "env": [
-            "*:*:GO_VERSION=1.25"
+            "*:*:GO_VERSION=1.25",
+            "*:*:GOROOT_BOOTSTRAP=$NATIVEPREFIX/go$GO_VERSION"
         ],
         "steps": [
             "*:*:cd src && bash ./make.bash",

@@ -21,6 +21,10 @@
         "linux_*:*:native/pkgconf",
         "linux_*:*:native/sed"
     ],
+    "export-env": [
+        "*:*:FREETYPE_CFLAGS=-I$NATIVEPREFIX/include/freetype2",
+        "*:*:FREETYPE_LIBS=-L$NATIVEPREFIX/lib -lfreetype"
+    ],
     "build": {
         "env": [],
         "steps": [
@@ -29,7 +33,8 @@
             "linux_*:*:make -j$NUM_CORES",
             "linux_*:*:make DESTDIR=$STAGING_DIR install",
             "linux_*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX/lib/pkgconfig && if [ -d $STAGING_DIR$NATIVEPREFIX/share/pkgconfig ]; then mv $STAGING_DIR$NATIVEPREFIX/share/pkgconfig/*.pc $STAGING_DIR$NATIVEPREFIX/lib/pkgconfig/ 2>/dev/null || true; fi",
-            "linux_*:*:rm -rf $STAGING_DIR$NATIVEPREFIX/share/man $STAGING_DIR$NATIVEPREFIX/lib/*.la"
+            "linux_*:*:rm -rf $STAGING_DIR$NATIVEPREFIX/share/man $STAGING_DIR$NATIVEPREFIX/lib/*.la",
+            "linux_*:*:mv $STAGING_DIR$NATIVEPREFIX/lib/pkgconfig/freetype2.pc $STAGING_DIR$NATIVEPREFIX/lib/pkgconfig/freetype.pc"
         ]
     }
 }

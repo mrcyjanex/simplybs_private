@@ -15,8 +15,11 @@
         "*:*:native/automake",
         "*:*:native/bash",
         "*:*:native/gettext",
+        "*:*:native/git",
+        "*:*:native/grep",
         "*:*:native/libtool",
         "*:*:native/m4",
+        "*:*:native/sed",
         "*:*:native/make",
         "*:*:native/perl"
     ],
