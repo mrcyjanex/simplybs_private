@@ -3,8 +3,8 @@ version: 3.6.2
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-archiver.git
       sha256: 8a2e44f48348d52e3653e88275f19233a8de80e0
+      url: https://github.com/apache/maven-archiver.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

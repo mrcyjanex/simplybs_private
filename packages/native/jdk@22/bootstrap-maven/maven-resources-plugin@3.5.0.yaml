@@ -3,8 +3,8 @@ version: 3.5.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-resources-plugin.git
       sha256: ce485a0360dc1b4f548bd3c32d3f817661ae31ff
+      url: https://github.com/apache/maven-resources-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,9 +3,9 @@ version: "3"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/net/java/jvnet-parent/3/jvnet-parent-3.pom
-      sha256: 30f5789efa39ddbf96095aada3fc1260c4561faf2f714686717cb2dc5049475a
       path: ./jvnet-parent-3.pom
+      sha256: 30f5789efa39ddbf96095aada3fc1260c4561faf2f714686717cb2dc5049475a
+      url: https://repo1.maven.org/maven2/net/java/jvnet-parent/3/jvnet-parent-3.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

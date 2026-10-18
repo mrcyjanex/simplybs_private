@@ -3,9 +3,9 @@ version: 2.0.17
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-parent/2.0.17/slf4j-parent-2.0.17.pom
-      sha256: 95cd71e852dfdb29126e58b7b939d57ec2b2e6024391852e0b545dee082bbf3b
       path: ./slf4j-parent-2.0.17.pom
+      sha256: 95cd71e852dfdb29126e58b7b939d57ec2b2e6024391852e0b545dee082bbf3b
+      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-parent/2.0.17/slf4j-parent-2.0.17.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

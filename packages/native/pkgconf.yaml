@@ -3,8 +3,8 @@ version: 2.5.1
 type: native
 download:
     - kind: git
-      url: http://github.com/pkgconf/pkgconf.git
       sha256: 4fc570f91d9d8d843ab32d2198a5c064538d8ffd
+      url: http://github.com/pkgconf/pkgconf.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/autoconf'

@@ -3,8 +3,8 @@ version: "2_14_1"
 type: host
 download:
     - kind: tar.gz
-      url: https://download.savannah.gnu.org/releases/freetype/freetype-2.14.1.tar.gz
       sha256: 174d9e53402e1bf9ec7277e22ec199ba3e55a6be2c0740cb18c0ee9850fc8c34
+      url: https://download.savannah.gnu.org/releases/freetype/freetype-2.14.1.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_/_'
     - '*:*-linux-gnu:native/_'

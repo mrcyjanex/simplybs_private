@@ -3,8 +3,8 @@ version: "1.15"
 type: native
 download:
     - kind: tar.gz
-      url: https://downloads.sourceforge.net/project/byaccj/byaccj/1.15/byaccj1.15_src.tar.gz
       sha256: 4d6ba21fa5bc4ec4b1be9eb6e6efbb367eb6df2577fd0eaff60be9c6614f6609
+      url: https://downloads.sourceforge.net/project/byaccj/byaccj/1.15/byaccj1.15_src.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

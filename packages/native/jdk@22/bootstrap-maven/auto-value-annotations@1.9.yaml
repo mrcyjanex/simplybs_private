@@ -3,12 +3,12 @@ version: "1.9"
 type: native
 download:
     - kind: git
-      url: https://github.com/google/auto.git
       sha256: d26281e822ecd6e616889569e57c9166ecf22184
+      url: https://github.com/google/auto.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/auto/value/auto-value-annotations/1.9/auto-value-annotations-1.9.pom
-      sha256: 9220a3dabe75c79334f061b0e40df833448666bac28a8b823bc1e8fd52f8c98a
       path: ./auto-value-annotations-1.9.pom
+      sha256: 9220a3dabe75c79334f061b0e40df833448666bac28a8b823bc1e8fd52f8c98a
+      url: https://repo1.maven.org/maven2/com/google/auto/value/auto-value-annotations/1.9/auto-value-annotations-1.9.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

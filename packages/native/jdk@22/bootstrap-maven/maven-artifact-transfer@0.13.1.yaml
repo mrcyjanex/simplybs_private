@@ -3,12 +3,12 @@ version: 0.13.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-artifact-transfer.git
       sha256: ee4b1f50504d9538ea447e0d987a44e9e89e8dc1
+      url: https://github.com/apache/maven-artifact-transfer.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/shared/maven-artifact-transfer/0.13.1/maven-artifact-transfer-0.13.1.pom
-      sha256: e4b15a1e7cfbfe480408cfbaa148d66ea3324bf19e9ac6d6c17053bdb18ac4cd
       path: ./maven-artifact-transfer-0.13.1.pom
+      sha256: e4b15a1e7cfbfe480408cfbaa148d66ea3324bf19e9ac6d6c17053bdb18ac4cd
+      url: https://repo1.maven.org/maven2/org/apache/maven/shared/maven-artifact-transfer/0.13.1/maven-artifact-transfer-0.13.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

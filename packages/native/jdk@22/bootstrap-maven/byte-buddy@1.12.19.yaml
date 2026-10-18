@@ -3,12 +3,12 @@ version: 1.12.19
 type: native
 download:
     - kind: git
-      url: https://github.com/raphw/byte-buddy.git
       sha256: c93425a1e92bd246c053968512226ff391c54b5c
+      url: https://github.com/raphw/byte-buddy.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy/1.12.19/byte-buddy-1.12.19.pom
-      sha256: 435fb8664aa9b7e120c8dd6c707d4eafa642fa262dff6d5e3f71dc25c69e89eb
       path: ./byte-buddy-1.12.19.pom
+      sha256: 435fb8664aa9b7e120c8dd6c707d4eafa642fa262dff6d5e3f71dc25c69e89eb
+      url: https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy/1.12.19/byte-buddy-1.12.19.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

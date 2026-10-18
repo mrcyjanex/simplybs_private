@@ -3,8 +3,8 @@ version: v1.10.0
 type: host
 download:
     - kind: git
-      url: https://github.com/lz4/lz4.git
       sha256: ebb370ca83af193212df4dcbadcc5d87bc0de2f0
+      url: https://github.com/lz4/lz4.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/cmake'

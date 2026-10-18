@@ -3,8 +3,8 @@ version: "6"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-shared-resources.git
       sha256: 96d16734b2ca46b91bbae9cd0f1596b4bfbb4862
+      url: https://github.com/apache/maven-shared-resources.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

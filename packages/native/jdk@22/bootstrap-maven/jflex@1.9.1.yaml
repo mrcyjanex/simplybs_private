@@ -3,8 +3,8 @@ version: 1.9.1
 type: native
 download:
     - kind: git
-      url: https://github.com/jflex-de/jflex.git
       sha256: 0679cc1098f0f8119905bcd2ff07ea0e7e965284
+      url: https://github.com/jflex-de/jflex.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

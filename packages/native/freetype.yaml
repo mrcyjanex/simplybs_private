@@ -3,8 +3,8 @@ version: 2.14.1
 type: native
 download:
     - kind: tar.gz
-      url: https://downloads.sourceforge.net/project/freetype/freetype2/2.14.1/freetype-2.14.1.tar.gz
       sha256: 174d9e53402e1bf9ec7277e22ec199ba3e55a6be2c0740cb18c0ee9850fc8c34
+      url: https://downloads.sourceforge.net/project/freetype/freetype2/2.14.1/freetype-2.14.1.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

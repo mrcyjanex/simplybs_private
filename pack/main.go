@@ -38,7 +38,7 @@ type Package struct {
 	Version      string      `json:"version" yaml:"version"`
 	Type         string      `json:"type" yaml:"type"`
 	Download     []*Download `json:"download" yaml:"download"`
-	Build        *Build      `json:"build" yaml:"build"`
+	Build        Build       `json:"build" yaml:"build"`
 	Dependencies []string    `json:"dependencies" yaml:"dependencies"`
 	ExportEnv    []string    `json:"export-env" yaml:"export-env"`
 }

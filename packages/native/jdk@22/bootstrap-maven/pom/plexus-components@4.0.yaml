@@ -3,9 +3,9 @@ version: "4.0"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-components/4.0/plexus-components-4.0.pom
-      sha256: 1a5c0f95f65ed3e98edcf4f3b27c21cbcb14567384d9e4cf07f83a49675347ed
       path: ./plexus-components-4.0.pom
+      sha256: 1a5c0f95f65ed3e98edcf4f3b27c21cbcb14567384d9e4cf07f83a49675347ed
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-components/4.0/plexus-components-4.0.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

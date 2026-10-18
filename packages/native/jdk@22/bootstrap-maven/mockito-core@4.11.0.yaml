@@ -3,12 +3,12 @@ version: 4.11.0
 type: native
 download:
     - kind: git
-      url: https://github.com/mockito/mockito.git
       sha256: 483e15f9f940716a85f2d58f6c28981136790c4e
+      url: https://github.com/mockito/mockito.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/mockito/mockito-core/4.11.0/mockito-core-4.11.0.pom
-      sha256: 2bc2e3c8c8b313fdac231f23822225b07831dc899d067072f49d5f8ae37e739a
       path: ./mockito-core-4.11.0.pom
+      sha256: 2bc2e3c8c8b313fdac231f23822225b07831dc899d067072f49d5f8ae37e739a
+      url: https://repo1.maven.org/maven2/org/mockito/mockito-core/4.11.0/mockito-core-4.11.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

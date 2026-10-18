@@ -3,12 +3,12 @@ version: "3.10"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-lang.git
       sha256: e0b474c0d015f89a52c4cf8866fa157dd89e7d1c
+      url: https://github.com/apache/commons-lang.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.pom
-      sha256: 005b5a3a88736bd2584f69cc59467e67c106e6a4b7a2dbd1ba2251267e96011d
       path: ./commons-lang3-3.10.pom
+      sha256: 005b5a3a88736bd2584f69cc59467e67c106e6a4b7a2dbd1ba2251267e96011d
+      url: https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

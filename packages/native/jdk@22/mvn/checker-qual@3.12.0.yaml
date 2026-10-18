@@ -3,8 +3,8 @@ version: 3.12.0
 type: native
 download:
     - kind: git
-      url: https://github.com/typetools/checker-framework.git
       sha256: 1b56916ff9fb9f1caf75d6486f8f9f5cb491131d
+      url: https://github.com/typetools/checker-framework.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

@@ -3,12 +3,12 @@ version: 1.7.36
 type: native
 download:
     - kind: git
-      url: https://github.com/qos-ch/slf4j.git
       sha256: e9ee55cca93c2bf26f14482a9bdf961c750d2a56
+      url: https://github.com/qos-ch/slf4j.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-nop/1.7.36/slf4j-nop-1.7.36.pom
-      sha256: 20a0f7c060020d75fef4470ae6948661d418ebd5ea4549c68abedf20ee86cb65
       path: ./slf4j-nop-1.7.36.pom
+      sha256: 20a0f7c060020d75fef4470ae6948661d418ebd5ea4549c68abedf20ee86cb65
+      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-nop/1.7.36/slf4j-nop-1.7.36.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

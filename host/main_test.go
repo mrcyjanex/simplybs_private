@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			break
 		}
 		parent := filepath.Dir(wd)
@@ -41,7 +41,7 @@ func chdirRepoRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			if err := os.Chdir(wd); err != nil {
 				t.Fatal(err)
 			}
@@ -49,7 +49,7 @@ func chdirRepoRoot(t *testing.T) {
 		}
 		parent := filepath.Dir(wd)
 		if parent == wd {
-			t.Fatal("could not find repo root (packages/native/_.json)")
+			t.Fatal("could not find repo root (packages/native/_.yaml)")
 		}
 		wd = parent
 	}

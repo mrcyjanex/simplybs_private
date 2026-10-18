@@ -3,8 +3,8 @@ version: 1.11.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-cli.git
       sha256: d74613321325f6081fa0206c4ab608ab65d80e2e
+      url: https://github.com/apache/commons-cli.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,9 +3,9 @@ version: "21"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/apache/21/apache-21.pom
-      sha256: af10c108da014f17cafac7b52b2b4b5a3a1c18265fa2af97a325d9143537b380
       path: ./apache-21.pom
+      sha256: af10c108da014f17cafac7b52b2b4b5a3a1c18265fa2af97a325d9143537b380
+      url: https://repo1.maven.org/maven2/org/apache/apache/21/apache-21.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

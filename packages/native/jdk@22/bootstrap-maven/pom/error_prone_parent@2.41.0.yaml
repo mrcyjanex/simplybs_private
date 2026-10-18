@@ -3,9 +3,9 @@ version: 2.41.0
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/errorprone/error_prone_parent/2.41.0/error_prone_parent-2.41.0.pom
-      sha256: c538388d760a5c1c98dcf06f6ed3cfe5f11a651827db5cbd2ed8288c795cad42
       path: ./error_prone_parent-2.41.0.pom
+      sha256: c538388d760a5c1c98dcf06f6ed3cfe5f11a651827db5cbd2ed8288c795cad42
+      url: https://repo1.maven.org/maven2/com/google/errorprone/error_prone_parent/2.41.0/error_prone_parent-2.41.0.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

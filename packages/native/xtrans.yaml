@@ -3,8 +3,8 @@ version: 1.6.0
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/xtrans-1.6.0.tar.gz
       sha256: 936b74c60b19c317c3f3cb1b114575032528dbdaf428740483200ea874c2ca0a
+      url: https://www.x.org/releases/individual/lib/xtrans-1.6.0.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

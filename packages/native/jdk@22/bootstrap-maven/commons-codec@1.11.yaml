@@ -3,12 +3,12 @@ version: "1.11"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-codec.git
       sha256: 9ceef2231549e95f7868266f38b0c7e1a0a40ed4
+      url: https://github.com/apache/commons-codec.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/commons-codec/commons-codec/1.11/commons-codec-1.11.pom
-      sha256: c1e7140d1dea8fdf3528bc1e3c5444ac0b541297311f45f9806c213ec3ee9a10
       path: ./commons-codec-1.11.pom
+      sha256: c1e7140d1dea8fdf3528bc1e3c5444ac0b541297311f45f9806c213ec3ee9a10
+      url: https://repo1.maven.org/maven2/commons-codec/commons-codec/1.11/commons-codec-1.11.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: 1.9.4
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-beanutils.git
       sha256: 32ceb2c92512d44f97638805e2f3fd9d70dfcfc6
+      url: https://github.com/apache/commons-beanutils.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

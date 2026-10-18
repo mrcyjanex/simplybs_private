@@ -3,8 +3,8 @@ version: 11.0.32.1
 type: native
 download:
     - kind: git
-      url: https://git.openjdk.org/jdk11u
       sha256: 30abc58ea74716e0d260bad1e5d6f3545f9a9332
+      url: https://git.openjdk.org/jdk11u
 dependencies:
     - '*:*:native/_/_'
     - darwin_*:*:native/mig

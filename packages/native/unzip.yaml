@@ -3,8 +3,8 @@ version: 1.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/7zz_unzip.git
       sha256: f802bc7b20bf0626d765ff3fe0ef0adb3fd93b26
+      url: https://github.com/MrCyjaneK/7zz_unzip.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bzip2'

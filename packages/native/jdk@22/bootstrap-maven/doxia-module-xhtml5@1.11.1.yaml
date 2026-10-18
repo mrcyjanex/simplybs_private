@@ -3,12 +3,12 @@ version: 1.11.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia.git
       sha256: 84c3babdeeadafb546985e00353c1dc71c770344
+      url: https://github.com/apache/maven-doxia.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-module-xhtml5/1.11.1/doxia-module-xhtml5-1.11.1.pom
-      sha256: a322ee9d8b5b300f337994c710be006dd8b05f2d83e07a9bef64c2530ac9282b
       path: ./doxia-module-xhtml5-1.11.1.pom
+      sha256: a322ee9d8b5b300f337994c710be006dd8b05f2d83e07a9bef64c2530ac9282b
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-module-xhtml5/1.11.1/doxia-module-xhtml5-1.11.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

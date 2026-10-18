@@ -3,24 +3,24 @@ version: "1.70"
 type: native
 download:
     - kind: git
-      url: https://github.com/bcgit/bc-java.git
       sha256: 1ef1da015e116c1c2d09719674dfdd437971077f
+      url: https://github.com/bcgit/bc-java.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.70/bcprov-jdk15on-1.70.pom
-      sha256: 6df4b5b76d9062017664ad0ca285e57154ae803607cb89c970b39cc0e016abb0
       path: ./bcprov-jdk15on-1.70.pom
+      sha256: 6df4b5b76d9062017664ad0ca285e57154ae803607cb89c970b39cc0e016abb0
+      url: https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.70/bcprov-jdk15on-1.70.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/bouncycastle/bcutil-jdk15on/1.70/bcutil-jdk15on-1.70.pom
-      sha256: 9ebae71c25e0c9f2cd756003c01f1ad0fc398ca06fbcda0d175e71cac5840aad
       path: ./bcutil-jdk15on-1.70.pom
+      sha256: 9ebae71c25e0c9f2cd756003c01f1ad0fc398ca06fbcda0d175e71cac5840aad
+      url: https://repo1.maven.org/maven2/org/bouncycastle/bcutil-jdk15on/1.70/bcutil-jdk15on-1.70.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.70/bcpkix-jdk15on-1.70.pom
-      sha256: 6ea5502b7eebec7018271bb8a82cb819bf4c1f2b6543549c5cfd84d6a13996bf
       path: ./bcpkix-jdk15on-1.70.pom
+      sha256: 6ea5502b7eebec7018271bb8a82cb819bf4c1f2b6543549c5cfd84d6a13996bf
+      url: https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.70/bcpkix-jdk15on-1.70.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.70/bcpg-jdk15on-1.70.pom
-      sha256: df398b389bc419564df63c5ae2cf4b5ae653d96e5fbb253bbc94d1b06733cdf5
       path: ./bcpg-jdk15on-1.70.pom
+      sha256: df398b389bc419564df63c5ae2cf4b5ae653d96e5fbb253bbc94d1b06733cdf5
+      url: https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.70/bcpg-jdk15on-1.70.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

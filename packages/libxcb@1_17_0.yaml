@@ -3,8 +3,8 @@ version: "1_17_0"
 type: host
 download:
     - kind: tar.gz
-      url: https://xcb.freedesktop.org/dist/libxcb-1.17.0.tar.gz
       sha256: 2c69287424c9e2128cb47ffe92171e10417041ec2963bceafb65cb3fcf8f0b85
+      url: https://xcb.freedesktop.org/dist/libxcb-1.17.0.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

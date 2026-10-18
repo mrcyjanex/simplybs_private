@@ -3,8 +3,8 @@ version: cd994a3b6009
 type: host
 download:
     - kind: git
-      url: https://github.com/mayanklahiri/easyexif.git
       sha256: cd994a3b6009bc3c1f84062e96bd7f5ad16e85f6
+      url: https://github.com/mayanklahiri/easyexif.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/coreutils'

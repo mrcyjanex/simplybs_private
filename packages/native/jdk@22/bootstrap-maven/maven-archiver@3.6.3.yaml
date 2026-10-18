@@ -3,12 +3,12 @@ version: 3.6.3
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-archiver.git
       sha256: 3d895e888861c3762143c3a34610c092cabbac27
+      url: https://github.com/apache/maven-archiver.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/maven-archiver/3.6.3/maven-archiver-3.6.3.pom
-      sha256: bc130259c5e1087a270ea8cf3f8182fecc90bf93113a2074d640a1a67f102ec4
       path: ./maven-archiver-3.6.3.pom
+      sha256: bc130259c5e1087a270ea8cf3f8182fecc90bf93113a2074d640a1a67f102ec4
+      url: https://repo1.maven.org/maven2/org/apache/maven/maven-archiver/3.6.3/maven-archiver-3.6.3.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

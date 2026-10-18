@@ -3,8 +3,8 @@ version: 1.0.58
 type: native
 download:
     - kind: git
-      url: https://github.com/jruby/jcodings
       sha256: 729c96c85c8c87f44d4b71c3fc1dc699a0abf413
+      url: https://github.com/jruby/jcodings
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

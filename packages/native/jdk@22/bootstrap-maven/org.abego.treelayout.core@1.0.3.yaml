@@ -3,8 +3,8 @@ version: 1.0.3
 type: native
 download:
     - kind: git
-      url: https://github.com/abego/treelayout.git
       sha256: fb5b5326d9fe642b9ca0631c3da739bf775f6374
+      url: https://github.com/abego/treelayout.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

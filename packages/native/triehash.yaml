@@ -3,8 +3,8 @@ version: 1.6.1-patch
 type: native
 download:
     - kind: git
-      url: https://github.com/julian-klode/triehash.git
       sha256: e0bd5e08395bcd5ae105ad279d8d3ba67e8b738b
+      url: https://github.com/julian-klode/triehash.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/sed'

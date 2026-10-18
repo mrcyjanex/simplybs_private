@@ -3,13 +3,13 @@ version: 2.0.8
 type: native
 download:
     - kind: blob
-      url: https://archive.apache.org/dist/jakarta/oro/source/jakarta-oro-2.0.8.tar.gz
-      sha256: 4c4f3c7c479994c3ce09f542d4fbdc03eed58a2d7f320d32f2baf238b5b6f566
       path: ./jakarta-oro-2.0.8.tar.gz
+      sha256: 4c4f3c7c479994c3ce09f542d4fbdc03eed58a2d7f320d32f2baf238b5b6f566
+      url: https://archive.apache.org/dist/jakarta/oro/source/jakarta-oro-2.0.8.tar.gz
     - kind: blob
-      url: https://repo1.maven.org/maven2/oro/oro/2.0.8/oro-2.0.8.pom
-      sha256: 9aa9dfeb2e85e1d5e7932c87140697cecc2b0fadd933d679fd420a2e43831a82
       path: ./oro-2.0.8.pom
+      sha256: 9aa9dfeb2e85e1d5e7932c87140697cecc2b0fadd933d679fd420a2e43831a82
+      url: https://repo1.maven.org/maven2/oro/oro/2.0.8/oro-2.0.8.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

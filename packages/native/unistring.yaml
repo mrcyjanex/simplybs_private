@@ -3,8 +3,8 @@ version: 1.4.1
 type: native
 download:
     - kind: tar.gz
-      url: http://ftpmirror.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.gz
       sha256: 12542ad7619470efd95a623174dcd4b364f2483caf708c6bee837cb53a54cb9d
+      url: http://ftpmirror.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

@@ -3,12 +3,12 @@ version: 2.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia.git
       sha256: 9d04eaf9f327205929024b558ada4ce61f74c3c5
+      url: https://github.com/apache/maven-doxia.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-core/2.0.0/doxia-core-2.0.0.pom
-      sha256: f3e804d91571075e6367cff9020641d79d66bc46a6c13a62fcba1d369cd8936d
       path: ./doxia-core-2.0.0.pom
+      sha256: f3e804d91571075e6367cff9020641d79d66bc46a6c13a62fcba1d369cd8936d
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-core/2.0.0/doxia-core-2.0.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

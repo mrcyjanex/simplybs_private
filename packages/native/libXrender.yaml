@@ -3,8 +3,8 @@ version: 0.9.12
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXrender-0.9.12.tar.gz
       sha256: 0fff64125819c02d1102b6236f3d7d861a07b5216d8eea336c3811d31494ecf7
+      url: https://www.x.org/releases/individual/lib/libXrender-0.9.12.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

@@ -3,9 +3,9 @@ version: 1.0.10
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/1.0.10/plexus-1.0.10.pom
-      sha256: 09b999a969e73525a6cc3ad2868ea744766e1d93b25c6c656d61a5ff9c881da9
       path: ./plexus-1.0.10.pom
+      sha256: 09b999a969e73525a6cc3ad2868ea744766e1d93b25c6c656d61a5ff9c881da9
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/1.0.10/plexus-1.0.10.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

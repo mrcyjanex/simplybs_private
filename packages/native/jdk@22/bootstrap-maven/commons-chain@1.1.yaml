@@ -3,12 +3,12 @@ version: "1.1"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-chain.git
       sha256: e5f35697d1a549a556a8fd00862c16334479e743
+      url: https://github.com/apache/commons-chain.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/commons-chain/commons-chain/1.1/commons-chain-1.1.pom
-      sha256: cf0c15c4e843507d95be11114039794494d6fc6259118581a90e03b2db5f5acb
       path: ./commons-chain-1.1.pom
+      sha256: cf0c15c4e843507d95be11114039794494d6fc6259118581a90e03b2db5f5acb
+      url: https://repo1.maven.org/maven2/commons-chain/commons-chain/1.1/commons-chain-1.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

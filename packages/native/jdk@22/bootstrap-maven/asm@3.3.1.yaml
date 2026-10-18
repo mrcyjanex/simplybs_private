@@ -3,12 +3,12 @@ version: 3.3.1
 type: native
 download:
     - kind: git
-      url: https://gitlab.ow2.org/asm/asm.git
       sha256: d6f33999569493c18f04686facf8e91484db7ee6
+      url: https://gitlab.ow2.org/asm/asm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/asm/asm/3.3.1/asm-3.3.1.pom
-      sha256: 6e9dcc0313935ff11e7bea368811e48066ae3177a72ed69bceb3792096f7c2bb
       path: ./asm-3.3.1.pom
+      sha256: 6e9dcc0313935ff11e7bea368811e48066ae3177a72ed69bceb3792096f7c2bb
+      url: https://repo1.maven.org/maven2/asm/asm/3.3.1/asm-3.3.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

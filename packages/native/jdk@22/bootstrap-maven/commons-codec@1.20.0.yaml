@@ -3,8 +3,8 @@ version: 1.20.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-codec.git
       sha256: b20db1f1fa6ee7b0536f6a25c9c33f8289c22098
+      url: https://github.com/apache/commons-codec.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

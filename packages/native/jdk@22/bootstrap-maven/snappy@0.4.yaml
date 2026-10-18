@@ -3,8 +3,8 @@ version: "0.4"
 type: native
 download:
     - kind: git
-      url: https://github.com/dain/snappy.git
       sha256: e02f7c887d666afbdd11763f3a6ba22e68f53f15
+      url: https://github.com/dain/snappy.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

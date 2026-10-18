@@ -3,8 +3,8 @@ version: "4.0"
 type: native
 download:
     - kind: git
-      url: https://github.com/google/guice.git
       sha256: 5a209e98e0dedf3dbb2cc657514e7daf1707296c
+      url: https://github.com/google/guice.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

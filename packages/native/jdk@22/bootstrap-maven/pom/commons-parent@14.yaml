@@ -3,9 +3,9 @@ version: "14"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/commons/commons-parent/14/commons-parent-14.pom
-      sha256: 24f2e52bde65e2dc9cfcebb2fc22d8de0edb3726925ccf80b13db4eeb515a302
       path: ./commons-parent-14.pom
+      sha256: 24f2e52bde65e2dc9cfcebb2fc22d8de0edb3726925ccf80b13db4eeb515a302
+      url: https://repo1.maven.org/maven2/org/apache/commons/commons-parent/14/commons-parent-14.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

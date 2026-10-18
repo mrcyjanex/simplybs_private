@@ -3,12 +3,12 @@ version: 1.0.0-build217
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/trilead-ssh2-mirror.git
       sha256: 306b822c30c2c475d5907d376827c74f7dd81609
+      url: https://github.com/MrCyjaneK/trilead-ssh2-mirror.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/trilead/trilead-ssh2/1.0.0-build217/trilead-ssh2-1.0.0-build217.pom
-      sha256: f8707a531e46c181f69ba9b1fee0b83607e8a0d767ae847f2533009ea1e8b8ee
       path: ./trilead-ssh2-1.0.0-build217.pom
+      sha256: f8707a531e46c181f69ba9b1fee0b83607e8a0d767ae847f2533009ea1e8b8ee
+      url: https://repo1.maven.org/maven2/com/trilead/trilead-ssh2/1.0.0-build217/trilead-ssh2-1.0.0-build217.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

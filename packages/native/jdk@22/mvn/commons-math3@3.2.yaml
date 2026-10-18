@@ -3,8 +3,8 @@ version: "3.2"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-math.git
       sha256: 7ec508828f62c2a3df31cde2a2f3aa32c5135fdb
+      url: https://github.com/apache/commons-math.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

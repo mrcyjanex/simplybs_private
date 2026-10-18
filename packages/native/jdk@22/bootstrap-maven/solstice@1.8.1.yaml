@@ -3,12 +3,12 @@ version: 1.8.1
 type: native
 download:
     - kind: git
-      url: https://github.com/equodev/equo-ide.git
       sha256: fc409fd5517a32ffe6dd54827322c470d9320224
+      url: https://github.com/equodev/equo-ide.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/dev/equo/ide/solstice/1.8.1/solstice-1.8.1.pom
-      sha256: 6ab4a8ecae2abbd36b919d0b9b9fb24c177148f13e5364c97a0c6ee11a3fc426
       path: ./solstice-1.8.1.pom
+      sha256: 6ab4a8ecae2abbd36b919d0b9b9fb24c177148f13e5364c97a0c6ee11a3fc426
+      url: https://repo1.maven.org/maven2/dev/equo/ide/solstice/1.8.1/solstice-1.8.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,12 +3,12 @@ version: 9.9.1
 type: native
 download:
     - kind: git
-      url: https://gitlab.ow2.org/asm/asm.git
       sha256: 4e6de6cb3dcddb00a2bbf7bbb9ee40f0c15281c5
+      url: https://gitlab.ow2.org/asm/asm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.9.1/asm-commons-9.9.1.pom
-      sha256: def70fa7d3a4bb71660bc661523329579a4bc31ccc96c42d3a5c3b9f76a6b649
       path: ./asm-commons-9.9.1.pom
+      sha256: def70fa7d3a4bb71660bc661523329579a4bc31ccc96c42d3a5c3b9f76a6b649
+      url: https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.9.1/asm-commons-9.9.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

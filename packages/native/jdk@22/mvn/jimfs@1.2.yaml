@@ -3,8 +3,8 @@ version: "1.2"
 type: native
 download:
     - kind: git
-      url: https://github.com/google/jimfs.git
       sha256: 3bc54fae2feb218dcf5427d2626720fc09ef38d1
+      url: https://github.com/google/jimfs.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

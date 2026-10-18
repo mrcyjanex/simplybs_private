@@ -3,8 +3,8 @@ version: "2_12_6"
 type: host
 download:
     - kind: tar.gz
-      url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.6.tar.gz
       sha256: 064b9ebf060c9e77011733ac9dc0e2ce92870b574cca2405e11f5353a683c334
+      url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.6.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

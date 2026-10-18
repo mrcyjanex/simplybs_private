@@ -3,8 +3,8 @@ version: 3.5.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-clean-plugin.git
       sha256: d18c59617e3add4d964ba51085b49bec88da556e
+      url: https://github.com/apache/maven-clean-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

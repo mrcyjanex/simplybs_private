@@ -3,8 +3,8 @@ version: 1.2.0
 type: native
 download:
     - kind: git
-      url: https://github.com/jaxen-xpath/jaxen.git
       sha256: b9fb932ef64f0fe7b05f7ac33b4c5e8de6597b21
+      url: https://github.com/jaxen-xpath/jaxen.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,9 +3,9 @@ version: "4"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/apache/4/apache-4.pom
-      sha256: 9e9323a26ba8eb2394efef0c96d31b70df570808630dc147cab1e73541cc5194
       path: ./apache-4.pom
+      sha256: 9e9323a26ba8eb2394efef0c96d31b70df570808630dc147cab1e73541cc5194
+      url: https://repo1.maven.org/maven2/org/apache/apache/4/apache-4.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: 1.2.3
 type: native
 download:
     - kind: git
-      url: https://github.com/lemire/javaewah.git
       sha256: f52f4091c44f1c3a1aff68522d8deaf5126651bb
+      url: https://github.com/lemire/javaewah.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

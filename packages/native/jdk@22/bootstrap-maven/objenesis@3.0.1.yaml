@@ -3,8 +3,8 @@ version: 3.0.1
 type: native
 download:
     - kind: git
-      url: https://github.com/easymock/objenesis.git
       sha256: e2da695362c07e873d57a609ee87fd9cbce55865
+      url: https://github.com/easymock/objenesis.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

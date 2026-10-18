@@ -3,8 +3,8 @@ version: 3.11.13
 type: native
 download:
     - kind: tar.gz
-      url: http://www.python.org/ftp/python/3.11.13/Python-3.11.13.tgz
       sha256: 0f1a22f4dfd34595a29cf69ee7ea73b9eff8b1cc89d7ab29b3ab0ec04179dad8
+      url: http://www.python.org/ftp/python/3.11.13/Python-3.11.13.tgz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

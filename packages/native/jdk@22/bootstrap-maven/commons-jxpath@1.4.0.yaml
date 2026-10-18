@@ -3,8 +3,8 @@ version: 1.4.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-jxpath.git
       sha256: 146f2534e885fd7085fba4bf3fb658d434416504
+      url: https://github.com/apache/commons-jxpath.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

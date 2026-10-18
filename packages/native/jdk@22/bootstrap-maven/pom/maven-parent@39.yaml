@@ -3,9 +3,9 @@ version: "39"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/maven-parent/39/maven-parent-39.pom
-      sha256: cfe4820aa1d96ae51d1dc5b0e2a9dc582c42478c24c95ca8238f547e60bef721
       path: ./maven-parent-39.pom
+      sha256: cfe4820aa1d96ae51d1dc5b0e2a9dc582c42478c24c95ca8238f547e60bef721
+      url: https://repo1.maven.org/maven2/org/apache/maven/maven-parent/39/maven-parent-39.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

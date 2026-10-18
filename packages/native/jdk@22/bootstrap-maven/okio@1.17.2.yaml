@@ -3,8 +3,8 @@ version: 1.17.2
 type: native
 download:
     - kind: git
-      url: https://github.com/square/okio.git
       sha256: f95aabc6605d3ea8349385cf2de34e229d58d60e
+      url: https://github.com/square/okio.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

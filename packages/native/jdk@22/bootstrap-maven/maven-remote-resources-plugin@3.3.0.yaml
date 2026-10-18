@@ -3,8 +3,8 @@ version: 3.3.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-remote-resources-plugin.git
       sha256: 1ea5c305431a4b175339fb1339f841c2c7eb4162
+      url: https://github.com/apache/maven-remote-resources-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

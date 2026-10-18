@@ -3,8 +3,8 @@ version: 0.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/pypa/flit.git
       sha256: 92c9486a543c4db266e3908bffc984060b8466af
+      url: https://github.com/pypa/flit.git
 dependencies:
     - '*:*:native/python@3.14'
 build:

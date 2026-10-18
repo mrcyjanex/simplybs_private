@@ -3,12 +3,12 @@ version: 3.5.3
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-wagon.git
       sha256: 20b847446bb60f49af0428d592eadee774b5bff2
+      url: https://github.com/apache/maven-wagon.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-file/3.5.3/wagon-file-3.5.3.pom
-      sha256: b89e540a7e432329bb5d93f2dfc578f898960afed66ae6a2dfeaa3d48d32c09c
       path: ./wagon-file-3.5.3.pom
+      sha256: b89e540a7e432329bb5d93f2dfc578f898960afed66ae6a2dfeaa3d48d32c09c
+      url: https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-file/3.5.3/wagon-file-3.5.3.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

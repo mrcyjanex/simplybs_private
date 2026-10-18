@@ -3,16 +3,16 @@ version: 2.2.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-scm.git
       sha256: 65b342bf93292812d48a8c27048728ebe9881454
+      url: https://github.com/apache/maven-scm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-git/2.2.1/maven-scm-providers-git-2.2.1.pom
-      sha256: 211bb5ced73ffb41021421357d30ca064eb3fdd663124861bbed84a8715aa2ec
       path: ./maven-scm-providers-git-2.2.1.pom
+      sha256: 211bb5ced73ffb41021421357d30ca064eb3fdd663124861bbed84a8715aa2ec
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-git/2.2.1/maven-scm-providers-git-2.2.1.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-svn/2.2.1/maven-scm-providers-svn-2.2.1.pom
-      sha256: c107690438a1e7d24acb1e253295fcf99c83d0c44d6ac98d76ce703de5b60806
       path: ./maven-scm-providers-svn-2.2.1.pom
+      sha256: c107690438a1e7d24acb1e253295fcf99c83d0c44d6ac98d76ce703de5b60806
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-svn/2.2.1/maven-scm-providers-svn-2.2.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

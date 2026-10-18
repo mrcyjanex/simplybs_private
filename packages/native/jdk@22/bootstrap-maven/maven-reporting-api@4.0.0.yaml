@@ -3,12 +3,12 @@ version: 4.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-reporting-api.git
       sha256: ad877cd9072d6570c3addfd9a6e3b72ce913c56b
+      url: https://github.com/apache/maven-reporting-api.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.pom
-      sha256: 2032531f05994121c2fdb5df7235ed548f53d294d0b7ac45e797148d85a30ee2
       path: ./maven-reporting-api-4.0.0.pom
+      sha256: 2032531f05994121c2fdb5df7235ed548f53d294d0b7ac45e797148d85a30ee2
+      url: https://repo1.maven.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

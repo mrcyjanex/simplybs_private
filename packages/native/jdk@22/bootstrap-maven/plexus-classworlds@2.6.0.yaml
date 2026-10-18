@@ -3,12 +3,12 @@ version: 2.6.0
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-classworlds.git
       sha256: 71132de9527b7fa154160a5bf679ea79a7d161a3
+      url: https://github.com/codehaus-plexus/plexus-classworlds.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.pom
-      sha256: 469a6c59f92effa62c0797ce7d52d2c03cf8ee1034b923c360dd78a9f505a7ba
       path: ./plexus-classworlds-2.6.0.pom
+      sha256: 469a6c59f92effa62c0797ce7d52d2c03cf8ee1034b923c360dd78a9f505a7ba
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

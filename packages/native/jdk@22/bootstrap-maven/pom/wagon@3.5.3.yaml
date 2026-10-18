@@ -3,9 +3,9 @@ version: 3.5.3
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon/3.5.3/wagon-3.5.3.pom
-      sha256: 7c10b8bac59268fe7957f2ab2b50965d90069ebf850c756bb55ea807ce440f0b
       path: ./wagon-3.5.3.pom
+      sha256: 7c10b8bac59268fe7957f2ab2b50965d90069ebf850c756bb55ea807ce440f0b
+      url: https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon/3.5.3/wagon-3.5.3.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

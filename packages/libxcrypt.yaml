@@ -3,8 +3,8 @@ version: 4.4.38
 type: host
 download:
     - kind: git
-      url: https://github.com/besser82/libxcrypt
       sha256: 55ea777e8d567e5e86ffac917c28815ac54cc341
+      url: https://github.com/besser82/libxcrypt
 dependencies:
     - '*:*:native/_'
     - '*:*:native/autoconf'

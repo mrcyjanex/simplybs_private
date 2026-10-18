@@ -3,20 +3,20 @@ version: 3.4.0
 type: native
 download:
     - kind: git
-      url: https://github.com/diffplug/spotless.git
       sha256: 708a1b0e6383ad2dd34cf3def185bb085a786789
+      url: https://github.com/diffplug/spotless.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-lib/4.5.0/spotless-lib-4.5.0.pom
-      sha256: 4af4a588a775ac284fad50bf114924670004f6b80a092913f5048e6fd1a3d9f2
       path: ./spotless-lib-4.5.0.pom
+      sha256: 4af4a588a775ac284fad50bf114924670004f6b80a092913f5048e6fd1a3d9f2
+      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-lib/4.5.0/spotless-lib-4.5.0.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-lib-extra/4.5.0/spotless-lib-extra-4.5.0.pom
-      sha256: 50f24df8a386b59e3cad2db29618c7398804819010604342b17e63c6e6dd3c65
       path: ./spotless-lib-extra-4.5.0.pom
+      sha256: 50f24df8a386b59e3cad2db29618c7398804819010604342b17e63c6e6dd3c65
+      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-lib-extra/4.5.0/spotless-lib-extra-4.5.0.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-maven-plugin/3.4.0/spotless-maven-plugin-3.4.0.pom
-      sha256: c6ba4933fb70b917311b9ff6fa690ddb32b017a74acbf6c14717aa12faa47801
       path: ./spotless-maven-plugin-3.4.0.pom
+      sha256: c6ba4933fb70b917311b9ff6fa690ddb32b017a74acbf6c14717aa12faa47801
+      url: https://repo1.maven.org/maven2/com/diffplug/spotless/spotless-maven-plugin/3.4.0/spotless-maven-plugin-3.4.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

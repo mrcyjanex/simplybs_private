@@ -3,8 +3,8 @@ version: 4.5.13
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/httpcomponents-client.git
       sha256: dd76cf91c8f9125c7e0e29770622271f9417b46d
+      url: https://github.com/apache/httpcomponents-client.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

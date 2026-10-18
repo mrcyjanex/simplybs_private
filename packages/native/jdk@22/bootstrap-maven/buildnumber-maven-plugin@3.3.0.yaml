@@ -3,8 +3,8 @@ version: 3.3.0
 type: native
 download:
     - kind: git
-      url: https://github.com/mojohaus/buildnumber-maven-plugin.git
       sha256: d943f30d0c703c9398efe83b6fd5a4b71dc5bcb6
+      url: https://github.com/mojohaus/buildnumber-maven-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

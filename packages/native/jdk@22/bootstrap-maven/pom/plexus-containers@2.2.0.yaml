@@ -3,9 +3,9 @@ version: 2.2.0
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-containers/2.2.0/plexus-containers-2.2.0.pom
-      sha256: 743f42d967d02826ee79f0601108e2deeb11dd3e6add24fc5f2758b1b68634ec
       path: ./plexus-containers-2.2.0.pom
+      sha256: 743f42d967d02826ee79f0601108e2deeb11dd3e6add24fc5f2758b1b68634ec
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-containers/2.2.0/plexus-containers-2.2.0.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

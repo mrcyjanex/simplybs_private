@@ -3,12 +3,12 @@ version: "9.6"
 type: native
 download:
     - kind: git
-      url: https://gitlab.ow2.org/asm/asm.git
       sha256: 85cf1aeb0d08be8446f6efbda962817d2a9707dd
+      url: https://gitlab.ow2.org/asm/asm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.pom
-      sha256: 92eee24bc3c843e4881d46c1dd6505471ee3142facfb466b428cfea5a56c6b60
       path: ./asm-9.6.pom
+      sha256: 92eee24bc3c843e4881d46c1dd6505471ee3142facfb466b428cfea5a56c6b60
+      url: https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

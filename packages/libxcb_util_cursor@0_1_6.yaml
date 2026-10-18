@@ -3,8 +3,8 @@ version: "0_1_6"
 type: host
 download:
     - kind: tar.gz
-      url: https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.6.tar.gz
       sha256: eae38b2dfc5c529a886e507ef576b12d2a20aa1f149608e4853af760f31be60b
+      url: https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.6.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

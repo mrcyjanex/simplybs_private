@@ -3,8 +3,8 @@ version: 3.28.0-GA
 type: native
 download:
     - kind: git
-      url: https://github.com/jboss-javassist/javassist.git
       sha256: 3112090a508b8a42c08cd68308d1018596a70b1e
+      url: https://github.com/jboss-javassist/javassist.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: 4.9.3
 type: native
 download:
     - kind: git
-      url: https://github.com/antlr/antlr4.git
       sha256: e4c1a74c66bd5290364ea2b36c97cd724b247357
+      url: https://github.com/antlr/antlr4.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: 986-ld64-711
 type: native
 download:
     - kind: git
-      url: https://github.com/tpoechtrager/cctools-port.git
       sha256: 6e31355ca5babc708681bd906eaaef86c3ac93be
+      url: https://github.com/tpoechtrager/cctools-port.git
 dependencies:
     - '*:*-apple-*:native/bzip2'
     - '*:*-apple-*:native/libtapi'

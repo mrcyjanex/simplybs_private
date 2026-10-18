@@ -3,8 +3,8 @@ version: 1.3.1
 type: native
 download:
     - kind: git
-      url: https://github.com/nielsbasjes/codeowners.git
       sha256: 41f9daaf97f10945c110d1bcaaf2a44daff6ef69
+      url: https://github.com/nielsbasjes/codeowners.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

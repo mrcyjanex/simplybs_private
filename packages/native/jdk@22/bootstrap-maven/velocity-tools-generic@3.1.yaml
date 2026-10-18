@@ -3,8 +3,8 @@ version: "3.1"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/velocity-tools.git
       sha256: 8e7f20a477351362ab2d29d564e11e4f5b2b3cd5
+      url: https://github.com/apache/velocity-tools.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

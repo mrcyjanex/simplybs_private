@@ -3,9 +3,9 @@ version: 1.9.10
 type: native
 download:
     - kind: blob
-      url: https://github.com/JetBrains/kotlin/releases/download/v1.9.10/kotlin-compiler-1.9.10.zip
-      sha256: 7d74863deecf8e0f28ea54c3735feab003d0eac67e8d3a791254b16889c20342
       path: ./kotlin-compiler-1.9.10.zip
+      sha256: 7d74863deecf8e0f28ea54c3735feab003d0eac67e8d3a791254b16889c20342
+      url: https://github.com/JetBrains/kotlin/releases/download/v1.9.10/kotlin-compiler-1.9.10.zip
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/7zip'

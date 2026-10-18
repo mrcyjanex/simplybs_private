@@ -3,8 +3,8 @@ version: "1.8"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-apache-resources.git
       sha256: de8120d4d4bc8bfde35e37353bffa52df2d39f55
+      url: https://github.com/apache/maven-apache-resources.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

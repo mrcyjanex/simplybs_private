@@ -3,8 +3,8 @@ version: 1.5.2
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-languages.git
       sha256: 0cbde2aa41466fd464022a4057da10ab8d031b38
+      url: https://github.com/codehaus-plexus/plexus-languages.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

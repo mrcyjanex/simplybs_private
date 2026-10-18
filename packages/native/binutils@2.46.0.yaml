@@ -3,8 +3,8 @@ version: 2.46.0
 type: native
 download:
     - kind: tar.bz2
-      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2
       sha256: 0f3152632a2a9ce066f20963e9bb40af7cf85b9b6c409ed892fd0676e84ecd12
+      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.46.0.tar.bz2
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bison'

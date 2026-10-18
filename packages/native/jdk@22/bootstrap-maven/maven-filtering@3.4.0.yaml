@@ -3,8 +3,8 @@ version: 3.4.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-filtering.git
       sha256: efc19996657c33f689ca80cd3766b6295794b737
+      url: https://github.com/apache/maven-filtering.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

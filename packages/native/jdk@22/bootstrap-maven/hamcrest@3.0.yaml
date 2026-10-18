@@ -3,12 +3,12 @@ version: "3.0"
 type: native
 download:
     - kind: git
-      url: https://github.com/hamcrest/JavaHamcrest.git
       sha256: 68984b85e869df6a888fffcad87e4b676a8fc0ac
+      url: https://github.com/hamcrest/JavaHamcrest.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/hamcrest/hamcrest/3.0/hamcrest-3.0.pom
-      sha256: 4a04a68133bf32461f47b8a53c8ee9df4ce2f49a0dad9794bce8717bee5bac31
       path: ./hamcrest-3.0.pom
+      sha256: 4a04a68133bf32461f47b8a53c8ee9df4ce2f49a0dad9794bce8717bee5bac31
+      url: https://repo1.maven.org/maven2/org/hamcrest/hamcrest/3.0/hamcrest-3.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

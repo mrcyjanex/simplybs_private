@@ -3,12 +3,12 @@ version: "3.1"
 type: native
 download:
     - kind: git
-      url: https://github.com/google/j2objc.git
       sha256: 1671e9afb72a16126d448f468db3e582358fba47
+      url: https://github.com/google/j2objc.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/3.1/j2objc-annotations-3.1.pom
-      sha256: 14570838500034fc1b47c8205ce1c9d6b255c1ccdd2d1afdcdcbf75e89b24a33
       path: ./j2objc-annotations-3.1.pom
+      sha256: 14570838500034fc1b47c8205ce1c9d6b255c1ccdd2d1afdcdcbf75e89b24a33
+      url: https://repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/3.1/j2objc-annotations-3.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

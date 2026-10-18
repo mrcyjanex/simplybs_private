@@ -3,12 +3,12 @@ version: 2.21.0
 type: native
 download:
     - kind: git
-      url: https://github.com/FasterXML/jackson-core.git
       sha256: 80fb536c26e49505be73eb826c450de4f9dba6d0
+      url: https://github.com/FasterXML/jackson-core.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.21.0/jackson-core-2.21.0.pom
-      sha256: a0add9d219816d4da50a03d62ae21222329388822cb8aac8b5ab3d0af16aa7d6
       path: ./jackson-core-2.21.0.pom
+      sha256: a0add9d219816d4da50a03d62ae21222329388822cb8aac8b5ab3d0af16aa7d6
+      url: https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.21.0/jackson-core-2.21.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

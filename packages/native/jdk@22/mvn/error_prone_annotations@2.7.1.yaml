@@ -3,8 +3,8 @@ version: 2.7.1
 type: native
 download:
     - kind: git
-      url: https://github.com/google/error-prone.git
       sha256: 09262b80cbc736ab7e27635de5be811a39371ff3
+      url: https://github.com/google/error-prone.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

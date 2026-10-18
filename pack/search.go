@@ -35,7 +35,7 @@ func GetAllPackages() []*Package {
 			return err
 		}
 
-		if d.IsDir() || filepath.Ext(path) != ".json" {
+		if d.IsDir() || filepath.Ext(path) != ".yaml" {
 			return nil
 		}
 

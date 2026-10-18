@@ -3,8 +3,8 @@ version: 1.0.3
 type: native
 download:
     - kind: git
-      url: https://github.com/google/guava.git
       sha256: 6b1a22f80cd9496f20913c5efbc656c9c4c5f912
+      url: https://github.com/google/guava.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

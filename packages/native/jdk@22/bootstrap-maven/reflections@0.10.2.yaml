@@ -3,12 +3,12 @@ version: 0.10.2
 type: native
 download:
     - kind: git
-      url: https://github.com/ronmamo/reflections.git
       sha256: 5ff7a1d366e8656dfa0f2f476991b558b037e919
+      url: https://github.com/ronmamo/reflections.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/reflections/reflections/0.10.2/reflections-0.10.2.pom
-      sha256: b6caa3eb7d35bd756ed6eb0a2a81868b8d3c0f6f42244feae41760ac66306d87
       path: ./reflections-0.10.2.pom
+      sha256: b6caa3eb7d35bd756ed6eb0a2a81868b8d3c0f6f42244feae41760ac66306d87
+      url: https://repo1.maven.org/maven2/org/reflections/reflections/0.10.2/reflections-0.10.2.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

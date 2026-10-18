@@ -3,9 +3,9 @@ version: 3.9.16
 type: native
 download:
     - kind: blob
-      url: https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz
-      sha256: 80ffca22aed9e8b9713a232f3394fd81d7f20322df75efdb2b047dbd3e3a23bb
       path: ./apache-maven-3.9.16-bin.tar.gz
+      sha256: 80ffca22aed9e8b9713a232f3394fd81d7f20322df75efdb2b047dbd3e3a23bb
+      url: https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

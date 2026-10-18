@@ -3,11 +3,11 @@ version: 3.5.2
 type: native
 download:
     - kind: git
-      url: https://github.com/antlr/antlr3.git
       sha256: 88318343d48c13b5af377ef45c2363b66e587451
+      url: https://github.com/antlr/antlr3.git
     - kind: tar.xz
-      url: https://deb.debian.org/debian/pool/main/a/antlr3/antlr3_3.5.2-9.debian.tar.xz
       sha256: debe7311886bd6a5e54de6665dbd36d2b5cf9d4cf15c62f556bf3c75416888be
+      url: https://deb.debian.org/debian/pool/main/a/antlr3/antlr3_3.5.2-9.debian.tar.xz
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

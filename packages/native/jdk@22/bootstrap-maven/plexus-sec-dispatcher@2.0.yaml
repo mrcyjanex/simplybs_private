@@ -3,8 +3,8 @@ version: "2.0"
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-sec-dispatcher.git
       sha256: 0bab9aa096c411973ce3d48771a8fe735cafd917
+      url: https://github.com/codehaus-plexus/plexus-sec-dispatcher.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

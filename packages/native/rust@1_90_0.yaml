@@ -3,8 +3,8 @@ version: 1.90.0
 type: native
 download:
     - kind: tar.gz
-      url: http://static.rust-lang.org/dist/rustc-1.90.0-src.tar.gz
       sha256: 799a9f9cba4ed5351e071048bcf6b5560755d9009648def33a407dd4961f9b7e
+      url: http://static.rust-lang.org/dist/rustc-1.90.0-src.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

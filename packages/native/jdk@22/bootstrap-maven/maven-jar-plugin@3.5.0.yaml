@@ -3,8 +3,8 @@ version: 3.5.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-jar-plugin.git
       sha256: 68d00f1121da7ca6c04501363e020977bd1ad5ae
+      url: https://github.com/apache/maven-jar-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

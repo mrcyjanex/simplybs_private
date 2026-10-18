@@ -3,8 +3,8 @@ version: 1.1.5
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXdmcp-1.1.5.tar.gz
       sha256: 31a7abc4f129dcf6f27ae912c3eedcb94d25ad2e8f317f69df6eda0bc4e4f2f3
+      url: https://www.x.org/releases/individual/lib/libXdmcp-1.1.5.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

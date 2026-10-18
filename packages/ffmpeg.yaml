@@ -3,8 +3,8 @@ version: n9.0
 type: host
 download:
     - kind: git
-      url: https://github.com/FFmpeg/FFmpeg.git
       sha256: d32b387f2b0a484599d4587d651891f0c63c4238
+      url: https://github.com/FFmpeg/FFmpeg.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/_'

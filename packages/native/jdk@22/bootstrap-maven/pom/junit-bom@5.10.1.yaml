@@ -3,9 +3,9 @@ version: 5.10.1
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/junit/junit-bom/5.10.1/junit-bom-5.10.1.pom
-      sha256: 21c4b0286f4b20069577ff4b20978a85c100ac8a46b6f1c8672fbaab337bc3f2
       path: ./junit-bom-5.10.1.pom
+      sha256: 21c4b0286f4b20069577ff4b20978a85c100ac8a46b6f1c8672fbaab337bc3f2
+      url: https://repo1.maven.org/maven2/org/junit/junit-bom/5.10.1/junit-bom-5.10.1.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: "3.2"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-digester.git
       sha256: ec75748096c8639be7b4998d99c37bb2e3a9c206
+      url: https://github.com/apache/commons-digester.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

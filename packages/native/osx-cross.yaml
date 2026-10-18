@@ -3,16 +3,16 @@ version: master
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/osxcross.git
       sha256: ea17212e41970b9f602fb30898b5a4013a1fb7af
+      url: https://github.com/MrCyjaneK/osxcross.git
     - kind: blob
-      url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-20.1.8.zip
-      sha256: b115ce6285dd9f3f401459912c12d28eb2e2d81e2387a71f6300aa11f7bc3288
       path: tarballs/llvmorg-20.1.8.zip
+      sha256: b115ce6285dd9f3f401459912c12d28eb2e2d81e2387a71f6300aa11f7bc3288
+      url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-20.1.8.zip
     - kind: blob
-      url: https://github.com/apple/llvm-project/archive/refs/heads/stable/20250402.zip
-      sha256: b8e87f026e19259e6eac347746661e11592e0ff8bcdb657e177800223d7438ce
       path: tarballs/20250402.zip
+      sha256: b8e87f026e19259e6eac347746661e11592e0ff8bcdb657e177800223d7438ce
+      url: https://github.com/apple/llvm-project/archive/refs/heads/stable/20250402.zip
 dependencies:
     - '*:*-apple-*:native/7zip'
     - '*:*-apple-*:native/_/_'

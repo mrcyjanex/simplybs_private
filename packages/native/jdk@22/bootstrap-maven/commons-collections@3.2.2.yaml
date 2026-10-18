@@ -3,8 +3,8 @@ version: 3.2.2
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-collections.git
       sha256: 8e217b44a763565f395268be20e7cff1dedf747b
+      url: https://github.com/apache/commons-collections.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

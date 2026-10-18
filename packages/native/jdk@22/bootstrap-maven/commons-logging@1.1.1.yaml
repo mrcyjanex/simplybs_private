@@ -3,12 +3,12 @@ version: 1.1.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-logging.git
       sha256: a4f4ec12f83e9d78e2a5dd24186ed004db463048
+      url: https://github.com/apache/commons-logging.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom
-      sha256: d0f2e16d054e8bb97add9ca26525eb2346f692809fcd2a28787da8ceb3c35ee8
       path: ./commons-logging-1.1.1.pom
+      sha256: d0f2e16d054e8bb97add9ca26525eb2346f692809fcd2a28787da8ceb3c35ee8
+      url: https://repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

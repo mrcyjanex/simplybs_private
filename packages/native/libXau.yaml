@@ -3,8 +3,8 @@ version: 1.0.12
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXau-1.0.12.tar.gz
       sha256: 2402dd938da4d0a332349ab3d3586606175e19cb32cb9fe013c19f1dc922dcee
+      url: https://www.x.org/releases/individual/lib/libXau-1.0.12.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

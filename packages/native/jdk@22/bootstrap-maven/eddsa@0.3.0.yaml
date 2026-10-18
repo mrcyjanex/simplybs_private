@@ -3,8 +3,8 @@ version: 0.3.0
 type: native
 download:
     - kind: git
-      url: https://github.com/str4d/ed25519-java.git
       sha256: 7c26a6312c2d2e887210930698706103e0f2da7d
+      url: https://github.com/str4d/ed25519-java.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

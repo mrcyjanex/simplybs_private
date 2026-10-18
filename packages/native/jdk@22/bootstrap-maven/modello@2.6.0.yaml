@@ -3,8 +3,8 @@ version: 2.6.0
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/modello.git
       sha256: e69d432be8e07b23270f1e707c5532dada29d155
+      url: https://github.com/codehaus-plexus/modello.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

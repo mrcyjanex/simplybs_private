@@ -3,8 +3,8 @@ version: 3.4.2
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-shared-utils.git
       sha256: 2dc9eb5ea2b4ed2573bd96282a16e0340083c87a
+      url: https://github.com/apache/maven-shared-utils.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

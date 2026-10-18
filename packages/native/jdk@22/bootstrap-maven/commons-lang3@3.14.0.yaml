@@ -3,8 +3,8 @@ version: 3.14.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-lang.git
       sha256: c8774fa74adbbbcd4e5f915ab6bc3aa10d877419
+      url: https://github.com/apache/commons-lang.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

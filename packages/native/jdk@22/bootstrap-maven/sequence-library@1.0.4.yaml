@@ -3,12 +3,12 @@ version: 1.0.4
 type: native
 download:
     - kind: git
-      url: https://salsa.debian.org/java-team/libsequence-library-java.git
       sha256: 63794eccc15f3f50cf8e164faefef8b840ef8791
+      url: https://salsa.debian.org/java-team/libsequence-library-java.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/de/regnis/q/sequence/sequence-library/1.0.4/sequence-library-1.0.4.pom
-      sha256: 4adee65d24ef4b03ed9ebbff7fbefe4e90a6919d6e2066d0875facd360111338
       path: ./sequence-library-1.0.4.pom
+      sha256: 4adee65d24ef4b03ed9ebbff7fbefe4e90a6919d6e2066d0875facd360111338
+      url: https://repo1.maven.org/maven2/de/regnis/q/sequence/sequence-library/1.0.4/sequence-library-1.0.4.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

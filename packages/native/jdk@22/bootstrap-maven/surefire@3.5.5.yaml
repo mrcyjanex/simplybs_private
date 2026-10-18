@@ -3,12 +3,12 @@ version: 3.5.5
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-surefire.git
       sha256: 968cb38271efdee0cbe3abcd4c130fd67eb1f047
+      url: https://github.com/apache/maven-surefire.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire-shared-utils/3.5.5/surefire-shared-utils-3.5.5.pom
-      sha256: 61df0ff0b033305b956d3e4d614b368d53775e72fb89cc4fbb5f6764f5e893fd
       path: ./surefire-shared-utils-3.5.5.pom
+      sha256: 61df0ff0b033305b956d3e4d614b368d53775e72fb89cc4fbb5f6764f5e893fd
+      url: https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire-shared-utils/3.5.5/surefire-shared-utils-3.5.5.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

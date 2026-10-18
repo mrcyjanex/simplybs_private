@@ -3,12 +3,12 @@ version: 1.10.11
 type: native
 download:
     - kind: git
-      url: https://git.tmatesoft.com/repos/svnkit.git
       sha256: 914ea80c67839693464115a78fe5dbaecd3cec98
+      url: https://git.tmatesoft.com/repos/svnkit.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/tmatesoft/svnkit/svnkit/1.10.11/svnkit-1.10.11.pom
-      sha256: 56c9f6d2e4a719c6004398a7c7c9a24167c1f6d387154d494f2aab5cb577a9ea
       path: ./svnkit-1.10.11.pom
+      sha256: 56c9f6d2e4a719c6004398a7c7c9a24167c1f6d387154d494f2aab5cb577a9ea
+      url: https://repo1.maven.org/maven2/org/tmatesoft/svnkit/svnkit/1.10.11/svnkit-1.10.11.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

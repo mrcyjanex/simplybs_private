@@ -3,8 +3,8 @@ version: 0.0.0
 type: native
 download:
     - kind: git
-      url: https://gn.googlesource.com/gn.git
       sha256: 07d3c6f4dc290fae5ca6152ebcb37d6815c411ab
+      url: https://gn.googlesource.com/gn.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/git'

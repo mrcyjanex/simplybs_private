@@ -3,8 +3,8 @@ version: 2.13.2
 type: native
 download:
     - kind: git
-      url: https://github.com/google/gson.git
       sha256: 686fad782d969d8f15c7581a5435a208b810caa7
+      url: https://github.com/google/gson.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

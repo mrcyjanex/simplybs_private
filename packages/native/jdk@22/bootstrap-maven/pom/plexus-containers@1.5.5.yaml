@@ -3,9 +3,9 @@ version: 1.5.5
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom
-      sha256: 1bc264824ec876b0ca6f4f5838175c541c638cbc43326a268b9aee7d4778b5ef
       path: ./plexus-containers-1.5.5.pom
+      sha256: 1bc264824ec876b0ca6f4f5838175c541c638cbc43326a268b9aee7d4778b5ef
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

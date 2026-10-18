@@ -3,8 +3,8 @@ version: "74.1"
 type: native
 download:
     - kind: git
-      url: https://github.com/unicode-org/icu.git
       sha256: 9edac7b78327a1cb58db29e2714b15f9fa14e4d7
+      url: https://github.com/unicode-org/icu.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

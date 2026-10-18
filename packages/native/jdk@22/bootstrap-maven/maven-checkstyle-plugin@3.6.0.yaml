@@ -3,12 +3,12 @@ version: 3.6.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-checkstyle-plugin.git
       sha256: dd1abd9ee7cb1046ece3ae013fa6e68a345c7a32
+      url: https://github.com/apache/maven-checkstyle-plugin.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-checkstyle-plugin/3.6.0/maven-checkstyle-plugin-3.6.0.pom
-      sha256: cffaa2aca918f96afd7fe2cc99f1715fa66af0a87a8dee459e77dbc79f74a55e
       path: ./maven-checkstyle-plugin-3.6.0.pom
+      sha256: cffaa2aca918f96afd7fe2cc99f1715fa66af0a87a8dee459e77dbc79f74a55e
+      url: https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-checkstyle-plugin/3.6.0/maven-checkstyle-plugin-3.6.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

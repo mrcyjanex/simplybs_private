@@ -3,8 +3,8 @@ version: "1"
 type: native
 download:
     - kind: git
-      url: https://github.com/javax-inject/javax-inject.git
       sha256: 1e4a33307a1a2c5f38dd87e9458591a02b6f2f41
+      url: https://github.com/javax-inject/javax-inject.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

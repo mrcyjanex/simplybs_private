@@ -3,8 +3,8 @@ version: 2.6.1
 type: native
 download:
     - kind: git
-      url: https://github.com/npgall/concurrent-trees.git
       sha256: a0c776706eec90e425960a056b20f260bca238b2
+      url: https://github.com/npgall/concurrent-trees.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

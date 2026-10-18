@@ -3,8 +3,8 @@ version: 3.8.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-assembly-plugin.git
       sha256: 434b3aa2b516cb03fdccdd63548a53013c7368f0
+      url: https://github.com/apache/maven-assembly-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

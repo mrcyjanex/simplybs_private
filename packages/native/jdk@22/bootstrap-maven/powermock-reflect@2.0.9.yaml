@@ -3,12 +3,12 @@ version: 2.0.9
 type: native
 download:
     - kind: git
-      url: https://github.com/powermock/powermock.git
       sha256: 42c72daf9d8b04129178d1d3f1fb4e485d3c13dc
+      url: https://github.com/powermock/powermock.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/powermock/powermock-reflect/2.0.9/powermock-reflect-2.0.9.pom
-      sha256: 316ff63f5b09e3e240a4d4e1cafeb7fcfb27208ccabaaf17fee8a455e8654a24
       path: ./powermock-reflect-2.0.9.pom
+      sha256: 316ff63f5b09e3e240a4d4e1cafeb7fcfb27208ccabaaf17fee8a455e8654a24
+      url: https://repo1.maven.org/maven2/org/powermock/powermock-reflect/2.0.9/powermock-reflect-2.0.9.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

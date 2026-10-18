@@ -3,8 +3,8 @@ version: 1.12.0
 type: native
 download:
     - kind: git
-      url: https://github.com/mojohaus/extra-enforcer-rules.git
       sha256: 4684a445dad0ef1c700528b667e95c6391838b6f
+      url: https://github.com/mojohaus/extra-enforcer-rules.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

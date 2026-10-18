@@ -3,9 +3,9 @@ version: "30"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/apache/30/apache-30.pom
-      sha256: 63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8
       path: ./apache-30.pom
+      sha256: 63dd4a393a9c0dfcb314efe83871a41d243bc8d200cbc7f2d197f30da78239d8
+      url: https://repo1.maven.org/maven2/org/apache/apache/30/apache-30.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

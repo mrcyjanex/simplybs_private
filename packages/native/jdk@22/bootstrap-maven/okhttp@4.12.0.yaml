@@ -3,12 +3,12 @@ version: 4.12.0
 type: native
 download:
     - kind: git
-      url: https://github.com/square/okhttp.git
       sha256: ad97bd3df34376eec85aa187dc8f45cfde8a2c01
+      url: https://github.com/square/okhttp.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.pom
-      sha256: 7c737040a9419522e7c50cc027416a70fe7c7629e52b219935ade6b4119c7d38
       path: ./okhttp-4.12.0.pom
+      sha256: 7c737040a9419522e7c50cc027416a70fe7c7629e52b219935ade6b4119c7d38
+      url: https://repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,12 +3,12 @@ version: 1.5.6-3
 type: native
 download:
     - kind: git
-      url: https://github.com/luben/zstd-jni.git
       sha256: c77a7658aeba94ccd3da52e61ce87d06e7292826
+      url: https://github.com/luben/zstd-jni.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/github/luben/zstd-jni/1.5.6-3/zstd-jni-1.5.6-3.pom
-      sha256: dfd2fa7b1d23939216902f844fa5e86a79cdfb9209760e4c04242b5a58d49490
       path: ./zstd-jni-1.5.6-3.pom
+      sha256: dfd2fa7b1d23939216902f844fa5e86a79cdfb9209760e4c04242b5a58d49490
+      url: https://repo1.maven.org/maven2/com/github/luben/zstd-jni/1.5.6-3/zstd-jni-1.5.6-3.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

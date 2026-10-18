@@ -3,9 +3,9 @@ version: "34"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/apache/34/apache-34.pom
-      sha256: 3671ae9d4d062ae3bb985731c76088bb2f6f7d7254e2d304ee9f690b97651328
       path: ./apache-34.pom
+      sha256: 3671ae9d4d062ae3bb985731c76088bb2f6f7d7254e2d304ee9f690b97651328
+      url: https://repo1.maven.org/maven2/org/apache/apache/34/apache-34.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: 3.23.0
 type: native
 download:
     - kind: git
-      url: https://github.com/jline/jline3.git
       sha256: cc57d0bab938742459e414400e4241ef261edcbe
+      url: https://github.com/jline/jline3.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

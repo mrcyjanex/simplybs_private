@@ -3,12 +3,12 @@ version: 2.2.0
 type: native
 download:
     - kind: git
-      url: https://github.com/paul-hammant/qdox.git
       sha256: 9f42358adffa576313e8d95a0f763a2ac1a4abe1
+      url: https://github.com/paul-hammant/qdox.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/thoughtworks/qdox/qdox/2.2.0/qdox-2.2.0.pom
-      sha256: c850fbad0b05eada85ca1bce22409a75f758aea0ca1e47a828c6a505ad361fab
       path: ./qdox-2.2.0.pom
+      sha256: c850fbad0b05eada85ca1bce22409a75f758aea0ca1e47a828c6a505ad361fab
+      url: https://repo1.maven.org/maven2/com/thoughtworks/qdox/qdox/2.2.0/qdox-2.2.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

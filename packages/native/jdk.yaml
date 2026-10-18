@@ -3,8 +3,8 @@ version: 22.0.2
 type: native
 download:
     - kind: git
-      url: https://git.openjdk.org/jdk22u
       sha256: 8153097cea2076988d8ad355d35ff08b04a89875
+      url: https://git.openjdk.org/jdk22u
 dependencies:
     - '*:*:native/_/_'
     - darwin_*:*:native/mig

@@ -3,9 +3,9 @@ version: "4"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/velocity/velocity-master/4/velocity-master-4.pom
-      sha256: 7a2ac73c90dd104b5a07e6e2cd03e95ec28d29f3b8304f3dd7fffcecb049712e
       path: ./velocity-master-4.pom
+      sha256: 7a2ac73c90dd104b5a07e6e2cd03e95ec28d29f3b8304f3dd7fffcecb049712e
+      url: https://repo1.maven.org/maven2/org/apache/velocity/velocity-master/4/velocity-master-4.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

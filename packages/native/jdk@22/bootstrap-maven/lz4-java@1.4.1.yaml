@@ -3,12 +3,12 @@ version: 1.4.1
 type: native
 download:
     - kind: git
-      url: https://github.com/lz4/lz4-java.git
       sha256: 02e53cb470bed939b69ddcc8dfe291d5e6428e38
+      url: https://github.com/lz4/lz4-java.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/lz4/lz4-java/1.4.1/lz4-java-1.4.1.pom
-      sha256: 562836344a32d056e6aaddf498b49112141fa408f4090ef56c80673fee59814b
       path: ./lz4-java-1.4.1.pom
+      sha256: 562836344a32d056e6aaddf498b49112141fa408f4090ef56c80673fee59814b
+      url: https://repo1.maven.org/maven2/org/lz4/lz4-java/1.4.1/lz4-java-1.4.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

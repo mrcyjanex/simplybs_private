@@ -3,8 +3,8 @@ version: "3.7"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/geronimo-xbean.git
       sha256: 32468977fd32ebe12880b5fc8f73a8097ed88778
+      url: https://github.com/apache/geronimo-xbean.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

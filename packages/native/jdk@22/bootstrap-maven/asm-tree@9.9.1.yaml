@@ -3,12 +3,12 @@ version: 9.9.1
 type: native
 download:
     - kind: git
-      url: https://gitlab.ow2.org/asm/asm.git
       sha256: 4e6de6cb3dcddb00a2bbf7bbb9ee40f0c15281c5
+      url: https://gitlab.ow2.org/asm/asm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.9.1/asm-tree-9.9.1.pom
-      sha256: 67fee446ba512871300738f0f956f61a500a852f6861ff70f0a3c7bf0c0fa405
       path: ./asm-tree-9.9.1.pom
+      sha256: 67fee446ba512871300738f0f956f61a500a852f6861ff70f0a3c7bf0c0fa405
+      url: https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.9.1/asm-tree-9.9.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

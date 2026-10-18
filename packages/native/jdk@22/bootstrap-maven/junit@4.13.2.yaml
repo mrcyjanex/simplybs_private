@@ -3,8 +3,8 @@ version: 4.13.2
 type: native
 download:
     - kind: git
-      url: https://github.com/junit-team/junit4.git
       sha256: 05fe2a64f59127c02135be22f416e91260d6ede6
+      url: https://github.com/junit-team/junit4.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

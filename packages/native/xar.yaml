@@ -3,8 +3,8 @@ version: 1.6.1-patch
 type: native
 download:
     - kind: git
-      url: https://github.com/tpoechtrager/xar.git
       sha256: 5fa4675419cfec60ac19a9c7f7c2d0e7c831a497
+      url: https://github.com/tpoechtrager/xar.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

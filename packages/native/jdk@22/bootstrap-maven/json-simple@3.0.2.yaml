@@ -3,8 +3,8 @@ version: 3.0.2
 type: native
 download:
     - kind: git
-      url: https://github.com/cliftonlabs/json-simple.git
       sha256: 48cb56e4b5ec1f14860d469cf67f89b0c288c399
+      url: https://github.com/cliftonlabs/json-simple.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

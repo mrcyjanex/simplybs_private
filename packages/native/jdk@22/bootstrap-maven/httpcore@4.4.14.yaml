@@ -3,8 +3,8 @@ version: 4.4.14
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/httpcomponents-core.git
       sha256: 1f51a73277bda05839ed8b1ccd6fa97db954be35
+      url: https://github.com/apache/httpcomponents-core.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

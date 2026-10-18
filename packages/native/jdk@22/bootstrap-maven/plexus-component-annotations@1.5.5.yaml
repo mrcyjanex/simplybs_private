@@ -3,12 +3,12 @@ version: 1.5.5
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-containers.git
       sha256: b2212a6adcab0e601475788fbe102da06a3aea9a
+      url: https://github.com/codehaus-plexus/plexus-containers.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom
-      sha256: 815f3ec316b8c5fa701385fdf4009bfb51e07d780e8f6a6e2afe720c52d7e292
       path: ./plexus-component-annotations-1.5.5.pom
+      sha256: 815f3ec316b8c5fa701385fdf4009bfb51e07d780e8f6a6e2afe720c52d7e292
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

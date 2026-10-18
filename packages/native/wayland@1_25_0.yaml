@@ -3,8 +3,8 @@ version: "1_25_0"
 type: native
 download:
     - kind: tar.gz
-      url: https://gitlab.freedesktop.org/wayland/wayland/-/archive/1.25.0/wayland-1.25.0.tar.gz
       sha256: 95413723f6cd0462770eda207a1c78d142d0a1bba9b0572a4ed1da6a9b27059c
+      url: https://gitlab.freedesktop.org/wayland/wayland/-/archive/1.25.0/wayland-1.25.0.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/expat

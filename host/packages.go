@@ -14,7 +14,7 @@ import (
 // RepoCloneURL is the simplybs checkout installed by `packages sync`.
 const RepoCloneURL = "https://github.com/mrcyjanex/simplybs_private"
 
-const packagesMarker = "_.json"
+const packagesMarker = "_.yaml"
 
 func resolvePackagesDir() string {
 	if dir := checkoutPackagesDir(); dir != "" {
@@ -51,7 +51,7 @@ func runningUnderGoRun() bool {
 }
 
 // findPackagesDir walks up from start and returns the packages directory
-// whose native/_.json marker is present.
+// whose native/_.yaml marker is present.
 func findPackagesDir(start string) string {
 	dir := start
 	for {

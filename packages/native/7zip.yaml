@@ -3,8 +3,8 @@ version: "26.01"
 type: native
 download:
     - kind: git
-      url: https://github.com/ip7z/7zip.git
       sha256: 8c63d71ff886bda90c86db28466287f977374237
+      url: https://github.com/ip7z/7zip.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/diffutils'

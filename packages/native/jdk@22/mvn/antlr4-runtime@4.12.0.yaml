@@ -3,8 +3,8 @@ version: 4.12.0
 type: native
 download:
     - kind: git
-      url: https://github.com/antlr/antlr4.git
       sha256: a2c349f9bf268cf75aaf8cddff90a767e703d489
+      url: https://github.com/antlr/antlr4.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

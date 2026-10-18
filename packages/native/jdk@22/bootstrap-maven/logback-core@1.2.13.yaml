@@ -3,12 +3,12 @@ version: 1.2.13
 type: native
 download:
     - kind: git
-      url: https://github.com/qos-ch/logback.git
       sha256: 2648b9e7fbb47426c89b9c93b411c07484e8f277
+      url: https://github.com/qos-ch/logback.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.2.13/logback-core-1.2.13.pom
-      sha256: 6a1402ecf487bb827315da679e1306e357b2aed2448578a8de058d5af39de9be
       path: ./logback-core-1.2.13.pom
+      sha256: 6a1402ecf487bb827315da679e1306e357b2aed2448578a8de058d5af39de9be
+      url: https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.2.13/logback-core-1.2.13.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,12 +3,12 @@ version: "4.4"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-collections.git
       sha256: cab58b3a8093a2f6b84f12783a3fb358747310f7
+      url: https://github.com/apache/commons-collections.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.pom
-      sha256: 271bd673839af46e73aff957e2918d4bf96f5ac4f6c6cf4d5be93fd1f1271c4d
       path: ./commons-collections4-4.4.pom
+      sha256: 271bd673839af46e73aff957e2918d4bf96f5ac4f6c6cf4d5be93fd1f1271c4d
+      url: https://repo1.maven.org/maven2/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

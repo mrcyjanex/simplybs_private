@@ -3,12 +3,12 @@ version: 3.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/spotbugs/spotbugs.git
       sha256: 6cf7b2c64073b5aab180ec64890ab5b55808956c
+      url: https://github.com/spotbugs/spotbugs.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0.pom
-      sha256: 8936e2f2763cbeda8ddd4834ba6415c5df4ffd7986054ae52d91e865173d117d
       path: ./annotations-3.0.0.pom
+      sha256: 8936e2f2763cbeda8ddd4834ba6415c5df4ffd7986054ae52d91e865173d117d
+      url: https://repo1.maven.org/maven2/com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

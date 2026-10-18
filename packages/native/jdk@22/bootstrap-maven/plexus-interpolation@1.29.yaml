@@ -3,8 +3,8 @@ version: "1.29"
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-interpolation.git
       sha256: 08bde474a835fe95795d3099c11c1b9de2d80779
+      url: https://github.com/codehaus-plexus/plexus-interpolation.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

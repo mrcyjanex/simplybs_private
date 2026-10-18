@@ -3,8 +3,8 @@ version: 4.3.1
 type: native
 download:
     - kind: git
-      url: https://github.com/antlr/stringtemplate4.git
       sha256: d6eb444bb4a4c386d9be8c844892659b0eae679c
+      url: https://github.com/antlr/stringtemplate4.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

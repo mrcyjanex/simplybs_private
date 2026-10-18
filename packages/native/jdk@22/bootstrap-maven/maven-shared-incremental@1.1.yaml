@@ -3,8 +3,8 @@ version: "1.1"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-shared-incremental.git
       sha256: a7ae98be73756c0a0b36f357741eb1e39daffd3b
+      url: https://github.com/apache/maven-shared-incremental.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: "2025_1"
 type: host
 download:
     - kind: tar.gz
-      url: https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2025.1.tar.gz
       sha256: d6f89f65bafb8c9b735e0515882b8a1511e8e864dde5e9513e191629369f2256
+      url: https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2025.1.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

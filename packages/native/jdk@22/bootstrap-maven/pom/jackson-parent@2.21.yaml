@@ -3,9 +3,9 @@ version: "2.21"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-parent/2.21/jackson-parent-2.21.pom
-      sha256: 3851df627faeb46887b956104630b74a8bbb5f7de22e974cf15982e20e0373de
       path: ./jackson-parent-2.21.pom
+      sha256: 3851df627faeb46887b956104630b74a8bbb5f7de22e974cf15982e20e0373de
+      url: https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-parent/2.21/jackson-parent-2.21.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

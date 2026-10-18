@@ -3,8 +3,8 @@ version: 8f829878
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/ndk-assemble.git
       sha256: 8f829878fec2d221398563e9f550c8c1b030b197
+      url: https://github.com/MrCyjaneK/ndk-assemble.git
 dependencies:
     - '*:*-android*:native/_/_'
     - '*:*-android*:native/bash'

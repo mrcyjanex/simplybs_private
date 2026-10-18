@@ -3,8 +3,8 @@ version: 2.0b6
 type: native
 download:
     - kind: git
-      url: https://github.com/beanshell/beanshell.git
       sha256: 7bf2199161b4cfe717d38d412ec6cf3f21751200
+      url: https://github.com/beanshell/beanshell.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

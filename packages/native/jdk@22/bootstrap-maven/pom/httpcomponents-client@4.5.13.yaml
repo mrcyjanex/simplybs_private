@@ -3,9 +3,9 @@ version: 4.5.13
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.5.13/httpcomponents-client-4.5.13.pom
-      sha256: 9cba594c08db7271d0c20e9845d622bb39e69583910b45e7d5df82f6058d4dd9
       path: ./httpcomponents-client-4.5.13.pom
+      sha256: 9cba594c08db7271d0c20e9845d622bb39e69583910b45e7d5df82f6058d4dd9
+      url: https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.5.13/httpcomponents-client-4.5.13.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

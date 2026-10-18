@@ -3,12 +3,12 @@ version: "1.8"
 type: native
 download:
     - kind: git
-      url: https://github.com/google/re2j.git
       sha256: 57278921a609461c14d9cdb057d7aa9511c8f7ac
+      url: https://github.com/google/re2j.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/re2j/re2j/1.8/re2j-1.8.pom
-      sha256: df62699335cd46fc465f4c03b8c581d3d507792212d27b65adb923b4c27de4e7
       path: ./re2j-1.8.pom
+      sha256: df62699335cd46fc465f4c03b8c581d3d507792212d27b65adb923b4c27de4e7
+      url: https://repo1.maven.org/maven2/com/google/re2j/re2j/1.8/re2j-1.8.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

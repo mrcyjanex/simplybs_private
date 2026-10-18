@@ -3,8 +3,8 @@ version: "1.27"
 type: native
 download:
     - kind: git
-      url: https://github.com/mojohaus/animal-sniffer.git
       sha256: 5adf3aad06658c44de48ba2fddf9819685230e5f
+      url: https://github.com/mojohaus/animal-sniffer.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: "1_0_12"
 type: host
 download:
     - kind: tar.gz
-      url: https://xorg.freedesktop.org/releases/individual/lib/libXau-1.0.12.tar.gz
       sha256: 2402dd938da4d0a332349ab3d3586606175e19cb32cb9fe013c19f1dc922dcee
+      url: https://xorg.freedesktop.org/releases/individual/lib/libXau-1.0.12.tar.gz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

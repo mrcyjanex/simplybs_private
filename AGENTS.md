@@ -63,7 +63,7 @@ go run ./cmd/gengitdeps        # prints download JSON to stdout
 go test ./...
 ```
 
-Note: `host.TestHosts` is data-driven from `packages/native/_.json` and may
+Note: `host.TestHosts` is data-driven from `packages/native/_.yaml` and may
 already fail on a clean checkout — unrelated to environment setup.
 
 ## Tooling

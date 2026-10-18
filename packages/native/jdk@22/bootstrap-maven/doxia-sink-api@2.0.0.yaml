@@ -3,12 +3,12 @@ version: 2.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia.git
       sha256: 9d04eaf9f327205929024b558ada4ce61f74c3c5
+      url: https://github.com/apache/maven-doxia.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sink-api/2.0.0/doxia-sink-api-2.0.0.pom
-      sha256: 4b05895d1cd65013d4b8e7eeb09cde6b567b4c31729fe5c77c0f0898b5e04b88
       path: ./doxia-sink-api-2.0.0.pom
+      sha256: 4b05895d1cd65013d4b8e7eeb09cde6b567b4c31729fe5c77c0f0898b5e04b88
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sink-api/2.0.0/doxia-sink-api-2.0.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

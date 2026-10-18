@@ -3,12 +3,12 @@ version: 3.3.1
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-utils.git
       sha256: 2229b3556a5f0467ef7b936cc1b031468b9e08b3
+      url: https://github.com/codehaus-plexus/plexus-utils.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.3.1/plexus-utils-3.3.1.pom
-      sha256: 5e583878df905b5f33a230ef690a52b8f19dab9cc892bedee069f3d8af4e960a
       path: ./plexus-utils-3.3.1.pom
+      sha256: 5e583878df905b5f33a230ef690a52b8f19dab9cc892bedee069f3d8af4e960a
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.3.1/plexus-utils-3.3.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: "1.21"
 type: native
 download:
     - kind: git
-      url: https://github.com/openjdk/jmh.git
       sha256: 5772a465e06b341feeec4ceb986c54e26fb8bdfb
+      url: https://github.com/openjdk/jmh.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

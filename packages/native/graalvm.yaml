@@ -3,20 +3,20 @@ version: 22.0.2
 type: native
 download:
     - kind: git
-      url: https://github.com/oracle/graal.git
       sha256: 1f72d5384cbf5a744b8284f874ad77947d2710bc
+      url: https://github.com/oracle/graal.git
     - kind: git
-      url: https://github.com/graalvm/mx.git
-      sha256: 5eb6d6f73d16a37f52c9d69815af479523513bdd
       path: mx
+      sha256: 5eb6d6f73d16a37f52c9d69815af479523513bdd
+      url: https://github.com/graalvm/mx.git
     - kind: blob
-      url: https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz
-      sha256: d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676
       path: libffi-3.4.4.tar.gz
+      sha256: d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676
+      url: https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz
     - kind: blob
-      url: https://files.pythonhosted.org/packages/source/n/ninja_syntax/ninja_syntax-1.7.2.tar.gz
-      sha256: 342dc97b9e88a6495bae22953ee6063f91d2f03db6f727b62ba5c3092a18ef1f
       path: ninja_syntax-1.7.2.tar.gz
+      sha256: 342dc97b9e88a6495bae22953ee6063f91d2f03db6f727b62ba5c3092a18ef1f
+      url: https://files.pythonhosted.org/packages/source/n/ninja_syntax/ninja_syntax-1.7.2.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

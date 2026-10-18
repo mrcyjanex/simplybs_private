@@ -3,8 +3,8 @@ version: 1.28.0-dirty
 type: native
 download:
     - kind: git
-      url: https://github.com/crosstool-ng/crosstool-ng
       sha256: 620b909cd0713f68084378b63cf61b5232757b90
+      url: https://github.com/crosstool-ng/crosstool-ng
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/autoconf'

@@ -3,9 +3,9 @@ version: "33"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/apache/33/apache-33.pom
-      sha256: d78bd8524c5f8380a190a6525686629a95dfe512df21111383a6d8c0923a4415
       path: ./apache-33.pom
+      sha256: d78bd8524c5f8380a190a6525686629a95dfe512df21111383a6d8c0923a4415
+      url: https://repo1.maven.org/maven2/org/apache/apache/33/apache-33.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

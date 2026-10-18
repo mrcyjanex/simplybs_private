@@ -3,8 +3,8 @@ version: r563880
 type: native
 download:
     - kind: git
-      url: https://android.googlesource.com/toolchain/llvm-project
       sha256: 5e96669f06077099aa41290cdb4c5e6fa0f59349
+      url: https://android.googlesource.com/toolchain/llvm-project
 dependencies:
     - '*:*-android*:native/_/_'
     - '*:*-android*:native/cmake'

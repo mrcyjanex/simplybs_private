@@ -3,12 +3,12 @@ version: 1.7.36
 type: native
 download:
     - kind: git
-      url: https://github.com/qos-ch/slf4j.git
       sha256: e9ee55cca93c2bf26f14482a9bdf961c750d2a56
+      url: https://github.com/qos-ch/slf4j.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.pom
-      sha256: bd96243d7d4218cd7cc7d45c0e30fa13480a1a4f91d356edd7dfe93f1ffb68e6
       path: ./jcl-over-slf4j-1.7.36.pom
+      sha256: bd96243d7d4218cd7cc7d45c0e30fa13480a1a4f91d356edd7dfe93f1ffb68e6
+      url: https://repo1.maven.org/maven2/org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

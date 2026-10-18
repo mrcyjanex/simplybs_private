@@ -3,8 +3,8 @@ version: "9.5"
 type: native
 download:
     - kind: git
-      url: https://gitlab.ow2.org/asm/asm.git
       sha256: 443339a964352dcec4dd3915de8f13188920d3ac
+      url: https://gitlab.ow2.org/asm/asm.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

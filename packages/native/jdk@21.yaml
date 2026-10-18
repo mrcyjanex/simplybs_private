@@ -3,8 +3,8 @@ version: 21.0.12.1
 type: native
 download:
     - kind: git
-      url: https://git.openjdk.org/jdk21u
       sha256: eac07229cf6cacc8a22eb79f4929e7fed61338b7
+      url: https://git.openjdk.org/jdk21u
 dependencies:
     - '*:*:native/_/_'
     - darwin_*:*:native/mig

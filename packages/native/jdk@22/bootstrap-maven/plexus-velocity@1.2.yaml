@@ -3,8 +3,8 @@ version: "1.2"
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-velocity.git
       sha256: 567f0e0f5628d7ec5ba68b06c46f100d31875220
+      url: https://github.com/codehaus-plexus/plexus-velocity.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

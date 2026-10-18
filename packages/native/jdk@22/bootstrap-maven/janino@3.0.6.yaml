@@ -3,8 +3,8 @@ version: 3.0.6
 type: native
 download:
     - kind: git
-      url: https://github.com/janino-compiler/janino.git
       sha256: 9c1d4a8586fa8b2c3c55ddd6c3f0dc2da589a247
+      url: https://github.com/janino-compiler/janino.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

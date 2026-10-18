@@ -3,8 +3,8 @@ version: 2.3.0
 type: native
 download:
     - kind: git
-      url: https://github.com/olamy/maven-scm-provider-svnjava.git
       sha256: e70e5dd7e583d0e0f07f374dfaa36f59fbbbb09e
+      url: https://github.com/olamy/maven-scm-provider-svnjava.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

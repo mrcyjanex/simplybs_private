@@ -3,8 +3,8 @@ version: 20.0.2
 type: native
 download:
     - kind: git
-      url: https://git.openjdk.org/jdk20u
       sha256: 9ced461a4d8cb2ecfe2d6a74ec218ec589dcd617
+      url: https://git.openjdk.org/jdk20u
 dependencies:
     - '*:*:native/_/_'
     - darwin_*:*:native/mig

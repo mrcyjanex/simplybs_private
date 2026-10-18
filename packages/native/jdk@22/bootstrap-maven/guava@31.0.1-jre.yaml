@@ -3,8 +3,8 @@ version: 31.0.1-jre
 type: native
 download:
     - kind: git
-      url: https://github.com/google/guava.git
       sha256: ba824dfb4c4f64d8c3b8d07e2042bf1ecdd53e28
+      url: https://github.com/google/guava.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

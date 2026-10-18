@@ -3,8 +3,8 @@ version: tor-0.4.8.17
 type: host
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/torch.git
       sha256: 10a8d069467c03b268c94f21c6bc93c2c052ecf7
+      url: https://github.com/MrCyjaneK/torch.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/cmake'

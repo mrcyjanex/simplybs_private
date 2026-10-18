@@ -3,8 +3,8 @@ version: 3.6.1
 type: native
 download:
     - kind: git
-      url: https://github.com/mojohaus/build-helper-maven-plugin.git
       sha256: 908df59c109817837a30e2340d2e8e6481bd4359
+      url: https://github.com/mojohaus/build-helper-maven-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

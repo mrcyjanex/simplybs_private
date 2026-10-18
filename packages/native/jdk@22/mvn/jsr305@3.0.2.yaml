@@ -3,8 +3,8 @@ version: 3.0.2
 type: native
 download:
     - kind: git
-      url: https://github.com/amaembo/jsr-305.git
       sha256: d7734b13c61492982784560ed5b4f4bd6cf9bb2c
+      url: https://github.com/amaembo/jsr-305.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

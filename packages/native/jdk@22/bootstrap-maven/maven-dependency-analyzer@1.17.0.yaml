@@ -3,8 +3,8 @@ version: 1.17.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-dependency-analyzer.git
       sha256: 26aa306141ecfd5ed3f982054d430aa65135b5ee
+      url: https://github.com/apache/maven-dependency-analyzer.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,12 +3,12 @@ version: 3.1.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-common-artifact-filters.git
       sha256: f8e5dcc61a8eb74739c30218fe265ae221e16767
+      url: https://github.com/apache/maven-common-artifact-filters.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.0/maven-common-artifact-filters-3.1.0.pom
-      sha256: 034e12a9d1d5f5618a9e0dda23aadda4ed659ec55240876b6e954cc2172be456
       path: ./maven-common-artifact-filters-3.1.0.pom
+      sha256: 034e12a9d1d5f5618a9e0dda23aadda4ed659ec55240876b6e954cc2172be456
+      url: https://repo1.maven.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/3.1.0/maven-common-artifact-filters-3.1.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

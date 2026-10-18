@@ -3,8 +3,8 @@ version: "1.2"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-logging.git
       sha256: bd26f32b9a24e1c5176da719c95203bba09e401c
+      url: https://github.com/apache/commons-logging.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

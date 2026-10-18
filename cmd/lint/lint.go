@@ -14,17 +14,18 @@ import (
 	"github.com/mrcyjanek/simplybs/utils"
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
 	"github.com/mrcyjanek/simplybs/utils/uniparse"
+	"gopkg.in/yaml.v3"
 )
 
 type OrderedPackage struct {
-	Package      string                   `json:"package"`
-	Version      string                   `json:"version"`
-	Type         string                   `json:"type"`
-	Download     []map[string]interface{} `json:"download,omitempty"`
-	Dependencies []string                 `json:"dependencies,omitempty"`
-	Patches      []string                 `json:"patches,omitempty"`
-	ExportEnv    *[]string                `json:"export-env,omitempty"`
-	Build        map[string]interface{}   `json:"build,omitempty"`
+	Package      string                   `json:"package" yaml:"package"`
+	Version      string                   `json:"version" yaml:"version"`
+	Type         string                   `json:"type" yaml:"type"`
+	Download     []map[string]interface{} `json:"download,omitempty" yaml:"download,omitempty"`
+	Dependencies []string                 `json:"dependencies,omitempty" yaml:"dependencies,omitempty"`
+	Patches      []string                 `json:"patches,omitempty" yaml:"patches,omitempty"`
+	ExportEnv    *[]string                `json:"export-env,omitempty" yaml:"export-env,omitempty"`
+	Build        map[string]interface{}   `json:"build,omitempty" yaml:"build,omitempty"`
 }
 
 func Lint() {
@@ -39,7 +40,7 @@ func fixFormatting() {
 		if err != nil {
 			return err
 		}
-		if !d.IsDir() && strings.HasSuffix(path, ".json") {
+		if !d.IsDir() && strings.HasSuffix(path, ".yaml") {
 			files = append(files, path)
 		}
 		return nil
@@ -50,7 +51,8 @@ func fixFormatting() {
 		crash.Handle(err)
 
 		var data map[string]interface{}
-		uniparse.Unmarshal(contentInitial, &data)
+		err = uniparse.Unmarshal(contentInitial, &data)
+		crash.Handle(err)
 
 		ordered := OrderedPackage{}
 
@@ -104,10 +106,13 @@ func fixFormatting() {
 		}
 
 		var buf bytes.Buffer
-		err = utils.NewIndentedEncoder(&buf).Encode(ordered)
+		enc := yaml.NewEncoder(&buf)
+		enc.SetIndent(4)
+		err = enc.Encode(ordered)
 		crash.Handle(err)
+		crash.Handle(enc.Close())
 
-		contentNew := bytes.TrimSuffix(buf.Bytes(), []byte("\n"))
+		contentNew := buf.Bytes()
 
 		if !bytes.Equal(contentNew, contentInitial) {
 			log.Printf("Formatting %s", file)
@@ -257,7 +262,7 @@ func createSourcesFile() {
 
 	pkgs := pack.GetAllPackages()
 	for _, pkg := range pkgs {
-		content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".json"))
+		content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".yaml"))
 		if err != nil {
 			log.Printf("Failed to read package %s: %v", pkg.Package, err)
 			continue

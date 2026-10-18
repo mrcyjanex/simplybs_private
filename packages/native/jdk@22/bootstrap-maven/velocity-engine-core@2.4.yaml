@@ -3,8 +3,8 @@ version: "2.4"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/velocity-engine.git
       sha256: 1b99d9e02f380ea85ff915f23c7d266d39adb9ad
+      url: https://github.com/apache/velocity-engine.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

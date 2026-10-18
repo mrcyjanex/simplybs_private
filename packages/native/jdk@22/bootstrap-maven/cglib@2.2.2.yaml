@@ -3,12 +3,12 @@ version: 2.2.2
 type: native
 download:
     - kind: tar.gz
-      url: http://archive.debian.org/debian/pool/main/c/cglib/cglib_2.2.2+dfsg.orig.tar.gz
       sha256: 982481bcccd567199ef0f4aaaf7f62926c2762d5514fd33ad9520c792c7a8fd2
+      url: http://archive.debian.org/debian/pool/main/c/cglib/cglib_2.2.2+dfsg.orig.tar.gz
     - kind: blob
-      url: https://repo1.maven.org/maven2/cglib/cglib/2.2.2/cglib-2.2.2.pom
-      sha256: 9d6073c9e0d449b23b88f81976e395990878f771849a88a27bff1b2eeddcbad1
       path: ./cglib-2.2.2.pom
+      sha256: 9d6073c9e0d449b23b88f81976e395990878f771849a88a27bff1b2eeddcbad1
+      url: https://repo1.maven.org/maven2/cglib/cglib/2.2.2/cglib-2.2.2.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

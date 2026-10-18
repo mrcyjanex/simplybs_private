@@ -12,7 +12,7 @@ func TestFindPackagesDir(t *testing.T) {
 	if err := os.MkdirAll(native, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(native, "_.json"), []byte("{}"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(native, "_.yaml"), []byte("{}"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	nested := filepath.Join(root, "a", "b")

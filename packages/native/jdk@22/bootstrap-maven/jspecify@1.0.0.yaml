@@ -3,12 +3,12 @@ version: 1.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/jspecify/jspecify.git
       sha256: b2a10e14bb81c1b7cb6e488c112fe55cb2218d7d
+      url: https://github.com/jspecify/jspecify.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.pom
-      sha256: cdab929a3b95211f43d2090c5e2d0dfe8465960e378bc32b35841dab324433a6
       path: ./jspecify-1.0.0.pom
+      sha256: cdab929a3b95211f43d2090c5e2d0dfe8465960e378bc32b35841dab324433a6
+      url: https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

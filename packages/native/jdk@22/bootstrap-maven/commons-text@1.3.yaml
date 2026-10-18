@@ -3,8 +3,8 @@ version: "1.3"
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-text.git
       sha256: 4ac48357180c9222f032dd8b055d90e1192e4a47
+      url: https://github.com/apache/commons-text.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

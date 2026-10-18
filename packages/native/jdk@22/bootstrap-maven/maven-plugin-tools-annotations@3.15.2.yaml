@@ -3,8 +3,8 @@ version: 3.15.2
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-plugin-tools.git
       sha256: f7ed01b82c390ff629cecdb3cda88ec9346cc92a
+      url: https://github.com/apache/maven-plugin-tools.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

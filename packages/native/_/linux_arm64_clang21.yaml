@@ -3,8 +3,8 @@ version: 0.0.0
 type: native
 download:
     - kind: tar.xz
-      url: https://github.com/MrCyjaneK/easybs/releases/download/r0/clang21-aarch64-linux-gnu.tar.xz
       sha256: 9962a2889f1782e904baa34a77e9e12d2fe7feecb845287f378999c7e442d001
+      url: https://github.com/MrCyjaneK/easybs/releases/download/r0/clang21-aarch64-linux-gnu.tar.xz
 build:
     steps:
         - linux_arm64:*:./bin/mkdir -p $STAGING_DIR$NATIVEPREFIX/_/

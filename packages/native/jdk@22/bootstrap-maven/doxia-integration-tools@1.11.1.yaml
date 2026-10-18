@@ -3,12 +3,12 @@ version: 1.11.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia-sitetools.git
       sha256: 1f9fcf561c3a4e7ccd39dfd49bb905a296bfac1b
+      url: https://github.com/apache/maven-doxia-sitetools.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-integration-tools/1.11.1/doxia-integration-tools-1.11.1.pom
-      sha256: 1ad03814f59e835fbe6ba81d214b7f27cc6a8a688ac80791c2baa036ca53ec12
       path: ./doxia-integration-tools-1.11.1.pom
+      sha256: 1ad03814f59e835fbe6ba81d214b7f27cc6a8a688ac80791c2baa036ca53ec12
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-integration-tools/1.11.1/doxia-integration-tools-1.11.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

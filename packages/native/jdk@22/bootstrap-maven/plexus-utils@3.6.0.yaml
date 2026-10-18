@@ -3,8 +3,8 @@ version: 3.6.0
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-utils.git
       sha256: b7230bd6243248c3866ae9c9380408e8d7568545
+      url: https://github.com/codehaus-plexus/plexus-utils.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

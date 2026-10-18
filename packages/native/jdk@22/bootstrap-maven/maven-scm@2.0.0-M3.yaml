@@ -3,28 +3,28 @@ version: 2.0.0-M3
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-scm.git
       sha256: ff73ffabd57e2c281cb6e0970774a346236d4d9a
+      url: https://github.com/apache/maven-scm.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm/2.0.0-M3/maven-scm-2.0.0-M3.pom
-      sha256: 08ee7a38072973a05d6bafc01bece5e14c78dbcc639640e4e5e1301a4d9241a0
       path: ./maven-scm-2.0.0-M3.pom
+      sha256: 08ee7a38072973a05d6bafc01bece5e14c78dbcc639640e4e5e1301a4d9241a0
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm/2.0.0-M3/maven-scm-2.0.0-M3.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-api/2.0.0-M3/maven-scm-api-2.0.0-M3.pom
-      sha256: c65cd99b9c7795e40d2921eafe7904dc4d9cbe571367e3c19bec99cebdf32533
       path: ./maven-scm-api-2.0.0-M3.pom
+      sha256: c65cd99b9c7795e40d2921eafe7904dc4d9cbe571367e3c19bec99cebdf32533
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-api/2.0.0-M3/maven-scm-api-2.0.0-M3.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers/2.0.0-M3/maven-scm-providers-2.0.0-M3.pom
-      sha256: 742899352cfc14557272cc29c443ebf41f35acec8a84d922cb21e456b2db7262
       path: ./maven-scm-providers-2.0.0-M3.pom
+      sha256: 742899352cfc14557272cc29c443ebf41f35acec8a84d922cb21e456b2db7262
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers/2.0.0-M3/maven-scm-providers-2.0.0-M3.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-svn/2.0.0-M3/maven-scm-providers-svn-2.0.0-M3.pom
-      sha256: 2723541207d07241a9e58837fe545395632049ada10ae83b1ed33cd280729a5b
       path: ./maven-scm-providers-svn-2.0.0-M3.pom
+      sha256: 2723541207d07241a9e58837fe545395632049ada10ae83b1ed33cd280729a5b
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-providers-svn/2.0.0-M3/maven-scm-providers-svn-2.0.0-M3.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-provider-svn-commons/2.0.0-M3/maven-scm-provider-svn-commons-2.0.0-M3.pom
-      sha256: 63c70254432e2bd887296dba089daea6c9473370600e9c7a97d595ef606491e9
       path: ./maven-scm-provider-svn-commons-2.0.0-M3.pom
+      sha256: 63c70254432e2bd887296dba089daea6c9473370600e9c7a97d595ef606491e9
+      url: https://repo1.maven.org/maven2/org/apache/maven/scm/maven-scm-provider-svn-commons/2.0.0-M3/maven-scm-provider-svn-commons-2.0.0-M3.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

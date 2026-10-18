@@ -3,8 +3,8 @@ version: 4.3.5
 type: host
 download:
     - kind: git
-      url: http://github.com/zeromq/libzmq.git
       sha256: b946c18f676760387276cd095bbdd8c0e18c09bf
+      url: http://github.com/zeromq/libzmq.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/autoconf'

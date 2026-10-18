@@ -3,8 +3,8 @@ version: 1.8.13
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libX11-1.8.13.tar.gz
       sha256: acf0e7cd7541110e6330ecb539441a2d53061f386ec7be6906dfde0de2598470
+      url: https://www.x.org/releases/individual/lib/libX11-1.8.13.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

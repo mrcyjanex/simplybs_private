@@ -3,8 +3,8 @@ version: 2.20.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-io.git
       sha256: c224bce839494ed651e5eba320b27c73ce8d804e
+      url: https://github.com/apache/commons-io.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,9 +3,9 @@ version: "11"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-parent/11/httpcomponents-parent-11.pom
-      sha256: a901f87b115c55070c7ee43efff63e20e7b02d30af2443ae292bf1f4e532d3aa
       path: ./httpcomponents-parent-11.pom
+      sha256: a901f87b115c55070c7ee43efff63e20e7b02d30af2443ae292bf1f4e532d3aa
+      url: https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-parent/11/httpcomponents-parent-11.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

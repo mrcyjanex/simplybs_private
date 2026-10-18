@@ -3,9 +3,9 @@ version: 9999.0-empty-to-avoid-conflict-with-guava
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom
-      sha256: 18d4b1db26153d4e55079ce1f76bb1fe05cdb862ef9954a88cbcc4ff38b8679b
       path: ./listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom
+      sha256: 18d4b1db26153d4e55079ce1f76bb1fe05cdb862ef9954a88cbcc4ff38b8679b
+      url: https://repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

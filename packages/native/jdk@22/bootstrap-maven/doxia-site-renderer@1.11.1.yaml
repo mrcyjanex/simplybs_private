@@ -3,12 +3,12 @@ version: 1.11.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia-sitetools.git
       sha256: 1f9fcf561c3a4e7ccd39dfd49bb905a296bfac1b
+      url: https://github.com/apache/maven-doxia-sitetools.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.11.1/doxia-site-renderer-1.11.1.pom
-      sha256: bd9ac2f023c8fbf7fc2ab00cee25dffbc18249870ce0da2ec46ba6689066184f
       path: ./doxia-site-renderer-1.11.1.pom
+      sha256: bd9ac2f023c8fbf7fc2ab00cee25dffbc18249870ce0da2ec46ba6689066184f
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.11.1/doxia-site-renderer-1.11.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

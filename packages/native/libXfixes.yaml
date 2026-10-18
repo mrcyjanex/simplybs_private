@@ -3,8 +3,8 @@ version: 6.0.2
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXfixes-6.0.2.tar.gz
       sha256: 041331b8e6e36038b3bf836785b6b175ec8515f964c9e4e3316b3bfed0f53ac7
+      url: https://www.x.org/releases/individual/lib/libXfixes-6.0.2.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

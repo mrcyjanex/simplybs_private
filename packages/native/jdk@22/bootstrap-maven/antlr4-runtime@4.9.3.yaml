@@ -3,12 +3,12 @@ version: 4.9.3
 type: native
 download:
     - kind: git
-      url: https://github.com/antlr/antlr4.git
       sha256: e4c1a74c66bd5290364ea2b36c97cd724b247357
+      url: https://github.com/antlr/antlr4.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.pom
-      sha256: 4f7e44e4ea0629fa3a759b1116feb9fb28814e95f791e1eeedd20c12889d7aa4
       path: ./antlr4-runtime-4.9.3.pom
+      sha256: 4f7e44e4ea0629fa3a759b1116feb9fb28814e95f791e1eeedd20c12889d7aa4
+      url: https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

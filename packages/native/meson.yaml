@@ -3,8 +3,8 @@ version: 1.9.1
 type: native
 download:
     - kind: git
-      url: https://github.com/mesonbuild/meson.git
       sha256: 751b09390996163348612f0b106114256305ee40
+      url: https://github.com/mesonbuild/meson.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/python@3.11'

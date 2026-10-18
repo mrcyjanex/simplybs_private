@@ -3,12 +3,12 @@ version: 2.0.6.1
 type: native
 download:
     - kind: git
-      url: https://github.com/hunterhacker/jdom.git
       sha256: c6065f684bdff5cebf5f23b2859c5e4c89fd89db
+      url: https://github.com/hunterhacker/jdom.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/jdom/jdom2/2.0.6.1/jdom2-2.0.6.1.pom
-      sha256: 55795e1018b8ae647b937967cf810a99b08582c2374e7873c128734c8c914bf3
       path: ./jdom2-2.0.6.1.pom
+      sha256: 55795e1018b8ae647b937967cf810a99b08582c2374e7873c128734c8c914bf3
+      url: https://repo1.maven.org/maven2/org/jdom/jdom2/2.0.6.1/jdom2-2.0.6.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

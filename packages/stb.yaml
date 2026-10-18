@@ -3,8 +3,8 @@ version: 013ac3beddff
 type: host
 download:
     - kind: git
-      url: https://github.com/nothings/stb.git
       sha256: 013ac3beddff3dbffafd5177e7972067cd2b5083
+      url: https://github.com/nothings/stb.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/coreutils'

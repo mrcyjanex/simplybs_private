@@ -3,9 +3,9 @@ version: "69"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/commons/commons-parent/69/commons-parent-69.pom
-      sha256: d50da9c39bdca823d618d1b4a03b73f196497fcb8616fd0da727c8623592a9bb
       path: ./commons-parent-69.pom
+      sha256: d50da9c39bdca823d618d1b4a03b73f196497fcb8616fd0da727c8623592a9bb
+      url: https://repo1.maven.org/maven2/org/apache/commons/commons-parent/69/commons-parent-69.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: 2.4.3
 type: native
 download:
     - kind: git
-      url: https://github.com/fusesource/jansi.git
       sha256: 917013297d08ed2abcf616e6787b49bec3489b48
+      url: https://github.com/fusesource/jansi.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

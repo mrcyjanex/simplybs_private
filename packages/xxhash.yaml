@@ -3,8 +3,8 @@ version: v0.8.3-dev
 type: host
 download:
     - kind: git
-      url: https://github.com/Cyan4973/xxHash.git
       sha256: 66979328cf3f15cecdc61ea58c9f81e6071f8983
+      url: https://github.com/Cyan4973/xxHash.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/cmake'

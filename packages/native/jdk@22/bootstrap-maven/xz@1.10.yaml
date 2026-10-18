@@ -3,12 +3,12 @@ version: "1.10"
 type: native
 download:
     - kind: git
-      url: https://github.com/tukaani-project/xz-java.git
       sha256: 0f5ee02ca950b5e7cdadf89f8c314388092ad64c
+      url: https://github.com/tukaani-project/xz-java.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/tukaani/xz/1.10/xz-1.10.pom
-      sha256: ef608b83c3bb6c8e3e6b3beaa38842ba15963b46495e4af91b0746c8b750f3b9
       path: ./xz-1.10.pom
+      sha256: ef608b83c3bb6c8e3e6b3beaa38842ba15963b46495e4af91b0746c8b750f3b9
+      url: https://repo1.maven.org/maven2/org/tukaani/xz/1.10/xz-1.10.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

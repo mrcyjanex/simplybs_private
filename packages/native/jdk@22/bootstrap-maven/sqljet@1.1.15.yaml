@@ -3,12 +3,12 @@ version: 1.1.15
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/mirror-sqljet.git
       sha256: 930328fc3afcb87d6122b9c470cb205c13012aab
+      url: https://github.com/MrCyjaneK/mirror-sqljet.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/tmatesoft/sqljet/sqljet/1.1.15/sqljet-1.1.15.pom
-      sha256: 2020b0583a6002823645ae846aa2499ee54385da61b0d97e771b16b973e51ce5
       path: ./sqljet-1.1.15.pom
+      sha256: 2020b0583a6002823645ae846aa2499ee54385da61b0d97e771b16b973e51ce5
+      url: https://repo1.maven.org/maven2/org/tmatesoft/sqljet/sqljet/1.1.15/sqljet-1.1.15.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

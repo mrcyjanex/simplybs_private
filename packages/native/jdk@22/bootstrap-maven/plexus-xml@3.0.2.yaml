@@ -3,8 +3,8 @@ version: 3.0.2
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-xml.git
       sha256: 474a0e3daca9caeb1f8f72ebf33db44f5ffb3c0c
+      url: https://github.com/codehaus-plexus/plexus-xml.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

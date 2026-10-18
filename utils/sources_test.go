@@ -177,7 +177,7 @@ func TestPackageGitRefsCollected(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		if d.IsDir() || !strings.HasSuffix(path, ".json") {
+		if d.IsDir() || !strings.HasSuffix(path, ".yaml") {
 			return nil
 		}
 

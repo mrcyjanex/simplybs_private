@@ -3,8 +3,8 @@ version: 1.12.19
 type: native
 download:
     - kind: git
-      url: https://github.com/raphw/byte-buddy.git
       sha256: c93425a1e92bd246c053968512226ff391c54b5c
+      url: https://github.com/raphw/byte-buddy.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: "9.3"
 type: native
 download:
     - kind: git
-      url: https://github.com/checkstyle/checkstyle.git
       sha256: 5c1903792f8432243cc8ae5cd79a03a004d3c09c
+      url: https://github.com/checkstyle/checkstyle.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

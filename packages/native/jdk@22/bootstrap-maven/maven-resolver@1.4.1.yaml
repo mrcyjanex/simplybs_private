@@ -3,8 +3,8 @@ version: 1.4.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-resolver.git
       sha256: 9417310df326cd4a58b0ef534e6c0e29f7b4cb47
+      url: https://github.com/apache/maven-resolver.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

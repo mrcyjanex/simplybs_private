@@ -3,9 +3,9 @@ version: "43"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugins/43/maven-plugins-43.pom
-      sha256: a177f84e01c3829a357b8f135686ae7dd8c35d1c2089a390ef089340aa47cd21
       path: ./maven-plugins-43.pom
+      sha256: a177f84e01c3829a357b8f135686ae7dd8c35d1c2089a390ef089340aa47cd21
+      url: https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugins/43/maven-plugins-43.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

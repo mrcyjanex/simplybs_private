@@ -3,12 +3,12 @@ version: 1.5.8
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-utils.git
       sha256: 38ecf41fe352679ded6ab65e413574a4b19c2966
+      url: https://github.com/codehaus-plexus/plexus-utils.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/1.5.8/plexus-utils-1.5.8.pom
-      sha256: 1ff4fb95c218af4a46f71d625212c70f377ccf97ad2e26cb8d4c10709265bf62
       path: ./plexus-utils-1.5.8.pom
+      sha256: 1ff4fb95c218af4a46f71d625212c70f377ccf97ad2e26cb8d4c10709265bf62
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/1.5.8/plexus-utils-1.5.8.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

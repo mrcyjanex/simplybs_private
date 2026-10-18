@@ -3,12 +3,12 @@ version: "1.4"
 type: native
 download:
     - kind: git
-      url: https://github.com/sonatype/plexus-cipher.git
       sha256: a73d92e2bd4a3cc9dc250c0e4b24cf2313a2682d
+      url: https://github.com/sonatype/plexus-cipher.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom
-      sha256: a63a2e23988cca7fac6c93886d6f0506fd26d88d7e8cc0cb89b9c6e0d6c994ad
       path: ./plexus-cipher-1.4.pom
+      sha256: a63a2e23988cca7fac6c93886d6f0506fd26d88d7e8cc0cb89b9c6e0d6c994ad
+      url: https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

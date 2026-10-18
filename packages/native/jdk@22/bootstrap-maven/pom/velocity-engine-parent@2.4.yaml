@@ -3,9 +3,9 @@ version: "2.4"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/velocity/velocity-engine-parent/2.4/velocity-engine-parent-2.4.pom
-      sha256: d4b9e31a7e9ea490c562a2bdeced94eef3f08c8d0a5378add3d6bcf8828334bf
       path: ./velocity-engine-parent-2.4.pom
+      sha256: d4b9e31a7e9ea490c562a2bdeced94eef3f08c8d0a5378add3d6bcf8828334bf
+      url: https://repo1.maven.org/maven2/org/apache/velocity/velocity-engine-parent/2.4/velocity-engine-parent-2.4.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: 1.96.0
 type: native
 download:
     - kind: tar.gz
-      url: http://static.rust-lang.org/dist/rustc-1.96.0-src.tar.gz
       sha256: e90a9eb153b2948afac840dbe9d77b64e376706f2864387ee7717f7450043b44
+      url: http://static.rust-lang.org/dist/rustc-1.96.0-src.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/cmake'

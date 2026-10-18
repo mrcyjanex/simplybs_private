@@ -3,8 +3,8 @@ version: "2025-07-10"
 type: native
 download:
     - kind: git
-      url: https://https.git.savannah.gnu.org/git/config.git
       sha256: a2287c3041a3f2a204eb942e09c015eab00dc7dd
+      url: https://https.git.savannah.gnu.org/git/config.git
 dependencies:
     - '*:*:native/_/_'
 build:

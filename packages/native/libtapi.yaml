@@ -3,8 +3,8 @@ version: 1300.6.5
 type: native
 download:
     - kind: git
-      url: https://github.com/tpoechtrager/apple-libtapi.git
       sha256: 640b4623929c923c0468143ff2a363a48665fa54
+      url: https://github.com/tpoechtrager/apple-libtapi.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

@@ -3,12 +3,12 @@ version: 1.7.32
 type: native
 download:
     - kind: git
-      url: https://github.com/qos-ch/slf4j.git
       sha256: 0d8774854f4ebb0807bcb69867c13f1e991fcde5
+      url: https://github.com/qos-ch/slf4j.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.pom
-      sha256: 001cde5b3c6ba91070425cfe9f2e695e4aeb8bc290a2d4cd96531127ab244fe5
       path: ./slf4j-api-1.7.32.pom
+      sha256: 001cde5b3c6ba91070425cfe9f2e695e4aeb8bc290a2d4cd96531127ab244fe5
+      url: https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

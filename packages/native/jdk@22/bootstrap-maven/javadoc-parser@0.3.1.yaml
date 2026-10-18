@@ -3,8 +3,8 @@ version: 0.3.1
 type: native
 download:
     - kind: git
-      url: https://github.com/chhorz/javadoc-parser.git
       sha256: c75a9d04ef4f3d922de50849c3eefe24e0deaa5e
+      url: https://github.com/chhorz/javadoc-parser.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

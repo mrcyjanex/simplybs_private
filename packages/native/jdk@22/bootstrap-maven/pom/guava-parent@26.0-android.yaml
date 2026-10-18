@@ -3,9 +3,9 @@ version: 26.0-android
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/google/guava/guava-parent/26.0-android/guava-parent-26.0-android.pom
-      sha256: f8698ab46ca996ce889c1afc8ca4f25eb8ac6b034dc898d4583742360016cc04
       path: ./guava-parent-26.0-android.pom
+      sha256: f8698ab46ca996ce889c1afc8ca4f25eb8ac6b034dc898d4583742360016cc04
+      url: https://repo1.maven.org/maven2/com/google/guava/guava-parent/26.0-android/guava-parent-26.0-android.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

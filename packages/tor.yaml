@@ -3,8 +3,8 @@ version: tor-0.4.9.12
 type: host
 download:
     - kind: git
-      url: http://gitlab.torproject.org/tpo/core/tor.git
       sha256: 78923280eed3eff6a77910bba59ecc1fa2244e02
+      url: http://gitlab.torproject.org/tpo/core/tor.git
 dependencies:
     - '*:*:native/_'
     - '*:*:native/autoconf'

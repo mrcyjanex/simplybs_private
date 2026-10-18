@@ -3,11 +3,11 @@ version: "3.2"
 type: native
 download:
     - kind: tar.gz
-      url: https://deb.debian.org/debian/pool/main/a/antlr3.2/antlr3.2_3.2.orig.tar.gz
       sha256: fca85b779064a06020bf37865c0c8b16df1ef25f4471392a36466b662ec0588a
+      url: https://deb.debian.org/debian/pool/main/a/antlr3.2/antlr3.2_3.2.orig.tar.gz
     - kind: tar.xz
-      url: https://deb.debian.org/debian/pool/main/a/antlr3.2/antlr3.2_3.2-16.debian.tar.xz
       sha256: fe7eab16bac9a73c0066b3487ba0e569078f17cae014e37f301a0cecf9c5fb70
+      url: https://deb.debian.org/debian/pool/main/a/antlr3.2/antlr3.2_3.2-16.debian.tar.xz
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

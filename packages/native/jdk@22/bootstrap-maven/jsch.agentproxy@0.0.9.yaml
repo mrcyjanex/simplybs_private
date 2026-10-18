@@ -3,12 +3,12 @@ version: 0.0.9
 type: native
 download:
     - kind: git
-      url: https://github.com/ymnk/jsch-agent-proxy.git
       sha256: 12c3d64fc2b0a4fd37659369edfdee26e48954e2
+      url: https://github.com/ymnk/jsch-agent-proxy.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/jcraft/jsch.agentproxy/0.0.9/jsch.agentproxy-0.0.9.pom
-      sha256: a9aac5a8596492f9004d3e8aea94e331ec8ca4f9e7f6b61ecd383777b8fa62af
       path: ./jsch.agentproxy-0.0.9.pom
+      sha256: a9aac5a8596492f9004d3e8aea94e331ec8ca4f9e7f6b61ecd383777b8fa62af
+      url: https://repo1.maven.org/maven2/com/jcraft/jsch.agentproxy/0.0.9/jsch.agentproxy-0.0.9.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

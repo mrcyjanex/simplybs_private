@@ -3,8 +3,8 @@ version: 2.3.3
 type: native
 download:
     - kind: git
-      url: https://github.com/eclipse-ee4j/jaxb-api.git
       sha256: fd06b2b050cf612695ec7f0c372815e3910de154
+      url: https://github.com/eclipse-ee4j/jaxb-api.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

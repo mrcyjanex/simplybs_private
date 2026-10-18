@@ -3,8 +3,8 @@ version: 2.15.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-io.git
       sha256: dc51644d5adbb0c461efb58380ec51fbca10005d
+      url: https://github.com/apache/commons-io.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/findutils'

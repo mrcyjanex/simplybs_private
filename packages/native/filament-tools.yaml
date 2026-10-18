@@ -3,8 +3,8 @@ version: v1.75.0
 type: native
 download:
     - kind: git
-      url: https://github.com/google/filament.git
       sha256: 0e58877c09afb1aacd09ff640f74d2adcd2a7e80
+      url: https://github.com/google/filament.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

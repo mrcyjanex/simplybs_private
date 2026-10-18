@@ -3,12 +3,12 @@ version: 2.0.1
 type: native
 download:
     - kind: git
-      url: https://github.com/wrandelshofer/FastDoubleParser.git
       sha256: 2e1235766719b2db4f24c5c28920012850333833
+      url: https://github.com/wrandelshofer/FastDoubleParser.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/ch/randelshofer/fastdoubleparser/2.0.1/fastdoubleparser-2.0.1.pom
-      sha256: 922b2ea73b7aa0368f1346e6b791bc8c901c42d0c90fb1d4efefcd3d532e6df8
       path: ./fastdoubleparser-2.0.1.pom
+      sha256: 922b2ea73b7aa0368f1346e6b791bc8c901c42d0c90fb1d4efefcd3d532e6df8
+      url: https://repo1.maven.org/maven2/ch/randelshofer/fastdoubleparser/2.0.1/fastdoubleparser-2.0.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

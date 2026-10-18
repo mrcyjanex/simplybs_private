@@ -3,8 +3,8 @@ version: "1.4"
 type: native
 download:
     - kind: git
-      url: https://github.com/sonatype/plexus-sec-dispatcher.git
       sha256: 7db8f880486e192a1c5ea9544e01e756c3d49d0f
+      url: https://github.com/sonatype/plexus-sec-dispatcher.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

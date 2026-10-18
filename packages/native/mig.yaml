@@ -3,8 +3,8 @@ version: "138"
 type: native
 download:
     - kind: git
-      url: https://github.com/markmentovai/bootstrap_cmds.git
       sha256: f337e600741638896fb6056ce87c6479f74b89a3
+      url: https://github.com/markmentovai/bootstrap_cmds.git
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/autoconf'

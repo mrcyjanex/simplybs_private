@@ -3,12 +3,12 @@ version: 1.11.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-doxia-sitetools.git
       sha256: 1f9fcf561c3a4e7ccd39dfd49bb905a296bfac1b
+      url: https://github.com/apache/maven-doxia-sitetools.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-skin-model/1.11.1/doxia-skin-model-1.11.1.pom
-      sha256: 358009924c031e858910e19dcfee1eddb9c352add9e3172e09a06f2afdcbf201
       path: ./doxia-skin-model-1.11.1.pom
+      sha256: 358009924c031e858910e19dcfee1eddb9c352add9e3172e09a06f2afdcbf201
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-skin-model/1.11.1/doxia-skin-model-1.11.1.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

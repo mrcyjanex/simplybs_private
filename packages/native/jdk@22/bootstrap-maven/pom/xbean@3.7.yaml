@@ -3,9 +3,9 @@ version: "3.7"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/xbean/xbean/3.7/xbean-3.7.pom
-      sha256: ea717132de8404b62fc9097a1f3215c705d525d457be9a5f12653adc68c33ab7
       path: ./xbean-3.7.pom
+      sha256: ea717132de8404b62fc9097a1f3215c705d525d457be9a5f12653adc68c33ab7
+      url: https://repo1.maven.org/maven2/org/apache/xbean/xbean/3.7/xbean-3.7.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

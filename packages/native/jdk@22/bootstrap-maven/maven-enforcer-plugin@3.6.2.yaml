@@ -3,8 +3,8 @@ version: 3.6.2
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-enforcer.git
       sha256: 82ba7700115bdf5ec8f267741a9e232adf91b51e
+      url: https://github.com/apache/maven-enforcer.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

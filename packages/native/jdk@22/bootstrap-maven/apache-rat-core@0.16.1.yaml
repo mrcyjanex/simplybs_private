@@ -3,8 +3,8 @@ version: 0.16.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/creadur-rat.git
       sha256: bc422708ba1569b6acf793703c435c78b16ca60c
+      url: https://github.com/apache/creadur-rat.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

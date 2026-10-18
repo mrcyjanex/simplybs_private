@@ -3,8 +3,8 @@ version: 2.21.0
 type: native
 download:
     - kind: git
-      url: https://github.com/FasterXML/jackson-databind.git
       sha256: 220ee04ec724e5f5ea60fe5e638670e83e994765
+      url: https://github.com/FasterXML/jackson-databind.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

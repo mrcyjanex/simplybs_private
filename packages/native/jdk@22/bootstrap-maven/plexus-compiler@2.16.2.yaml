@@ -3,8 +3,8 @@ version: 2.16.2
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-compiler.git
       sha256: 36237da5f5a6c9e1dce4479596e975f5cc045793
+      url: https://github.com/codehaus-plexus/plexus-compiler.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

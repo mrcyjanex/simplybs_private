@@ -3,8 +3,8 @@ version: 2.2.0
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-containers.git
       sha256: 2b1502b4cf2e6c2ecd381f515c38bfe335d4e3bb
+      url: https://github.com/codehaus-plexus/plexus-containers.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

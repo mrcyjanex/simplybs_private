@@ -3,16 +3,16 @@ version: 5.14.4
 type: native
 download:
     - kind: git
-      url: https://github.com/junit-team/junit-framework.git
       sha256: 096fd696c1b22780e025a02417d42903e0022862
+      url: https://github.com/junit-team/junit-framework.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/1.14.4/junit-platform-commons-1.14.4.pom
-      sha256: d77be81708cf9836db7a09908e6d9e4d94c527e090bd594cc4af06711b9d853d
       path: ./junit-platform-commons-1.14.4.pom
+      sha256: d77be81708cf9836db7a09908e6d9e4d94c527e090bd594cc4af06711b9d853d
+      url: https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/1.14.4/junit-platform-commons-1.14.4.pom
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.14.4/junit-jupiter-api-5.14.4.pom
-      sha256: 4c175189fd774dcd90cb23cfcab2ce9dbf2f5d0a16d7ef3702e7cfcd6411a762
       path: ./junit-jupiter-api-5.14.4.pom
+      sha256: 4c175189fd774dcd90cb23cfcab2ce9dbf2f5d0a16d7ef3702e7cfcd6411a762
+      url: https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.14.4/junit-jupiter-api-5.14.4.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

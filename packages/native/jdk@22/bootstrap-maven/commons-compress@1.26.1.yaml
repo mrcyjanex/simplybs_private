@@ -3,8 +3,8 @@ version: 1.26.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/commons-compress.git
       sha256: 81ac94151eedc61c2131239362a051e30c5e9e59
+      url: https://github.com/apache/commons-compress.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,9 +3,9 @@ version: "25"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/25/plexus-25.pom
-      sha256: faa7947c2020967ad0c92b259ee9fa361d05e90cd036d17c37098bb1edaea3a3
       path: ./plexus-25.pom
+      sha256: faa7947c2020967ad0c92b259ee9fa361d05e90cd036d17c37098bb1edaea3a3
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/25/plexus-25.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

@@ -3,8 +3,8 @@ version: 3.15.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-compiler-plugin.git
       sha256: 9290cb337f199673e02b6beac0fba37d8066d72c
+      url: https://github.com/apache/maven-compiler-plugin.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

@@ -3,8 +3,8 @@ version: 1.22.1
 type: native
 download:
     - kind: git
-      url: https://github.com/jhy/jsoup.git
       sha256: 8dd66febe8d5e2221a63f4d1228a2a35df81c148
+      url: https://github.com/jhy/jsoup.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

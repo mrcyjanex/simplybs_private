@@ -3,9 +3,9 @@ version: "1.12"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.12/fusesource-pom-1.12.pom
-      sha256: c40d960daadcef7b01c1b1c6657afbac4fffb5e53168f8fcb0b28b84e6fdcca1
       path: ./fusesource-pom-1.12.pom
+      sha256: c40d960daadcef7b01c1b1c6657afbac4fffb5e53168f8fcb0b28b84e6fdcca1
+      url: https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.12/fusesource-pom-1.12.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

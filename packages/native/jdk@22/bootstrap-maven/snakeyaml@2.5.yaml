@@ -3,8 +3,8 @@ version: "2.5"
 type: native
 download:
     - kind: git
-      url: https://bitbucket.org/snakeyaml/snakeyaml.git
       sha256: 225cf7b0166c7d8b25ed0000d03f2a02105347ee
+      url: https://bitbucket.org/snakeyaml/snakeyaml.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

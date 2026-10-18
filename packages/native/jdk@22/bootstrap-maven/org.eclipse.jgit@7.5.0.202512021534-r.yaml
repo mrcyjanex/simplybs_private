@@ -3,8 +3,8 @@ version: 7.5.0.202512021534-r
 type: native
 download:
     - kind: git
-      url: https://github.com/eclipse-jgit/jgit.git
       sha256: 402b0dd5c8e167cb0808fd6139e2270ada6611cc
+      url: https://github.com/eclipse-jgit/jgit.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

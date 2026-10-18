@@ -3,8 +3,8 @@ version: "2.21"
 type: native
 download:
     - kind: git
-      url: https://github.com/FasterXML/jackson-annotations.git
       sha256: e71e0bd0deddf35d2c310463acd258dca1d536d1
+      url: https://github.com/FasterXML/jackson-annotations.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

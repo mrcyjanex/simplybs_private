@@ -3,8 +3,8 @@ version: "4.6"
 type: native
 download:
     - kind: git
-      url: https://github.com/jopt-simple/jopt-simple.git
       sha256: 60979e99102ad93a0e42d9f3a03ad29e1ec0f55c
+      url: https://github.com/jopt-simple/jopt-simple.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

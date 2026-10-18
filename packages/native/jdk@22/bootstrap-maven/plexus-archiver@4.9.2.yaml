@@ -3,8 +3,8 @@ version: 4.9.2
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-archiver.git
       sha256: 30e3a058ff1a68ad934c105e097a137e05743111
+      url: https://github.com/codehaus-plexus/plexus-archiver.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

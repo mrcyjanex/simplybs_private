@@ -3,9 +3,9 @@ version: 2.0.0
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-modules/2.0.0/doxia-modules-2.0.0.pom
-      sha256: 9c56654ceff62d08b19b802d7d4d77dca54b17548b9802a0ba493f72f2adaf34
       path: ./doxia-modules-2.0.0.pom
+      sha256: 9c56654ceff62d08b19b802d7d4d77dca54b17548b9802a0ba493f72f2adaf34
+      url: https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-modules/2.0.0/doxia-modules-2.0.0.pom
 dependencies:
     - '*:*:native/coreutils'
 build:

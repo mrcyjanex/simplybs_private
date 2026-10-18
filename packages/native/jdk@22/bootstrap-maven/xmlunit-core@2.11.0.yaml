@@ -3,8 +3,8 @@ version: 2.11.0
 type: native
 download:
     - kind: git
-      url: https://github.com/xmlunit/xmlunit.git
       sha256: 02aef5d5950d4f113d26b3bc6d32320a0d1ec6f1
+      url: https://github.com/xmlunit/xmlunit.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

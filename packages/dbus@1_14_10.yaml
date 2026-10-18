@@ -3,8 +3,8 @@ version: "1_14_10"
 type: host
 download:
     - kind: tar.xz
-      url: https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz
       sha256: ba1f21d2bd9d339da2d4aa8780c09df32fea87998b73da24f49ab9df1e36a50f
+      url: https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz
 dependencies:
     - '*:*-linux-gnu:native/_'
     - '*:*-linux-gnu:native/bash'

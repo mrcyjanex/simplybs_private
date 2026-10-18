@@ -3,8 +3,8 @@ version: 1.5.5
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXrandr-1.5.5.tar.gz
       sha256: 23faedab4675890ba579b8103399132a139527306b18b500c6fe28e090e2a056
+      url: https://www.x.org/releases/individual/lib/libXrandr-1.5.5.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

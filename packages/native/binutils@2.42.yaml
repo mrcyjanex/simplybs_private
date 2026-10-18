@@ -3,8 +3,8 @@ version: "2.42"
 type: native
 download:
     - kind: tar.bz2
-      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.42.tar.bz2
       sha256: aa54850ebda5064c72cd4ec2d9b056c294252991486350d9a97ab2a6dfdfaf12
+      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.42.tar.bz2
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bison'

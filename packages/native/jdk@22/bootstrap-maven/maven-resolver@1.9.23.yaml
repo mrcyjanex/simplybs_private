@@ -3,8 +3,8 @@ version: 1.9.23
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-resolver.git
       sha256: 8535d09660cb68eb55d8e75228d5d35eaae00c88
+      url: https://github.com/apache/maven-resolver.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

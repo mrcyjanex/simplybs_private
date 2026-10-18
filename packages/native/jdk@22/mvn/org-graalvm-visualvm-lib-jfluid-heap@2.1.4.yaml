@@ -3,8 +3,8 @@ version: 2.1.4
 type: native
 download:
     - kind: git
-      url: https://github.com/oracle/visualvm.git
       sha256: 53e1c5580792637c5a964bc5193e4fc2e9f00095
+      url: https://github.com/oracle/visualvm.git
 dependencies:
     - '*:*:native/coreutils'
     - '*:*:native/findutils'

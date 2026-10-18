@@ -3,12 +3,12 @@ version: 4.3.0
 type: native
 download:
     - kind: git
-      url: https://github.com/diffplug/durian-swt.git
       sha256: e956245cc1f4d445cb1f14ba8ea2536da6351d95
+      url: https://github.com/diffplug/durian-swt.git
     - kind: blob
-      url: https://repo1.maven.org/maven2/com/diffplug/durian/durian-swt.os/4.3.0/durian-swt.os-4.3.0.pom
-      sha256: 435cff55789986dedaad717f68fba8d548249478562dcd84b22ad4d6566f440b
       path: ./durian-swt.os-4.3.0.pom
+      sha256: 435cff55789986dedaad717f68fba8d548249478562dcd84b22ad4d6566f440b
+      url: https://repo1.maven.org/maven2/com/diffplug/durian/durian-swt.os/4.3.0/durian-swt.os-4.3.0.pom
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

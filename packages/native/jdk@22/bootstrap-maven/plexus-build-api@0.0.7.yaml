@@ -3,8 +3,8 @@ version: 0.0.7
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-build-api.git
       sha256: 883ea674097b2d147b8efd21ed19f3962b14fd2f
+      url: https://github.com/codehaus-plexus/plexus-build-api.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

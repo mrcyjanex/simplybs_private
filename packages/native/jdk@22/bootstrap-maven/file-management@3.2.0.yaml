@@ -3,8 +3,8 @@ version: 3.2.0
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven-file-management.git
       sha256: 36efd6f162c30f468669935a764e8b41e8daa062
+      url: https://github.com/apache/maven-file-management.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

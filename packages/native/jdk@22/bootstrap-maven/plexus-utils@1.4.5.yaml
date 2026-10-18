@@ -3,8 +3,8 @@ version: 1.4.5
 type: native
 download:
     - kind: git
-      url: https://github.com/codehaus-plexus/plexus-utils.git
       sha256: 57c0bcc2ea35e58ec7dc0476504180c5ad0a4593
+      url: https://github.com/codehaus-plexus/plexus-utils.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

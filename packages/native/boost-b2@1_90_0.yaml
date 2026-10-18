@@ -3,8 +3,8 @@ version: "1_90_0"
 type: native
 download:
     - kind: tar.bz2
-      url: http://downloads.sourceforge.net/project/boost/boost/1.90.0/boost_1_90_0.tar.bz2
       sha256: 49551aff3b22cbc5c5a9ed3dbc92f0e23ea50a0f7325b0d198b705e8ee3fc305
+      url: http://downloads.sourceforge.net/project/boost/boost/1.90.0/boost_1_90_0.tar.bz2
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

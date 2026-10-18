@@ -3,8 +3,8 @@ version: 3.14.0
 type: native
 download:
     - kind: tar.gz
-      url: http://www.python.org/ftp/python/3.14.0/Python-3.14.0.tgz
       sha256: 88d2da4eed42fa9a5f42ff58a8bc8988881bd6c547e297e46682c2687638a851
+      url: http://www.python.org/ftp/python/3.14.0/Python-3.14.0.tgz
 dependencies:
     - '*:*:native/_/_'
     - '*:*:native/bash'

@@ -3,84 +3,84 @@ version: 1.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/MrCyjaneK/ct-ng-configs.git
       sha256: 50eb4f2cbf22872af991c1db5d11f32b6a398d6b
+      url: https://github.com/MrCyjaneK/ct-ng-configs.git
     - kind: blob
-      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.45.tar.xz
-      sha256: c50c0e7f9cb188980e2cc97e4537626b1672441815587f1eab69d2a1bfbef5d2
       path: work/.build/tarballs/binutils-2.45.tar.xz
+      sha256: c50c0e7f9cb188980e2cc97e4537626b1672441815587f1eab69d2a1bfbef5d2
+      url: https://ftpmirror.gnu.org/gnu/binutils/binutils-2.45.tar.xz
     - kind: blob
-      url: https://github.com/johnsonjh/duma/archive/refs/tags/VERSION_2_5_21.tar.gz
-      sha256: 470aa72e7018f0beadb5fbe3c932a62ba1b0594c29158a744c614bfa42133e59
       path: work/.build/tarballs/VERSION_2_5_21.tar.gz
+      sha256: 470aa72e7018f0beadb5fbe3c932a62ba1b0594c29158a744c614bfa42133e59
+      url: https://github.com/johnsonjh/duma/archive/refs/tags/VERSION_2_5_21.tar.gz
     - kind: blob
-      url: http://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.xz
-      sha256: 354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30
       path: work/.build/tarballs/expat-2.7.1.tar.xz
+      sha256: 354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30
+      url: http://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
-      sha256: 438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e
       path: work/.build/tarballs/gcc-15.2.0.tar.xz
+      sha256: 438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e
+      url: http://ftpmirror.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/gcc/gcc-13.4.0/gcc-13.4.0.tar.xz
-      sha256: 9c4ce6dbb040568fdc545588ac03c5cbc95a8dbf0c7aa490170843afb59ca8f5
       path: work/.build/tarballs/gcc-13.4.0.tar.xz
+      sha256: 9c4ce6dbb040568fdc545588ac03c5cbc95a8dbf0c7aa490170843afb59ca8f5
+      url: http://ftpmirror.gnu.org/gnu/gcc/gcc-13.4.0/gcc-13.4.0.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/gdb/gdb-16.3.tar.xz
-      sha256: bcfcd095528a987917acf9fff3f1672181694926cc18d609c99d0042c00224c5
       path: work/.build/tarballs/gdb-16.3.tar.xz
+      sha256: bcfcd095528a987917acf9fff3f1672181694926cc18d609c99d0042c00224c5
+      url: http://ftpmirror.gnu.org/gnu/gdb/gdb-16.3.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/gettext/gettext-0.26.tar.xz
-      sha256: d1fb86e260cfe7da6031f94d2e44c0da55903dbae0a2fa0fae78c91ae1b56f00
       path: work/.build/tarballs/gettext-0.26.tar.xz
+      sha256: d1fb86e260cfe7da6031f94d2e44c0da55903dbae0a2fa0fae78c91ae1b56f00
+      url: http://ftpmirror.gnu.org/gnu/gettext/gettext-0.26.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/glibc/glibc-2.41.tar.xz
-      sha256: a5a26b22f545d6b7d7b3dd828e11e428f24f4fac43c934fb071b6a7d0828e901
       path: work/.build/tarballs/glibc-2.41.tar.xz
+      sha256: a5a26b22f545d6b7d7b3dd828e11e428f24f4fac43c934fb071b6a7d0828e901
+      url: http://ftpmirror.gnu.org/gnu/glibc/glibc-2.41.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
-      sha256: a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
       path: work/.build/tarballs/gmp-6.3.0.tar.xz
+      sha256: a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
+      url: http://ftpmirror.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
     - kind: blob
-      url: https://libisl.sourceforge.io/isl-0.27.tar.xz
-      sha256: 6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c
       path: work/.build/tarballs/isl-0.27.tar.xz
+      sha256: 6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c
+      url: https://libisl.sourceforge.io/isl-0.27.tar.xz
     - kind: blob
-      url: https://ftpmirror.gnu.org/gnu/libiconv/libiconv-1.18.tar.gz
-      sha256: 3b08f5f4f9b4eb82f151a7040bfd6fe6c6fb922efe4b1659c66ea933276965e8
       path: work/.build/tarballs/libiconv-1.18.tar.gz
+      sha256: 3b08f5f4f9b4eb82f151a7040bfd6fe6c6fb922efe4b1659c66ea933276965e8
+      url: https://ftpmirror.gnu.org/gnu/libiconv/libiconv-1.18.tar.gz
     - kind: blob
-      url: https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.20.17.tar.xz
-      sha256: d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e
       path: work/.build/tarballs/linux-4.20.17.tar.xz
+      sha256: d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e
+      url: https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.20.17.tar.xz
     - kind: blob
-      url: https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v13.0.0.tar.bz2
-      sha256: 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
       path: work/.build/tarballs/mingw-w64-v13.0.0.tar.bz2
+      sha256: 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
+      url: https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v13.0.0.tar.bz2
     - kind: blob
-      url: https://sources.voidlinux.org/musl-1.2.5/musl-1.2.5.tar.gz
-      sha256: a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4
       path: work/.build/tarballs/musl-1.2.5.tar.gz
+      sha256: a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4
+      url: https://sources.voidlinux.org/musl-1.2.5/musl-1.2.5.tar.gz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz
-      sha256: ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8
       path: work/.build/tarballs/mpc-1.3.1.tar.gz
+      sha256: ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8
+      url: http://ftpmirror.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/mpfr/mpfr-4.2.2.tar.xz
-      sha256: b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
       path: work/.build/tarballs/mpfr-4.2.2.tar.xz
+      sha256: b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+      url: http://ftpmirror.gnu.org/gnu/mpfr/mpfr-4.2.2.tar.xz
     - kind: blob
-      url: http://ftpmirror.gnu.org/gnu/ncurses/ncurses-6.5.tar.gz
-      sha256: 136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
       path: work/.build/tarballs/ncurses-6.5.tar.gz
+      sha256: 136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
+      url: http://ftpmirror.gnu.org/gnu/ncurses/ncurses-6.5.tar.gz
     - kind: blob
-      url: https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.xz
-      sha256: 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
       path: work/.build/tarballs/zlib-1.3.1.tar.xz
+      sha256: 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
+      url: https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.xz
     - kind: blob
-      url: https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz
-      sha256: eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
       path: work/.build/tarballs/zstd-1.5.7.tar.gz
+      sha256: eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+      url: https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz
 dependencies:
     - '*:*:native/_/_'
     - '*:{*-linux-gnu,*-linux-musl,*-w64-mingw32}:native/autoconf'

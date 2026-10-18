@@ -3,8 +3,8 @@ version: 2.2.1
 type: native
 download:
     - kind: git
-      url: https://github.com/apache/maven.git
       sha256: 847203c6346f4b8d5ae27285f11eda8818af283f
+      url: https://github.com/apache/maven.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

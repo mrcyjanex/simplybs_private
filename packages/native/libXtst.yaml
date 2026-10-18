@@ -3,8 +3,8 @@ version: 1.2.5
 type: native
 download:
     - kind: tar.gz
-      url: https://www.x.org/releases/individual/lib/libXtst-1.2.5.tar.gz
       sha256: 244ba6e1c5ffa44f1ba251affdfa984d55d99c94bb925a342657e5e7aaf6d39c
+      url: https://www.x.org/releases/individual/lib/libXtst-1.2.5.tar.gz
 dependencies:
     - linux_*:*:native/_/_
     - linux_*:*:native/bash

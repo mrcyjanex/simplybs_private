@@ -3,8 +3,8 @@ version: 1.0.0
 type: native
 download:
     - kind: git
-      url: https://github.com/eclipse-sisu/sisu-project.git
       sha256: 4e6a00efdf39bcc37362197d96582cd9a9c41a7d
+      url: https://github.com/eclipse-sisu/sisu-project.git
 dependencies:
     - '*:*:native/bash'
     - '*:*:native/coreutils'

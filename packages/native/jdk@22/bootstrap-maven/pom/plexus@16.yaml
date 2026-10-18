@@ -3,9 +3,9 @@ version: "16"
 type: native
 download:
     - kind: blob
-      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/16/plexus-16.pom
-      sha256: 68d4eed65a3dbbc342ed80dd138fbe9c67cb7fb4c2abc4f5201cdb5b9f645868
       path: ./plexus-16.pom
+      sha256: 68d4eed65a3dbbc342ed80dd138fbe9c67cb7fb4c2abc4f5201cdb5b9f645868
+      url: https://repo1.maven.org/maven2/org/codehaus/plexus/plexus/16/plexus-16.pom
 dependencies:
     - '*:*:native/coreutils'
 build:
