@@ -19,7 +19,7 @@ func chdirRepoRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			if err := os.Chdir(wd); err != nil {
 				t.Fatal(err)
 			}

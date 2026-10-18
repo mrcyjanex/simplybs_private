@@ -1,7 +1,6 @@
 package pack
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,32 +12,35 @@ import (
 	"github.com/mrcyjanek/simplybs/host"
 	"github.com/mrcyjanek/simplybs/utils"
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 type Download struct {
-	Kind   string `json:"kind"`
-	URL    string `json:"url"`
-	Sha256 string `json:"sha256"`
-	Path   string `json:"path"`
+	Kind   string `json:"kind" yaml:"kind"`
+	URL    string `json:"url" yaml:"url"`
+	Sha256 string `json:"sha256" yaml:"sha256"`
+	Path   string `json:"path" yaml:"path"`
 }
 
 type StepProfile struct {
-	Unset []string `json:"unset,omitempty"`
-	Env   []string `json:"env,omitempty"`
+	Unset []string `json:"unset,omitempty" yaml:"unset,omitempty"`
+	Env   []string `json:"env,omitempty" yaml:"env,omitempty"`
+}
+
+type Build struct {
+	Env      []string                `json:"env" yaml:"env"`
+	Profiles map[string]*StepProfile `json:"profiles,omitempty" yaml:"profiles,omitempty"`
+	Steps    []string                `json:"steps" yaml:"steps"`
 }
 
 type Package struct {
-	Package  string      `json:"package"`
-	Version  string      `json:"version"`
-	Type     string      `json:"type"`
-	Download []*Download `json:"download"`
-	Build    struct {
-		Env      []string               `json:"env"`
-		Profiles map[string]StepProfile `json:"profiles,omitempty"`
-		Steps    []string               `json:"steps"`
-	} `json:"build"`
-	Dependencies []string `json:"dependencies"`
-	ExportEnv    []string `json:"export-env"`
+	Package      string      `json:"package" yaml:"package"`
+	Version      string      `json:"version" yaml:"version"`
+	Type         string      `json:"type" yaml:"type"`
+	Download     []*Download `json:"download" yaml:"download"`
+	Build        *Build      `json:"build" yaml:"build"`
+	Dependencies []string    `json:"dependencies" yaml:"dependencies"`
+	ExportEnv    []string    `json:"export-env" yaml:"export-env"`
 }
 
 type BuiltFile struct {
@@ -60,13 +62,13 @@ var bootstrapPackages = []string{
 }
 
 func FindPackage(name string) (*Package, error) {
-	pkgPath := filepath.Join(host.GetPackagesDir(), name+".json")
+	pkgPath := filepath.Join(host.GetPackagesDir(), name+".yaml")
 	info, err := os.ReadFile(pkgPath)
 	if err != nil {
 		return nil, err
 	}
 	var pkg Package
-	err = json.Unmarshal(info, &pkg)
+	err = uniparse.Unmarshal(info, &pkg)
 	if err != nil {
 		return nil, err
 	}

@@ -33,7 +33,7 @@
         "*:*:LDFLAGS=$LDFLAGS -L$PREFIX/lib",
         "*:*:LD_LIBRARY_PATH=$NATIVEPREFIX/lib",
         "*:*:PKG_CONFIG_PATH=$NATIVEPREFIX/lib/pkgconfig:$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig",
-        "*:*-linux-gnu:PKG_CONFIG_SYSROOT_DIR=$PREFIX",
+        "*:*:PKG_CONFIG_SYSROOT_DIR=$PREFIX",
         "*:*-linux-gnu:PKG_CONFIG_LIBDIR=$NATIVEPREFIX/lib64/pkgconfig:$NATIVEPREFIX/lib/pkgconfig:$PREFIX/lib64/pkgconfig:$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig",
         "*:*-apple-darwin:QT_MAC_SDK_NO_VERSION_CHECK=1",
         "*:*-android*:ANDROID_NDK_ROOT=$NATIVEPREFIX",

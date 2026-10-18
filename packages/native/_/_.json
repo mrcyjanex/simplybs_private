@@ -60,7 +60,8 @@
         "darwin_*:*:LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$NATIVEPREFIX/lib",
         "*:*:LIBRARY_PATH=$LIBRARY_PATH:$NATIVEPREFIX/lib",
         "*:*:CC_BUILD=$CC $CFLAGS",
-        "*:*:CXX_BUILD=$CXX $CXXFLAGS"
+        "*:*:CXX_BUILD=$CXX $CXXFLAGS",
+        "*:*:PKG_CONFIG_SYSROOT_DIR=$NATIVEPREFIX"
     ],
     "build": {
         "env": [

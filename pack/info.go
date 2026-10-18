@@ -170,20 +170,20 @@ func (p *Package) minimalEnvWithStaging(h *host.Host, stagingPath string) map[st
 		targetTriplet = builder.NativeTriplet()
 	}
 	return map[string]string{
-		"PATH":                   utils.BuildStepPATH(h.GetNativeEnvPath(), h.GetEnvPath(), "", utils.GetHostPath()),
-		"HOST":                   hostTriplet,
-		"TARGET":                 targetTriplet,
-		"PREFIX":                 utils.ToShellPath(h.GetEnvPath()),
-		"NATIVEPREFIX":           utils.ToShellPath(h.GetNativeEnvPath()),
-		"HOME":                   utils.ToShellPath(p.homePath(h)),
-		"HOST_PREFIX":            utils.ToShellPath(h.GetEnvPath()),
-		"NUM_CORES":              strconv.Itoa(getNumCores()),
-		"PATCH_DIR":              utils.ToShellPath(filepath.Join(getwd, "patches")),
-		"STAGING_DIR":            utils.ToShellPath(stagingPath),
-		"PKG_CONFIG_ALLOW_CROSS": "1",
-		"PKG_CONFIG_SYSROOT_DIR": utils.ToShellPath(h.GetEnvPath()),
-		"BUILDER_GOOS":           runtime.GOOS,
-		"BUILDER_GOARCH":         runtime.GOARCH,
+		"PATH":           utils.BuildStepPATH(h.GetNativeEnvPath(), h.GetEnvPath(), "", utils.GetHostPath()),
+		"HOST":           hostTriplet,
+		"TARGET":         targetTriplet,
+		"PREFIX":         utils.ToShellPath(h.GetEnvPath()),
+		"NATIVEPREFIX":   utils.ToShellPath(h.GetNativeEnvPath()),
+		"HOME":           utils.ToShellPath(p.homePath(h)),
+		"HOST_PREFIX":    utils.ToShellPath(h.GetEnvPath()),
+		"NUM_CORES":      strconv.Itoa(getNumCores()),
+		"PATCH_DIR":      utils.ToShellPath(filepath.Join(getwd, "patches")),
+		"STAGING_DIR":    utils.ToShellPath(stagingPath),
+		"BUILDER_GOOS":   runtime.GOOS,
+		"BUILDER_GOARCH": runtime.GOARCH,
+		// "PKG_CONFIG_ALLOW_CROSS": "1",
+		// "PKG_CONFIG_SYSROOT_DIR": utils.ToShellPath(h.GetEnvPath()),
 	}
 }
 

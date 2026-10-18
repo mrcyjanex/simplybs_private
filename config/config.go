@@ -14,6 +14,7 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/ProtonMail/go-crypto/openpgp/packet"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 // CacheURL is the sbscache API. It is not configurable.
@@ -56,7 +57,7 @@ func loadLocked() (File, error) {
 		return File{}, err
 	}
 	if err == nil && len(bytes.TrimSpace(data)) > 0 {
-		if err := json.Unmarshal(data, &f); err != nil {
+		if err := uniparse.Unmarshal(data, &f); err != nil {
 			return File{}, fmt.Errorf("config: %s: %w", path, err)
 		}
 	}

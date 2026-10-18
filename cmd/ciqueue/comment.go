@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 const commentMarker = "<!-- simplybs-ci-state"
@@ -118,7 +120,7 @@ func loadCommentState(repo string, pr int, marker string) (CommentState, error) 
 		ID   int64  `json:"id"`
 		Body string `json:"body"`
 	}
-	if err := json.Unmarshal(out, &comments); err != nil {
+	if err := uniparse.Unmarshal(out, &comments); err != nil {
 		return CommentState{}, err
 	}
 	for _, c := range comments {
@@ -145,7 +147,7 @@ func parseState(body, marker string) (CommentState, bool) {
 	}
 	raw := strings.TrimSpace(rest[:end])
 	var st CommentState
-	if err := json.Unmarshal([]byte(raw), &st); err != nil {
+	if err := uniparse.Unmarshal([]byte(raw), &st); err != nil {
 		return CommentState{}, false
 	}
 	return st, true
@@ -161,7 +163,7 @@ func upsertComment(repo string, pr int, body, marker string) error {
 		ID   int64  `json:"id"`
 		Body string `json:"body"`
 	}
-	if err := json.Unmarshal(out, &comments); err != nil {
+	if err := uniparse.Unmarshal(out, &comments); err != nil {
 		return err
 	}
 	var existing int64

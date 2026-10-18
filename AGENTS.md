@@ -1,7 +1,7 @@
 # AGENTS.md
 
 `simplybs` is a cross-compilation build system written in Go. Package definitions
-live in `packages/*.json` (and `packages/native/*.json`); patches live in `patches/`.
+live in `packages/*.yaml` (and `packages/native/*.yaml`); patches live in `patches/`.
 A checkout and `go run` read that `packages/` tree. Otherwise definitions come from
 `$HOME/.local/share/simplybs/repo/packages`, filled by `go run . packages sync`.
 
@@ -30,7 +30,7 @@ Supported host triplets are defined in `host/main.go` (e.g. `x86_64-linux-gnu`,
 
 There are many ways to solve problems, here are solutions, ordered by preference
 
-1. Making a change to the .json file - adding an extra step.
+1. Making a change to the .yaml file - adding an extra step.
 2. Prefer an extra step over && - && use accepted mainly when you need to cd as each step starts at working dir
 3. Adding existing dependency from the tree
 4. Adding an extra dependnecy (**must be built from source**, unless we are moving a prebuilt dependency to an older version - in which event it is fine to add extra prebuilt)

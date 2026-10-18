@@ -25,7 +25,6 @@
         "linux_*:*:native/libXau"
     ],
     "build": {
-        "env": [],
         "steps": [
             "linux_*:*:bash ./configure --prefix=$NATIVEPREFIX --enable-shared --disable-static --disable-dependency-tracking --enable-option-checking --disable-devel-docs --without-doxygen",
             "linux_*:*:make -j$NUM_CORES",

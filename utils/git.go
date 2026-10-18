@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/mrcyjanek/simplybs/utils/download"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 func gitCommand(args ...string) *exec.Cmd {
@@ -195,7 +195,7 @@ func loadSourcesFile() (*SourcesFile, error) {
 	}
 
 	var sources SourcesFile
-	if err := json.Unmarshal(content, &sources); err != nil {
+	if err := uniparse.Unmarshal(content, &sources); err != nil {
 		return nil, err
 	}
 

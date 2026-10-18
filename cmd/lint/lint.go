@@ -2,7 +2,6 @@ package lint
 
 import (
 	"bytes"
-	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,6 +13,7 @@ import (
 	"github.com/mrcyjanek/simplybs/pack"
 	"github.com/mrcyjanek/simplybs/utils"
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 type OrderedPackage struct {
@@ -50,7 +50,7 @@ func fixFormatting() {
 		crash.Handle(err)
 
 		var data map[string]interface{}
-		json.Unmarshal(contentInitial, &data)
+		uniparse.Unmarshal(contentInitial, &data)
 
 		ordered := OrderedPackage{}
 
@@ -126,13 +126,13 @@ func ensureSaneDependencies() {
 }
 
 func ensureValidName(pkg *pack.Package) {
-	content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".json"))
+	content, err := os.ReadFile(filepath.Join("packages", pkg.Package+".yaml"))
 	if err != nil {
 		log.Println(pkg.Package, "not found")
 		return
 	}
 	var foundPackage pack.Package
-	json.Unmarshal(content, &foundPackage)
+	uniparse.Unmarshal(content, &foundPackage)
 	if foundPackage.Package != pkg.Package {
 		log.Fatalf("Package %s has invalid name", pkg.Package)
 	}
@@ -265,7 +265,7 @@ func createSourcesFile() {
 
 		beforeRefs := utils.CountGitRefs(sources)
 		beforeDownloads := len(sources.Downloads)
-		utils.MergeDownloadsFromJSON(sources, content)
+		utils.MergeDownloadsFromJSONorYAML(sources, content)
 		currentRefs += utils.CountGitRefs(sources) - beforeRefs
 		currentDownloads += len(sources.Downloads) - beforeDownloads
 	}
