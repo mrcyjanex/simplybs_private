@@ -1,0 +1,24 @@
+package: native/pkgconf
+version: 2.5.1
+type: native
+download:
+    - kind: git
+      url: http://github.com/pkgconf/pkgconf.git
+      sha256: 4fc570f91d9d8d843ab32d2198a5c064538d8ffd
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/autoconf'
+    - '*:*:native/automake'
+    - '*:*:native/bash'
+    - '*:*:native/libtool'
+    - '*:*:native/m4'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+build:
+    env: []
+    steps:
+        - '*:*:bash ./autogen.sh'
+        - '*:*:bash ./configure --prefix=$NATIVEPREFIX --with-pkg-config-dir=$NATIVEPREFIX/lib/pkgconfig'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'
+        - '*:*:ln -s pkgconf $STAGING_DIR$NATIVEPREFIX/bin/pkg-config'

@@ -1,0 +1,149 @@
+package: onnxruntime
+version: 1.20.1
+type: host
+download:
+    - kind: tar.gz
+      url: https://github.com/microsoft/onnxruntime/archive/refs/tags/v1.20.1.tar.gz
+      sha256: d4c005506a2bbf88a838b14f8d1578406b8be2fb64abb50beeff908fb272529e
+    - kind: git
+      url: https://gitlab.com/libeigen/eigen.git
+      sha256: e7248b26a1ed53fa030c5c459f7ea095dfd276ac
+      path: deps/eigen
+    - kind: tar.gz
+      url: https://github.com/abseil/abseil-cpp/archive/refs/tags/20240722.0.tar.gz
+      sha256: f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3
+      path: deps/abseil_cpp
+    - kind: tar.gz
+      url: https://github.com/google/re2/archive/refs/tags/2024-07-02.tar.gz
+      sha256: eb2df807c781601c14a260a507a5bb4509be1ee626024cb45acbd57cb9d4032b
+      path: deps/re2
+    - kind: tar.gz
+      url: https://github.com/google/nsync/archive/refs/tags/1.26.0.tar.gz
+      sha256: 80fc1e605bb3cf5f272811ece39c4fb6761ffcb9b30563301845cc9ff381eb8b
+      path: deps/google_nsync
+    - kind: tar.gz
+      url: https://github.com/protocolbuffers/utf8_range/archive/72c943dea2b9240cd09efde15191e144bc7c7d38.tar.gz
+      sha256: e008768a46ee0ee646b8e4ef02f55af3634b3ad38b750489eb793774331ca5bd
+      path: deps/utf8_range
+    - kind: tar.gz
+      url: https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.12.tar.gz
+      sha256: 22fdaf641b31655d4b2297f9981fa5203b2866f8332d3c6333f6b0107bb320de
+      path: deps/protobuf
+    - kind: tar.gz
+      url: https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.1.tar.gz
+      sha256: 7a390f200f0ccd207e8cff6757e04817c1a0aec3e327b006b7eb451c57ee3538
+      path: deps/date
+    - kind: tar.gz
+      url: https://github.com/boostorg/mp11/archive/refs/tags/boost-1.82.0.tar.gz
+      sha256: 1705680b0849cac3258e528270c9071b440b95372e5be0b9197da89e84a794eb
+      path: deps/mp11
+    - kind: tar.gz
+      url: https://github.com/nlohmann/json/archive/refs/tags/v3.10.5.tar.gz
+      sha256: 5daca6ca216495edf89d167f808d1d03c4a4d929cef7da5e10f135ae1540c7e4
+      path: deps/nlohmann_json
+    - kind: tar.gz
+      url: https://github.com/pytorch/cpuinfo/archive/ca678952a9a8eaa6de112d154e8e104b22f9ab3f.tar.gz
+      sha256: c8f43b307fa7d911d88fec05448161eb1949c3fc0cb62f3a7a2c61928cdf2e9b
+      path: deps/pytorch_cpuinfo
+    - kind: tar.gz
+      url: https://github.com/microsoft/GSL/archive/refs/tags/v4.0.0.tar.gz
+      sha256: f0e32cb10654fea91ad56bde89170d78cfbf4363ee0b01d8f097de2ba49f6ce9
+      path: deps/GSL
+    - kind: tar.gz
+      url: https://github.com/microsoft/wil/archive/refs/tags/v1.0.230629.1.tar.gz
+      sha256: c0d9ad1f295e181aa28d7c9b219e7d530e6bc4b7533317be50e7eae760c8d63f
+      path: deps/microsoft_wil
+    - kind: tar.gz
+      url: https://github.com/dcleblanc/SafeInt/archive/refs/tags/3.0.28.tar.gz
+      sha256: d6b164bcea92a746e4d44132e505c7ab1816d1089ba99ebc674ccd4b70262ed5
+      path: deps/safeint
+    - kind: tar.gz
+      url: https://github.com/google/flatbuffers/archive/refs/tags/v23.5.26.tar.gz
+      sha256: 1cce06b17cddd896b6d73cc047e36a254fb8df4d7ea18a46acf16c4c0cd3f3f3
+      path: deps/flatbuffers
+    - kind: tar.gz
+      url: https://github.com/onnx/onnx/archive/refs/tags/v1.16.1.tar.gz
+      sha256: 0e6aa2c0a59bb2d90858ad0040ea1807117cc2f05b97702170f18e6cd6b66fb3
+      path: deps/onnx
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/cmake'
+    - '*:*:native/cmake-toolchain'
+    - '*:*:native/make'
+    - '*:*:native/coreutils'
+    - '*:*:native/bash'
+    - '*:*:native/python@3.11'
+    - '*:*:native/patch'
+    - '*:*-w64-mingw32:native/findutils'
+    - '*:*-w64-mingw32:native/sed'
+    - '*:*:native/protobuf@21.12'
+    - '*:*-android*:libiconv'
+build:
+    env:
+        - '*:*:ort_extra='
+        - '*:*-linux-gnu:ort_extra=CMAKE_SHARED_LINKER_FLAGS=-static-libstdc++'
+        - '*:*-android*:ort_extra=Iconv_INCLUDE_DIR=$PREFIX/include Iconv_LIBRARY=$PREFIX/lib/libiconv.a'
+        - '*:aarch64-apple-darwin:ort_extra=CMAKE_OSX_ARCHITECTURES=arm64'
+        - '*:x86_64-apple-darwin:ort_extra=CMAKE_OSX_ARCHITECTURES=x86_64'
+        - '*:aarch64-apple-ios:ort_extra=CMAKE_OSX_ARCHITECTURES=arm64 CMAKE_OSX_DEPLOYMENT_TARGET=14.0'
+        - '*:aarch64-apple-ios-simulator:ort_extra=CMAKE_OSX_ARCHITECTURES=arm64 CMAKE_OSX_DEPLOYMENT_TARGET=14.0'
+        - '*:aarch64-apple-ios:CC=$NATIVEPREFIX/bin/aarch64-apple-ios-clang -target aarch64-apple-ios -mios-version-min=14.0 -isysroot $SDK_PATH -I$PREFIX/include'
+        - '*:aarch64-apple-ios:CXX=$NATIVEPREFIX/bin/aarch64-apple-ios-clang++ -target aarch64-apple-ios -mios-version-min=14.0 -isysroot $SDK_PATH -I$PREFIX/include'
+        - '*:aarch64-apple-ios-simulator:CC=$NATIVEPREFIX/bin/aarch64-apple-ios-simulator-clang -target aarch64-apple-ios-simulator -mios-version-min=14.0 -isysroot $SDK_PATH -I$PREFIX/include'
+        - '*:aarch64-apple-ios-simulator:CXX=$NATIVEPREFIX/bin/aarch64-apple-ios-simulator-clang++ -target aarch64-apple-ios-simulator -mios-version-min=14.0 -isysroot $SDK_PATH -I$PREFIX/include'
+    steps:
+        - '*:*:patch -p1 < $PATCH_DIR/onnxruntime/cstdint-optimizer-api.patch'
+        - '*:*-android*:patch -p1 < $PATCH_DIR/onnxruntime/android-log-and-sink.patch'
+        - '*:*:patch -p1 -d deps/google_nsync < cmake/patches/nsync/nsync_1.26.0.patch'
+        - '*:*:patch -p1 -d deps/protobuf < cmake/patches/protobuf/protobuf_cmake.patch'
+        - '*:*:patch -p1 -d deps/flatbuffers < cmake/patches/flatbuffers/flatbuffers.patch'
+        - '*:*:patch -p1 -d deps/onnx < cmake/patches/onnx/onnx.patch'
+        - '*:*-android*:patch -p1 -d deps/pytorch_cpuinfo < $PATCH_DIR/onnxruntime/cpuinfo-android-properties.patch'
+        - '*:*-w64-mingw32:sed -i ''s/#ifdef _MSC_VER/#if defined(_MSC_VER) || defined(__MINGW32__)/'' onnxruntime/core/mlas/lib/mlasi.h'
+        - '*:*-w64-mingw32:sed -i ''/decltype(&_aligned_free)/i #include <malloc.h>'' onnxruntime/core/mlas/lib/mlasi.h'
+        - '*:*-w64-mingw32:sed -i ''s/defined(NTDDI_WIN10_NI) && NTDDI_VERSION >= NTDDI_WIN10_NI/0/'' deps/abseil_cpp/absl/time/internal/cctz/src/time_zone_lookup.cc'
+        - '*:*-w64-mingw32:sed -i ''/#if defined(_WIN32)/{N;s/#if defined(_WIN32)\n    return _xgetbv/#if defined(_WIN32) \&\& !defined(__MINGW32__)\n    return _xgetbv/;}'' onnxruntime/core/mlas/lib/platform.cpp'
+        - '*:*-w64-mingw32:sed -i ''/set(ORT_WARNING_FLAGS)/{n;s/if (WIN32)/if (MSVC)/;}'' cmake/CMakeLists.txt'
+        - '*:*-w64-mingw32:sed -i ''s/if (WIN32)/if (MSVC)/'' cmake/onnxruntime_mlas.cmake'
+        - '*:*-w64-mingw32:sed -i ''s/debug Dbghelp Advapi32/debug dbghelp advapi32/'' cmake/onnxruntime_mlas.cmake'
+        - '*:*-w64-mingw32:sed -i ''s|#include <winerror.h>|typedef long HRESULT;\n#include <winerror.h>|'' include/onnxruntime/core/common/status.h'
+        - '*:*-w64-mingw32:sed -i ''s|#include <sstream>|#include <cstdint>\n#include <sstream>|'' include/onnxruntime/core/framework/ortdevice.h'
+        - '*:*-w64-mingw32:patch -p1 < $PATCH_DIR/onnxruntime/mingw-log-severity.patch'
+        - '*:*-w64-mingw32:sed -i ''s|#include "core/platform/windows/telemetry.h"|#include "core/platform/windows/telemetry.h"\n#undef ERROR\n#undef OPTIONAL|'' onnxruntime/core/framework/execution_providers.h'
+        - '*:*-w64-mingw32:sed -i ''s/#if VER_PRODUCTBUILD > 9600/#if VER_PRODUCTBUILD > 9600 || defined(__MINGW32__)/'' onnxruntime/core/platform/windows/logging/etw_sink.h'
+        - '*:*-w64-mingw32:sed -i ''s|std::ifstream bytes_stream(model_uri,|std::ifstream bytes_stream(std::filesystem::path(model_uri).string(),|'' onnxruntime/core/session/inference_session.cc'
+        - '*:*-w64-mingw32:sed -i ''s|target_compile_options(onnxruntime_common PRIVATE "/Zc:char8_t-")|if(MSVC)\ntarget_compile_options(onnxruntime_common PRIVATE "/Zc:char8_t-")\nendif()|'' cmake/onnxruntime_common.cmake'
+        - '*:*-w64-mingw32:sed -i ''/onnxruntime_add_static_library(onnxruntime_common/a if(MINGW)\ntarget_link_libraries(onnxruntime_common PUBLIC pathcch)\nendif()'' cmake/onnxruntime_common.cmake'
+        - '*:*-w64-mingw32:cp $PATCH_DIR/onnxruntime/mingw_wil.h onnxruntime/core/platform/windows/mingw_wil.h'
+        - '*:*-w64-mingw32:sed -i ''s|#include <wil/Resource.h>|#include "mingw_wil.h"\n#include <intrin.h>\n#include <share.h>\n#include <sys/stat.h>|'' onnxruntime/core/platform/windows/env.cc'
+        - '*:*-w64-mingw32:sed -i ''s/FAIL_FAST_LAST_ERROR_IF(waitStatus == WAIT_FAILED);/if (waitStatus == WAIT_FAILED) std::terminate();/'' onnxruntime/core/platform/windows/env.cc'
+        - '*:*-w64-mingw32:sed -i ''s/struct _stat buf;/struct stat buf;/; s/_fstat(fd, \&buf)/fstat(fd, \&buf)/'' onnxruntime/core/platform/windows/env.cc'
+        - '*:*-w64-mingw32:sed -i ''s|symbol = GetProcAddress(modules\[i\], name);|symbol = reinterpret_cast<void*>(GetProcAddress(modules[i], name));|'' onnxruntime/core/platform/windows/env.cc'
+        - '*:*-w64-mingw32:sed -i ''s|*symbol = ::GetProcAddress(reinterpret_cast<HMODULE>(handle), symbol_name.c_str());|*symbol = reinterpret_cast<void*>(::GetProcAddress(reinterpret_cast<HMODULE>(handle), symbol_name.c_str()));|'' onnxruntime/core/platform/windows/env.cc'
+        - '*:*-w64-mingw32:sed -i ''s/116444736000000000i64/116444736000000000LL/'' onnxruntime/core/platform/windows/env_time.cc'
+        - '*:*-w64-mingw32:sed -i ''s|#include "profiler.h"|#include "profiler.h"\n#include <filesystem>|'' onnxruntime/core/common/profiler.cc'
+        - '*:*-w64-mingw32:sed -i ''s|profile_stream_.open(file_name,|profile_stream_.open(std::filesystem::path(file_name).string(),|'' onnxruntime/core/common/profiler.cc'
+        - '*:*-w64-mingw32:sed -i ''s/#if _MSC_VER/#if defined(_MSC_VER) || defined(__MINGW32__)/'' onnxruntime/core/framework/allocator.cc'
+        - '*:*-w64-mingw32:sed -i ''s|#include <mutex>|#include <mutex>\n#include <condition_variable>|'' include/onnxruntime/core/platform/ort_mutex.h'
+        - '*:*-w64-mingw32:sed -i ''s|qgemm_kernel_amx.cpp PROPERTIES COMPILE_FLAGS "-mavx2 -mavx512bw -mavx512dq -mavx512vl -mavx512f"|qgemm_kernel_amx.cpp PROPERTIES COMPILE_FLAGS "-mavx2 -mavx512bw -mavx512dq -mavx512vl -mavx512f -mamx-tile -mamx-int8"|'' cmake/onnxruntime_mlas.cmake'
+        - '*:*-w64-mingw32:sed -i ''1i #include <filesystem>'' onnxruntime/core/framework/allocation_planner.cc'
+        - '*:*-w64-mingw32:sed -i -e ''s|std::ifstream if_stream(config_file_)|std::ifstream if_stream(std::filesystem::path(config_file_).string())|'' -e ''s|std::ofstream of_stream(config_file_)|std::ofstream of_stream(std::filesystem::path(config_file_).string())|'' -e ''s|std::ifstream f(config_file)|std::ifstream f(std::filesystem::path(config_file).string())|'' onnxruntime/core/framework/allocation_planner.cc'
+        - '*:*-w64-mingw32:sed -i ''s/VER_STRING/"1.20.1"/g; s/FILE_NAME/"onnxruntime.dll"/'' onnxruntime/core/dll/onnxruntime.rc'
+        - '*:*-w64-mingw32:sed -i ''/\.type.*@function/d'' onnxruntime/core/mlas/lib/x86_64/asmmacro.h onnxruntime/core/mlas/lib/x86/asmmacro.h'
+        - '*:*-w64-mingw32:sed -i ''/\.hidden/d'' onnxruntime/core/mlas/lib/x86_64/*.S'
+        - '*:*-w64-mingw32:sed -i ''/#include <winmeta.h>/d'' onnxruntime/core/framework/execution_providers.h onnxruntime/core/session/provider_registration.cc onnxruntime/core/platform/windows/telemetry.cc onnxruntime/core/providers/qnn/builder/qnn_backend_manager.cc'
+        - '*:*-w64-mingw32:sed -i ''s/if (WIN32)/if (MSVC)/'' cmake/onnxruntime_graph.cmake cmake/external/onnx_minimal.cmake'
+        - '*:*-w64-mingw32:sed -i ''s/if (WIN32 AND NOT CMAKE_CXX_STANDARD_LIBRARIES MATCHES kernel32.lib)/if (MSVC AND NOT CMAKE_CXX_STANDARD_LIBRARIES MATCHES kernel32.lib)/'' cmake/onnxruntime.cmake'
+        - '*:*-w64-mingw32:sed -i ''s/set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")/if(MINGW)\n    set(ONNXRUNTIME_SO_LINK_FLAG "")\n  else()\n    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")\n  endif()/'' cmake/onnxruntime.cmake'
+        - '*:*-w64-mingw32:sed -i ''s/file.write("LIBRARY\\n")/file.write("LIBRARY onnxruntime.dll\\n")/'' tools/ci_build/gen_def.py'
+        - '*:*-w64-mingw32:sed -i ''s/0xffffffffffffffffui64/0xffffffffffffffffULL/; s/0xffffffffui32/0xffffffffU/'' deps/microsoft_wil/include/wil/resource.h'
+        - '*:*-w64-mingw32:cp $PATCH_DIR/onnxruntime/mingw_tracelogging.h include/onnxruntime/core/platform/windows/mingw_tracelogging.h'
+        - '*:*-w64-mingw32:find . -type f \( -name ''*.h'' -o -name ''*.hpp'' -o -name ''*.cc'' -o -name ''*.cpp'' -o -name ''*.c'' -o -name ''*.rc'' \) -print0 | xargs -0 sed -i -e ''s/<Windows.h>/<windows.h>/g'' -e ''s/<Winver.h>/<winver.h>/g'' -e ''s/<PathCch.h>/<pathcch.h>/g'' -e ''s|<TraceLoggingProvider.h>|<core/platform/windows/mingw_tracelogging.h>|g'''
+        - '*:*-w64-mingw32:sed -i ''s|#include <windows.h>|#include <windows.h>\n#undef OPTIONAL\n#undef ERROR|'' deps/onnx/onnx/common/path.h'
+        - '*:*-w64-mingw32:mkdir -p cmake/mingw-winwrap'
+        - '*:*-w64-mingw32:cp $PATCH_DIR/onnxruntime/mingw-winwrap/windows.h $PATCH_DIR/onnxruntime/mingw-winwrap/ntdef.h $PATCH_DIR/onnxruntime/mingw-winwrap/winnt.h cmake/mingw-winwrap/'
+        - '*:*-w64-mingw32:sed -i ''s|^project(onnxruntime C CXX ASM)|project(onnxruntime C CXX ASM)\nif(MINGW)\n  include_directories(BEFORE "${CMAKE_SOURCE_DIR}/mingw-winwrap")\nendif()|'' cmake/CMakeLists.txt'
+        - '*:*:./build.sh --config Release --build_shared_lib --parallel --skip_tests --allow_running_as_root --compile_no_warning_as_error --skip_submodule_sync --path_to_protoc_exe $NATIVEPREFIX/bin/protoc --cmake_extra_defines CMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE CMAKE_INSTALL_PREFIX=$PREFIX FETCHCONTENT_FULLY_DISCONNECTED=ON FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=$PWD/deps/abseil_cpp FETCHCONTENT_SOURCE_DIR_RE2=$PWD/deps/re2 FETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=$PWD/deps/google_nsync FETCHCONTENT_SOURCE_DIR_UTF8_RANGE=$PWD/deps/utf8_range FETCHCONTENT_SOURCE_DIR_PROTOBUF=$PWD/deps/protobuf FETCHCONTENT_SOURCE_DIR_DATE=$PWD/deps/date FETCHCONTENT_SOURCE_DIR_MP11=$PWD/deps/mp11 FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON=$PWD/deps/nlohmann_json FETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=$PWD/deps/pytorch_cpuinfo FETCHCONTENT_SOURCE_DIR_PYTORCH_CLOG=$PWD/deps/pytorch_cpuinfo FETCHCONTENT_SOURCE_DIR_GSL=$PWD/deps/GSL FETCHCONTENT_SOURCE_DIR_SAFEINT=$PWD/deps/safeint FETCHCONTENT_SOURCE_DIR_MICROSOFT_WIL=$PWD/deps/microsoft_wil FETCHCONTENT_SOURCE_DIR_FLATBUFFERS=$PWD/deps/flatbuffers FETCHCONTENT_SOURCE_DIR_ONNX=$PWD/deps/onnx onnxruntime_USE_PREINSTALLED_EIGEN=ON eigen_SOURCE_PATH=$PWD/deps/eigen CMAKE_POLICY_VERSION_MINIMUM=3.5 onnxruntime_BUILD_UNIT_TESTS=OFF FLATBUFFERS_BUILD_FLATC=OFF $ort_extra'
+        - linux_*:*:DESTDIR=$STAGING_DIR cmake --install build/Linux/Release --prefix "$PREFIX"
+        - darwin_*:*:DESTDIR=$STAGING_DIR cmake --install build/MacOS/Release --prefix "$PREFIX"
+        - '*:*:cp -a $STAGING_DIR$PREFIX/include/onnxruntime/. $STAGING_DIR$PREFIX/include/'

@@ -1,0 +1,23 @@
+package: native/texinfo
+version: "7.2"
+type: native
+download:
+    - kind: tar.gz
+      url: http://ftpmirror.gnu.org/gnu/texinfo/texinfo-7.2.tar.gz
+      sha256: e86de7dfef6b352aa1bf647de3a6213d1567c70129eccbf8977706d9c91919c8
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/automake'
+    - '*:*:native/bash'
+    - '*:*:native/gawk'
+    - '*:*:native/gettext'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+build:
+    env:
+        - '*:*:HELP2MAN=true'
+    steps:
+        - '*:*:bash ./configure --prefix=$NATIVEPREFIX'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'
+        - '*:*:cd $STAGING_DIR$NATIVEPREFIX/bin && ln -sf texi2any makeinfo'

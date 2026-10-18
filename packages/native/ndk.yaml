@@ -1,0 +1,101 @@
+package: native/ndk
+version: r29
+type: native
+download:
+    - kind: git
+      url: https://android.googlesource.com/platform/manifest
+      sha256: 82eb8adcaafe02dce4e462db2379fad3ea0b54d8
+      path: .repo/manifests
+    - kind: git
+      url: https://gerrit.googlesource.com/git-repo
+      sha256: 38d2fe11b9df521727fcca23c9dac086ce8378d3
+      path: .repo/repo
+    - kind: git
+      url: https://android.googlesource.com/platform/bionic
+      sha256: a63b21091ada240d92f8ceadb1cabbdedaaab81b
+      path: bionic
+    - kind: git
+      url: https://android.googlesource.com/platform/development
+      sha256: d84a5b9d746f241c3c77b16e8c6964b0f86f86e2
+      path: development
+    - kind: git
+      url: https://android.googlesource.com/platform/external/effcee
+      sha256: 291037172dcb79318a7d0214a194e985c9ad0d7b
+      path: external/effcee
+    - kind: git
+      url: https://android.googlesource.com/platform/external/googletest
+      sha256: dc81c03b5db576f5ab8a468b6eebf584b016fa5b
+      path: external/googletest
+    - kind: git
+      url: https://android.googlesource.com/platform/external/python/astroid
+      sha256: 062ae590ebac6acf05a5c7583be35870f0b563ba
+      path: external/python/astroid
+    - kind: git
+      url: https://android.googlesource.com/platform/external/python/pylint
+      sha256: 6169a46fd0a78ed1f3c9fd2c41c1636eb0ed35c5
+      path: external/python/pylint
+    - kind: git
+      url: https://android.googlesource.com/platform/external/regex-re2
+      sha256: 2e598de2ffcec7903d52742d4ecb80f11e7e1b92
+      path: external/regex-re2
+    - kind: git
+      url: https://android.googlesource.com/platform/external/shaderc/glslang
+      sha256: 2222fa5818324771ceb99fd8802e54a50a2fb1a4
+      path: external/shaderc/glslang
+    - kind: git
+      url: https://android.googlesource.com/platform/external/shaderc/shaderc
+      sha256: 8045a61b8c6b79c9fdaa86f36653a824880bab4d
+      path: external/shaderc/shaderc
+    - kind: git
+      url: https://android.googlesource.com/platform/external/shaderc/spirv-headers
+      sha256: 907059dfed550925a45217e1ed9a7bc42ff8d770
+      path: external/shaderc/spirv-headers
+    - kind: git
+      url: https://android.googlesource.com/platform/external/shaderc/spirv-tools
+      sha256: 12f5c853ee9e06ba6565006d8d36ee261a140d91
+      path: external/shaderc/spirv-tools
+    - kind: git
+      url: https://android.googlesource.com/platform/external/vulkan-headers
+      sha256: 062f62b42a62e18a8eaccbce323d4f58548677be
+      path: external/vulkan-headers
+    - kind: git
+      url: https://android.googlesource.com/platform/ndk
+      sha256: 196e0661200bad5361340700fea67be12e1f1684
+      path: ndk
+    - kind: git
+      url: https://android.googlesource.com/platform/prebuilts/ndk
+      sha256: c0815fea3a8081be6215440de330c63246e6551f
+      path: prebuilts/ndk
+    - kind: git
+      url: https://android.googlesource.com/platform/prebuilts/simpleperf
+      sha256: c04e1425e49ad7a106bdb5911e7ebbc5ff4afa20
+      path: prebuilts/simpleperf
+    - kind: git
+      url: https://android.googlesource.com/toolchain/make
+      sha256: 44fc4fe66a484b91844c302f03eaa8438e065d17
+      path: toolchain/make
+    - kind: git
+      url: https://android.googlesource.com/toolchain/yasm
+      sha256: 7a28367b72cb1e1667b081d6404afbd063898e70
+      path: toolchain/yasm
+dependencies:
+    - '*:*-android*:native/_/_'
+    - '*:*-android*:native/cmake'
+    - '*:*-android*:native/llvm@google@19.0.1'
+    - '*:*-android*:native/make'
+    - '*:*-android*:native/ninja'
+    - '*:*-android*:native/python@3.11'
+build:
+    steps:
+        - '*:*-android*:mkdir -p prebuilts/clang/host/darwin-x86'
+        - '*:*-android*:mkdir -p prebuilts/clang/host/linux-x86'
+        - '*:*-android*:mkdir -p prebuilts/clang/host/windows-x86'
+        - '*:*-android*:cp -a $NATIVEPREFIX/llvm@google@19.0.1 prebuilts/clang/host/darwin-x86/clang-r563880c'
+        - '*:*-android*:cp -a $NATIVEPREFIX/llvm@google@19.0.1 prebuilts/clang/host/linux-x86/clang-r563880c'
+        - '*:*-android*:cp -a $NATIVEPREFIX/llvm@google@19.0.1 prebuilts/clang/host/windows-x86/clang-r563880c'
+        - '*:*-android*:touch prebuilts/clang/host/darwin-x86/clang-r563880c/NOTICE'
+        - '*:*-android*:touch prebuilts/clang/host/linux-x86/clang-r563880c/NOTICE'
+        - '*:*-android*:touch prebuilts/clang/host/windows-x86/clang-r563880c/NOTICE'
+        - '*:*-android*:mkdir -p prebuilts/simpleperf'
+        - '*:*-android*:touch prebuilts/simpleperf/NOTICE'
+        - '*:*-android*:cd ndk && python3 checkbuild.py'

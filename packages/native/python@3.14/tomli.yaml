@@ -1,0 +1,16 @@
+package: native/python@3.14/tomli
+version: 2.4.0
+type: native
+download:
+    - kind: git
+      url: https://github.com/hukkin/tomli
+      sha256: a678e6fdeffa89bd28e4ecc148b926a4e1bbbc7b
+dependencies:
+    - '*:*:native/make'
+    - '*:*:native/python@3.14'
+    - '*:*:native/python@3.14/flit-core'
+    - '*:*:native/python@3.14/pyproject-hooks'
+build:
+    env: []
+    steps:
+        - '*:*:pip3 install --root $STAGING_DIR --prefix $NATIVEPREFIX --no-deps --no-build-isolation --no-index --disable-pip-version-check .'
