@@ -703,6 +703,52 @@ func TestTryPushPackageCacheUploadsOnlyMissing(t *testing.T) {
 	}
 }
 
+func TestCachePushKeepsAllPackagesInOneRequest(t *testing.T) {
+	enableCache(t)
+	h := host.SupportedHosts["x86_64-linux-gnu"]
+	var pkgs []*Package
+	var want []string
+	for _, name := range []string{"native/zlib", "native/bzip2"} {
+		pkg, err := FindPackage(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, rel := range pkg.BuiltRelPaths(h) {
+			path := filepath.Join(host.BuiltDir(), filepath.FromSlash(rel))
+			if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(path, []byte("payload-"+rel), 0644); err != nil {
+				t.Fatal(err)
+			}
+		}
+		pkgs = append(pkgs, pkg)
+		rels := append(append([]string{}, pkg.BuiltRelPaths(h)...), pkg.signatureRel(h))
+		for _, rel := range rels {
+			want = append(want, cacheObjectName(AssetNameForRel(rel)))
+		}
+	}
+	f := newFakeCache()
+	useFakeCache(t, f)
+	if err := CachePush(pkgs, h); err != nil {
+		t.Fatal(err)
+	}
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if len(f.keeps) != 1 {
+		t.Fatalf("keep requests %d, want 1", len(f.keeps))
+	}
+	got := map[string]bool{}
+	for _, name := range f.keeps[0] {
+		got[name] = true
+	}
+	for _, name := range want {
+		if !got[name] {
+			t.Fatalf("keep missing %s", name)
+		}
+	}
+}
+
 func TestTryPushDisabledWithoutToken(t *testing.T) {
 	t.Setenv("HOME", t.TempDir())
 	t.Setenv("SIMPLYBS_TOKEN", "")

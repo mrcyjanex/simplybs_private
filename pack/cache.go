@@ -500,22 +500,27 @@ func TryPushPackageCache(p *Package, h *host.Host) {
 		log.Printf("[%s][%s] cache push: list objects: %v", h.Triplet, p.Package, err)
 		return
 	}
-	if err := uploadPackage(p, h, idx); err != nil {
+	names, err := uploadPackage(p, h, idx)
+	if err != nil {
 		log.Printf("[%s][%s] cache push failed: %v", h.Triplet, p.Package, err)
+		return
+	}
+	if err := keepNames(names); err != nil {
+		log.Printf("[%s][%s] cache keep: %v", h.Triplet, p.Package, err)
 	}
 }
 
-func uploadPackage(p *Package, h *host.Host, idx *remoteAssetIndex) error {
+func uploadPackage(p *Package, h *host.Host, idx *remoteAssetIndex) ([]string, error) {
 	if p.localBuiltArtifactsPresent(h) {
 		if err := p.writePackSignature(h); err != nil {
-			return err
+			return nil, err
 		}
 	}
 	root := host.BuiltDir()
 	rels := append(append([]string{}, p.BuiltRelPaths(h)...), p.signatureRel(h))
 	c, err := cacheClient()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	tag := CacheTag()
 	for _, rel := range rels {
@@ -529,7 +534,7 @@ func uploadPackage(p *Package, h *host.Host, idx *remoteAssetIndex) error {
 		}
 		log.Printf("[%s][%s] cache push: %s", h.Triplet, p.Package, name)
 		if err := c.Upload(tag, name, abs); err != nil {
-			return err
+			return nil, err
 		}
 		st, _ := os.Stat(abs)
 		var size int64
@@ -538,7 +543,7 @@ func uploadPackage(p *Package, h *host.Host, idx *remoteAssetIndex) error {
 		}
 		idx.add(remoteObject{Name: name, Size: size})
 	}
-	return keepNames(existingAssetNames(p, h))
+	return existingAssetNames(p, h), nil
 }
 
 // CachePush uploads local built artifacts that are not yet on the cache.
@@ -553,12 +558,20 @@ func CachePush(pkgs []*Package, h *host.Host) error {
 		return fmt.Errorf("cache: list objects: %w", err)
 	}
 	if len(pkgs) > 0 && h != nil {
+		var keep []string
+		var firstErr error
 		for _, p := range CollectNeededPackages(pkgs, h) {
-			if err := uploadPackage(p, h, idx); err != nil {
-				return err
+			names, err := uploadPackage(p, h, idx)
+			if err != nil {
+				firstErr = err
+				break
 			}
+			keep = append(keep, names...)
 		}
-		return nil
+		if err := keepNames(keep); err != nil && firstErr == nil {
+			firstErr = err
+		}
+		return firstErr
 	}
 	return uploadBuiltTree(idx)
 }
