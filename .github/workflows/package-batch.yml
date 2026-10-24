@@ -28,9 +28,6 @@ on:
       cache_tag:
         required: true
         type: string
-      cache_repo:
-        required: true
-        type: string
       hosts:
         required: true
         type: string
@@ -59,7 +56,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -75,7 +71,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -91,7 +86,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -107,7 +101,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -123,7 +116,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -139,7 +131,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -155,7 +146,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -171,7 +161,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -187,7 +176,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -203,7 +191,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -219,7 +206,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -235,7 +221,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -251,7 +236,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -267,7 +251,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -283,7 +266,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -299,7 +281,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -315,7 +296,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -331,7 +311,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -347,7 +326,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -363,7 +341,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -379,7 +356,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -395,7 +371,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -411,7 +386,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}
@@ -427,7 +401,6 @@ jobs:
       base: ${{ inputs.base }}
       pr: ${{ inputs.pr }}
       cache_tag: ${{ inputs.cache_tag }}
-      cache_repo: ${{ inputs.cache_repo }}
       hosts: ${{ inputs.hosts }}
       extra_package: ${{ inputs.extra_package }}
       comment_queue: ${{ inputs.comment_queue }}

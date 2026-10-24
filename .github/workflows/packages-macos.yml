@@ -28,8 +28,7 @@ on:
 # linux-gnu and mingw (those stay on the Linux queues).
 # Ten batches of 24 slots (240 packages per run) so the GraalVM/maven tree
 # fits without failing the finish job on the old 72-slot cap.
-# Release cache tag is CI-only (v0-sbs-ci-darwin-arm64, overflowing to
-# v0-sbs-ci-darwin-arm64.sN at GitHub's 1000-asset cap). Do not use the
+# sbscache tag is CI-only (v0-sbs-ci-darwin-arm64). Do not use the
 # human/cloud-agent tag (v0-sbs-ubuntu-linux-amd64).
 permissions:
   contents: write
@@ -49,6 +48,15 @@ jobs:
       extra_package: ${{ steps.meta.outputs.extra_package }}
       cache_tag: ${{ steps.meta.outputs.cache_tag }}
     steps:
+      - name: Require sbscache
+        env:
+          SIMPLYBS_TOKEN: ${{ secrets.SIMPLYBS_TOKEN }}
+        run: |
+          if [ -z "$SIMPLYBS_TOKEN" ]; then
+            echo "SIMPLYBS_TOKEN is not set; refusing to run without sbscache"
+            exit 1
+          fi
+
       - name: Resolve refs
         id: meta
         env:
@@ -106,7 +114,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -121,7 +128,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -136,7 +142,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -151,7 +156,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -166,7 +170,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -181,7 +184,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -196,7 +198,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -211,7 +212,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -226,7 +226,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos
@@ -241,7 +240,6 @@ jobs:
       base: ${{ needs.meta.outputs.base }}
       pr: ${{ needs.meta.outputs.pr }}
       cache_tag: ${{ needs.meta.outputs.cache_tag }}
-      cache_repo: ${{ github.repository }}
       hosts: aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
       extra_package: ${{ needs.meta.outputs.extra_package }}
       comment_queue: macos

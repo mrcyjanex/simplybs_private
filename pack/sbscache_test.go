@@ -756,7 +756,7 @@ func TestTryPushDisabledWithoutToken(t *testing.T) {
 	TryPushPackageCache(&Package{Package: "zlib", Version: "1.0"}, host.SupportedHosts["x86_64-linux-gnu"])
 }
 
-func TestPackageCacheOnRelease(t *testing.T) {
+func TestPackageCached(t *testing.T) {
 	enableCache(t)
 	pkg, err := FindPackage("native/zlib")
 	if err != nil {
@@ -768,7 +768,7 @@ func TestPackageCacheOnRelease(t *testing.T) {
 		f.objects[AssetNameForRel(rel)] = []byte("x")
 	}
 	useFakeCache(t, f)
-	ok, err := PackageCacheOnRelease(pkg, h)
+	ok, err := PackageCached(pkg, h)
 	if err != nil {
 		t.Fatal(err)
 	}

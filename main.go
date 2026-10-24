@@ -78,7 +78,7 @@ func main() {
 	}
 
 	if *argCachePush && *argPkg == "" && !*argWorld {
-		// Push every local built artifact for this builder that is not on the release.
+		// Push every local built artifact for this builder that is not in sbscache.
 		if err := pack.CachePush(nil, nil); err != nil {
 			crash.Handle(err)
 		}

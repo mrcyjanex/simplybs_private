@@ -262,11 +262,11 @@ func exitSignatureMismatch(err error) {
 	os.Exit(1)
 }
 
-// PackageCacheOnRelease reports whether all built artifacts for p on host h
-// already exist on the configured tag. When cache is disabled, it returns false.
-func PackageCacheOnRelease(p *Package, h *host.Host) (bool, error) {
+// PackageCached reports whether all built artifacts for p on host h already
+// exist on the configured sbscache tag. An unconfigured cache is an error.
+func PackageCached(p *Package, h *host.Host) (bool, error) {
 	if !CacheEnabled() {
-		return false, nil
+		return false, fmt.Errorf("sbscache is not configured (set SIMPLYBS_TOKEN)")
 	}
 	idx, err := loadRemoteAssets()
 	if err != nil {

@@ -24,10 +24,7 @@ on:
         type: string
         default: ""
       cache_tag:
-        description: GitHub Release cache tag (CI-only, e.g. v0-sbs-ci-linux-amd64)
-        required: true
-        type: string
-      cache_repo:
+        description: sbscache tag (CI-only, e.g. v0-sbs-ci-linux-amd64)
         required: true
         type: string
       hosts:

@@ -105,16 +105,16 @@ func TestCacheEnabledRequiresToken(t *testing.T) {
 	}
 }
 
-func TestPackageCacheOnReleaseDisabled(t *testing.T) {
+func TestPackageCachedRequiresToken(t *testing.T) {
 	t.Setenv("HOME", t.TempDir())
 	t.Setenv("SIMPLYBS_TOKEN", "")
 	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	ok, err := PackageCacheOnRelease(&Package{Package: "zlib", Version: "1.3.1"}, host.SupportedHosts["x86_64-linux-gnu"])
-	if err != nil {
-		t.Fatal(err)
+	ok, err := PackageCached(&Package{Package: "zlib", Version: "1.3.1"}, host.SupportedHosts["x86_64-linux-gnu"])
+	if err == nil {
+		t.Fatal("expected error when sbscache is not configured")
 	}
 	if ok {
-		t.Fatal("expected miss when cache is disabled")
+		t.Fatal("expected no hit when sbscache is not configured")
 	}
 }
 
@@ -249,7 +249,7 @@ func TestCollectCachePullPackagesStopsAtCachedDirectDeps(t *testing.T) {
 		t.Fatal("native/rust@1_93_0 should not be a direct dep of rust@1_95_0")
 	}
 
-	// Everything except the root is on the release: pull the root + direct
+	// Everything except the root is in sbscache: pull the root + direct
 	// deps (including rust@1_94_0), but not older bootstraps.
 	remote := remoteAssetsFor(full, h, func(p *Package) bool {
 		return p.Package != pkg.Package

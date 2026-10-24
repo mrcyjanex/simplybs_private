@@ -75,6 +75,20 @@ func TestPackagesFromPaths(t *testing.T) {
 	}
 }
 
+func TestNextQueueRequiresCache(t *testing.T) {
+	chdirRepoRoot(t)
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
+	t.Setenv("SIMPLYBS_CACHE_TAG", "")
+	_, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json"},
+		hosts:        []string{"x86_64-linux-gnu"},
+	})
+	if err == nil {
+		t.Fatal("expected error when sbscache is not configured")
+	}
+}
+
 func TestNextQueueEmptyDiffIsDone(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
