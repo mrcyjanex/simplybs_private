@@ -23,7 +23,8 @@ dependencies:
 patches:
     - toolchain.txt
 build:
-    env: []
+    env:
+        - '*:*-linux-gnu:PKG_CONFIG_SYSROOT_DIR='
     steps:
         - '*:*-linux-gnu:cp $PATCH_DIR/wayland/toolchain.txt toolchain.txt'
         - '*:*-linux-gnu:sed -i -e "s|@host_prefix@|$PREFIX|" -e "s|@cc@|$CC|" -e "s|@cxx@|$CXX|" -e "s|@ar@|$AR|" -e "s|@strip@|$STRIP|" -e "s|@arch@|$ARCH|" toolchain.txt'
