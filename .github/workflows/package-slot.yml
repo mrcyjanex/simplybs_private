@@ -77,6 +77,11 @@ jobs:
       - name: Container HOME
         if: ${{ inputs.image != '' }}
         run: echo "HOME=/home/ci" >> "$GITHUB_ENV"
+      - name: Writable install prefix
+        if: ${{ inputs.image == '' }}
+        run: |
+          sudo mkdir -p /opt/_
+          sudo chown "$(id -u):$(id -g)" /opt/_
       - uses: actions/setup-go@v5
         if: ${{ inputs.image == '' }}
         with:
