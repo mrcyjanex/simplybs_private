@@ -73,6 +73,47 @@ func TestTokenAndTagPrecedence(t *testing.T) {
 	}
 }
 
+func TestCIKeyFileOverridesConfig(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("HOME", home)
+	t.Setenv("SIMPLYBS_TOKEN", "")
+	t.Setenv("SIMPLYBS_CACHE_TAG", "")
+
+	first, err := PrivateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	ciKey, err := generatePrivateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(home, ciKeyFile)
+	if err := os.WriteFile(path, []byte(ciKey+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	second, err := PrivateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first.PrivateKey.KeyId == second.PrivateKey.KeyId {
+		t.Fatal("CI key file did not replace the generated key")
+	}
+	data, err := os.ReadFile(filepath.Join(home, ".config", "simplybs", "config.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(data), "BEGIN PGP PRIVATE KEY BLOCK") {
+		t.Fatalf("config was not updated: %s", data)
+	}
+	again, err := PrivateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if again.PrivateKey.KeyId != second.PrivateKey.KeyId {
+		t.Fatal("CI key changed across loads")
+	}
+}
+
 func TestTagFromFile(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)

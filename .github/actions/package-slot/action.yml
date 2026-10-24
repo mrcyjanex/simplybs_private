@@ -28,10 +28,17 @@ runs:
     - name: Require sbscache
       shell: bash
       run: |
-        if [ -z "$SIMPLYBS_TOKEN" ] || [ -z "$SIMPLYBS_CACHE_TAG" ]; then
-          echo "sbscache is not configured (SIMPLYBS_TOKEN and SIMPLYBS_CACHE_TAG are required)"
+        if [ -z "$SIMPLYBS_TOKEN" ] || [ -z "$SIMPLYBS_CACHE_TAG" ] || [ -z "$SIMPLYBS_PGP_KEY" ]; then
+          echo "sbscache is not configured (SIMPLYBS_TOKEN, SIMPLYBS_CACHE_TAG, and SIMPLYBS_PGP_KEY are required)"
           exit 1
         fi
+        if [ -z "$HOME" ]; then
+          echo "HOME is not set"
+          exit 1
+        fi
+        mkdir -p "$HOME"
+        umask 077
+        printf '%s\n' "$SIMPLYBS_PGP_KEY" > "$HOME/simplybs-ci-key.txt"
 
     - name: Git safe.directory
       shell: bash

@@ -51,9 +51,10 @@ jobs:
       - name: Require sbscache
         env:
           SIMPLYBS_TOKEN: ${{ secrets.SIMPLYBS_TOKEN }}
+          SIMPLYBS_PGP_KEY: ${{ secrets.SIMPLYBS_PGP_KEY }}
         run: |
-          if [ -z "$SIMPLYBS_TOKEN" ]; then
-            echo "SIMPLYBS_TOKEN is not set; refusing to run without sbscache"
+          if [ -z "$SIMPLYBS_TOKEN" ] || [ -z "$SIMPLYBS_PGP_KEY" ]; then
+            echo "SIMPLYBS_TOKEN and SIMPLYBS_PGP_KEY are required"
             exit 1
           fi
 

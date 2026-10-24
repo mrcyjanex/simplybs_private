@@ -34,13 +34,9 @@ build:
         - '*_amd64:*:SHELL=$NATIVEPREFIX/bin/bash'
         - '*_amd64:*:PARLEVEL=$NUM_CORES'
         - '*_amd64:*:OPENSSL_DIR=$NATIVEPREFIX'
-        # - linux_arm64:*:RUSTC_TARGET=aarch64-unknown-linux-gnu
     steps:
         - '*_amd64:*:$NATIVEPREFIX/bin/sed -i.bak ''s/^make$/make $@/'' build-1.90.0.sh'
         - linux_amd64:*:$NATIVEPREFIX/bin/sed -i.bak '/samples\/no_core-1_90.rs/d' build-1.90.0.sh
-        # - darwin_arm64:*:$NATIVEPREFIX/bin/sed -i.bak 's/^[[:space:]]*RUSTC_TARGET ?= x86_64-apple-darwin/RUSTC_TARGET ?= aarch64-apple-darwin/' run_rustc/Makefile
-        # - linux_arm64:*:$NATIVEPREFIX/bin/sed -i.bak 's/^[[:space:]]*RUSTC_TARGET ?= x86_64-unknown-linux-gnu/RUSTC_TARGET ?= aarch64-unknown-linux-gnu/' run_rustc/Makefile
-        # - linux_arm64:*:$NATIVEPREFIX/bin/sed -i.bak 's/^[[:space:]]*RUSTC_TARGET ?= x86_64-unknown-linux-gnu/RUSTC_TARGET ?= aarch64-unknown-linux-gnu/' ./minicargo.mk
         - '*_amd64:*:$NATIVEPREFIX/bin/sed -i.bak ''s/LLVM_ENABLE_ZLIB=OFF/LLVM_ENABLE_ZLIB=OFF LLVM_ENABLE_ZSTD=OFF LLVM_ENABLE_LIBXML2=OFF/'' minicargo.mk'
         - linux_amd64:*:REP=$NATIVEPREFIX/lib && $NATIVEPREFIX/bin/sed -i.bak "s|^RUSTC_ENV_VARS += LD_LIBRARY_PATH=|RUSTC_ENV_VARS += LD_LIBRARY_PATH=$REP:|" minicargo.mk
         - '*_amd64:*:echo >> build-1.90.0.sh'

@@ -9,6 +9,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
@@ -19,6 +20,11 @@ import (
 
 // CacheURL is the sbscache API. It is not configurable.
 const CacheURL = "https://sbs.mrcyjanek.net"
+
+// ciKeyFile is an armored PGP private key at $HOME/simplybs-ci-key.txt.
+// CI writes the SIMPLYBS_PGP_KEY secret there so every runner signs with the
+// same key. When the file exists it replaces any key stored in the config.
+const ciKeyFile = "simplybs-ci-key.txt"
 
 // File is $HOME/.config/simplybs/config.json.
 type File struct {
@@ -68,7 +74,16 @@ func loadLocked() (File, error) {
 			changed = true
 		}
 	}
-	if f.PGPPrivateKey == "" {
+	ciKey, ciKeySet, err := readCIKey()
+	if err != nil {
+		return File{}, err
+	}
+	if ciKeySet {
+		if f.PGPPrivateKey != ciKey {
+			f.PGPPrivateKey = ciKey
+			changed = true
+		}
+	} else if f.PGPPrivateKey == "" {
 		armored, err := generatePrivateKey()
 		if err != nil {
 			return File{}, err
@@ -154,6 +169,40 @@ func defaultTag() string {
 		}
 	}
 	return fmt.Sprintf("v0-sbs-%s-%s-%s", name, runtime.GOOS, runtime.GOARCH)
+}
+
+func readCIKey() (armored string, ok bool, err error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", false, err
+	}
+	path := filepath.Join(home, ciKeyFile)
+	data, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, err
+	}
+	armored = strings.TrimSpace(string(data))
+	if armored == "" {
+		return "", false, fmt.Errorf("config: %s is empty", path)
+	}
+	if err := validatePrivateKey(armored); err != nil {
+		return "", false, fmt.Errorf("config: %s: %w", path, err)
+	}
+	return armored, true, nil
+}
+
+func validatePrivateKey(armored string) error {
+	ents, err := openpgp.ReadArmoredKeyRing(bytes.NewReader([]byte(armored)))
+	if err != nil {
+		return err
+	}
+	if len(ents) == 0 || ents[0].PrivateKey == nil {
+		return fmt.Errorf("not a private key")
+	}
+	return nil
 }
 
 func generatePrivateKey() (string, error) {

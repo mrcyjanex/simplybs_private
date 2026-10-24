@@ -61,6 +61,7 @@ jobs:
     env:
       SIMPLYBS_CACHE_TAG: ${{ inputs.cache_tag }}
       SIMPLYBS_TOKEN: ${{ secrets.SIMPLYBS_TOKEN }}
+      SIMPLYBS_PGP_KEY: ${{ secrets.SIMPLYBS_PGP_KEY }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GOCACHE: /tmp/go-cache

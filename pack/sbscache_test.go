@@ -2,6 +2,7 @@ package pack
 
 import (
 	"bytes"
+	"crypto"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,6 +16,9 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/ProtonMail/go-crypto/openpgp"
+	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	"github.com/ProtonMail/go-crypto/openpgp/packet"
 	"github.com/mrcyjanek/simplybs/host"
 )
 
@@ -647,6 +651,115 @@ func TestCachePullDownloadsOnlyNeededAssets(t *testing.T) {
 	if len(f.downloads) != 0 {
 		t.Fatalf("second pull downloaded %v", f.downloads)
 	}
+}
+
+func TestPullReplacesUnknownSigner(t *testing.T) {
+	enableCache(t)
+	pkg, err := FindPackage("native/zlib")
+	if err != nil {
+		t.Fatal(err)
+	}
+	h := host.SupportedHosts["x86_64-linux-gnu"]
+	rels := pkg.BuiltRelPaths(h)
+	var paths [3]string
+	var names [3]string
+	dir := t.TempDir()
+	for i, rel := range rels {
+		names[i] = AssetNameForRel(rel)
+		paths[i] = filepath.Join(dir, filepath.Base(rel))
+		if err := os.WriteFile(paths[i], []byte("signed-by-other-"+rel), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	sigPath := filepath.Join(dir, "pkg.sig.v1.txt")
+	if err := writePackSignatureFiles(paths, names, sigPath); err != nil {
+		t.Fatal(err)
+	}
+	oldSig, err := os.ReadFile(sigPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f := newFakeCache()
+	for i, name := range names {
+		body, err := os.ReadFile(paths[i])
+		if err != nil {
+			t.Fatal(err)
+		}
+		f.objects[name] = body
+	}
+	sigName := AssetNameForRel(pkg.signatureRel(h))
+	f.objects[sigName] = oldSig
+	useFakeCache(t, f)
+
+	other, err := armorPrivateKey()
+	if err != nil {
+		t.Fatal(err)
+	}
+	home, err := os.UserHomeDir()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(home, "simplybs-ci-key.txt"), []byte(other), 0600); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CachePull([]*Package{pkg}, h); err != nil {
+		t.Fatal(err)
+	}
+	for _, rel := range rels {
+		if _, err := os.Stat(filepath.Join(host.BuiltDir(), filepath.FromSlash(rel))); err == nil {
+			t.Fatalf("installed untrusted artifact %s", rel)
+		}
+	}
+	idx, err := loadRemoteAssets()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if idx.has(sigName) {
+		t.Fatal("unknown signature stayed in the index")
+	}
+
+	for _, rel := range rels {
+		path := filepath.Join(host.BuiltDir(), filepath.FromSlash(rel))
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte("rebuilt-"+rel), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	TryPushPackageCache(pkg, h)
+
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	for _, name := range names {
+		if !bytes.HasPrefix(f.objects[name], []byte("rebuilt-")) {
+			t.Fatalf("object %s was not replaced: %q", name, f.objects[name])
+		}
+	}
+	if bytes.Equal(f.objects[sigName], oldSig) {
+		t.Fatal("signature was not replaced")
+	}
+}
+
+func armorPrivateKey() (string, error) {
+	cfg := &packet.Config{Algorithm: packet.PubKeyAlgoEdDSA, DefaultHash: crypto.SHA512}
+	entity, err := openpgp.NewEntity("simplybs", "cache signing", "simplybs@localhost", cfg)
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	w, err := armor.Encode(&buf, openpgp.PrivateKeyType, nil)
+	if err != nil {
+		return "", err
+	}
+	if err := entity.SerializePrivate(w, nil); err != nil {
+		return "", err
+	}
+	if err := w.Close(); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
 
 func TestTryPushPackageCacheUploadsOnlyMissing(t *testing.T) {

@@ -110,12 +110,13 @@ They are stored on sbscache at `https://sbs.mrcyjanek.net`. One tag holds every
 object. Each pack is `.info.txt`, `.tar.gz`, `_native.tar.gz`, and a
 clearsigned `.sig.v1.txt` over the SHA-512 of those three files.
 
-Config is `$HOME/.config/simplybs/config.json` (token, optional tag, PGP private key). The cloud is used only when a token is set. Without one, simplybs warns and builds locally. A signature mismatch exits 1.
+Config is `$HOME/.config/simplybs/config.json` (token, optional tag, PGP private key). The cloud is used only when a token is set. Without one, simplybs warns and builds locally. A signature from the configured key that does not match the files exits 1. A signature made by another key is ignored, and the package is built and uploaded again.
 
 | Source | Purpose |
 | --- | --- |
 | `SIMPLYBS_TOKEN` | API token (`sbs_...`). Saved into the config file when the file has none. |
 | `SIMPLYBS_CACHE_TAG` | Tag override. Otherwise the `tag` field, otherwise `v0-sbs-$USER-$GOOS-$GOARCH`. |
+| `$HOME/simplybs-ci-key.txt` | Armored PGP private key. When this file exists it is the signing key. CI writes the `SIMPLYBS_PGP_KEY` secret here so every runner uses one key. |
 
 ```bash
 go run . -host x86_64-linux-gnu -package zlib -build

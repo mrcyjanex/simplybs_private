@@ -180,6 +180,10 @@ func clearsignManifest(entity *openpgp.Entity, manifest string) ([]byte, error) 
 	return buf.Bytes(), nil
 }
 
+func unknownSigner(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "unknown entity")
+}
+
 func verifyClearsign(entity *openpgp.Entity, signed []byte, manifest string) error {
 	block, _ := clearsign.Decode(signed)
 	if block == nil {

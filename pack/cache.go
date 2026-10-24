@@ -19,8 +19,10 @@ import (
 //	  -> x86_64-linux-gnu+zlib-1.3.1-deadbeef.tar.gz
 //
 // One tag holds every object. Cache is enabled when a token is configured.
-// A missing token logs a warning and skips the cloud. A signature mismatch
-// exits 1. Signed manifests use these names, including '@' in package names.
+// A missing token logs a warning and skips the cloud. A signature from this
+// key that does not match the files exits 1. A signature from another key is
+// ignored and the package is built and uploaded again. Signed manifests use
+// these names, including '@' in package names.
 // The HTTP client encodes '@' before it talks to sbscache.
 
 const cacheAssetSuffixes = 3 // .info.txt, .tar.gz, _native.tar.gz
@@ -45,6 +47,17 @@ func (idx *remoteAssetIndex) has(name string) bool {
 	defer remoteMu.Unlock()
 	_, ok := idx.objects[name]
 	return ok
+}
+
+func (idx *remoteAssetIndex) forget(names ...string) {
+	if idx == nil {
+		return
+	}
+	remoteMu.Lock()
+	defer remoteMu.Unlock()
+	for _, name := range names {
+		delete(idx.objects, name)
+	}
 }
 
 func (idx *remoteAssetIndex) add(obj remoteObject) {
@@ -416,6 +429,15 @@ func pullPackage(p *Package, h *host.Host, idx *remoteAssetIndex) (int, error) {
 	}
 	if err := verifyPackFiles(paths, names, sigPath); err != nil {
 		cleanup()
+		if unknownSigner(err) {
+			log.Printf("[%s][%s] cache: %s signed by an unknown key; rebuilding", h.Triplet, p.Package, sigName)
+			forget := make([]string, 0, len(payloads)+1)
+			for _, it := range payloads {
+				forget = append(forget, it.name)
+			}
+			idx.forget(append(forget, sigName)...)
+			return 0, nil
+		}
 		exitSignatureMismatch(err)
 	}
 	for dest, tmp := range staged {
