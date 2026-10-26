@@ -41,8 +41,8 @@ build:
         - linux_*:*:CXX=$NATIVEPREFIX/_/bin/clang++
         - '*:*:config_opts=--prefix=$NATIVEPREFIX --disable-multilib --enable-languages=c,c++ --disable-bootstrap --disable-libsanitizer --disable-libvtv --disable-libphobos --disable-libssp --disable-libquadmath --disable-libgomp --without-isl --with-system-zlib --with-gmp=$NATIVEPREFIX --with-mpfr=$NATIVEPREFIX --with-mpc=$NATIVEPREFIX --disable-nls'
     steps:
-        - '*:*:$NATIVEPREFIX/bin/mkdir -p build'
-        - '*:*:cd build && env -u LIBRARY_PATH ../configure $config_opts CC="$CC" CXX="$CXX"'
-        - '*:*:cd build && env -u LIBRARY_PATH make -j$NUM_CORES all-gcc all-target-libgcc all-target-libstdc++-v3 all-target-libatomic'
-        - '*:*:cd build && env -u LIBRARY_PATH make DESTDIR=$STAGING_DIR install-gcc install-target-libgcc install-target-libstdc++-v3 install-target-libatomic'
-        - '*:*:$NATIVEPREFIX/bin/ln -sf gcc $STAGING_DIR$NATIVEPREFIX/bin/cc'
+        - linux_*:*:$NATIVEPREFIX/bin/mkdir -p build
+        - linux_*:*:cd build && env -u LIBRARY_PATH ../configure $config_opts CC="$CC" CXX="$CXX"
+        - linux_*:*:cd build && env -u LIBRARY_PATH make -j$NUM_CORES all-gcc all-target-libgcc all-target-libstdc++-v3 all-target-libatomic
+        - linux_*:*:cd build && env -u LIBRARY_PATH make DESTDIR=$STAGING_DIR install-gcc install-target-libgcc install-target-libstdc++-v3 install-target-libatomic
+        - linux_*:*:$NATIVEPREFIX/bin/ln -sf gcc $STAGING_DIR$NATIVEPREFIX/bin/cc
