@@ -50,6 +50,7 @@ dependencies:
 build:
     env:
         - '*:*:JDK_VERSION=11'
+        - linux_arm64:*:NUM_CORES=2
         - '*:*:BOOT_JDK=$NATIVEPREFIX/jdk-11'
         - '*:*:AUTOCONF=$NATIVEPREFIX/bin/autoconf'
         - darwin_arm64:*:SDK_PATH=$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk
