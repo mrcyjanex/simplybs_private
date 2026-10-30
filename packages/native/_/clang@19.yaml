@@ -37,7 +37,7 @@ build:
         - linux_*:*:CMAKE_SHARED_LINKER_FLAGS=-L$NATIVEPREFIX/lib -stdlib=libc++ -lc++ -lc++abi -lunwind -Wl,-rpath,$NATIVEPREFIX/lib
     steps:
         - linux_*:*:cmake $config_opts -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="$CMAKE_EXE_LINKER_FLAGS" -DCMAKE_SHARED_LINKER_FLAGS="$CMAKE_SHARED_LINKER_FLAGS"
-        - '*:*:cmake --build build --target clang lld -j$NUM_CORES'
-        - '*:*:DESTDIR=$STAGING_DIR cmake --install build --component clang'
-        - '*:*:DESTDIR=$STAGING_DIR cmake --install build --component clang-resource-headers'
-        - '*:*:DESTDIR=$STAGING_DIR cmake --install build --component lld'
+        - linux_*:*:cmake --build build --target clang lld -j$NUM_CORES
+        - linux_*:*:DESTDIR=$STAGING_DIR cmake --install build --component clang
+        - linux_*:*:DESTDIR=$STAGING_DIR cmake --install build --component clang-resource-headers
+        - linux_*:*:DESTDIR=$STAGING_DIR cmake --install build --component lld
