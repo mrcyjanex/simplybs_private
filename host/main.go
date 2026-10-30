@@ -3,60 +3,57 @@ package host
 import (
 	"os"
 	"path/filepath"
-	"runtime"
-
-	"github.com/mrcyjanek/simplybs/crash"
 )
+
+// OptRoot is the install prefix for native and target trees.
+const OptRoot = "/opt/_"
 
 type Host struct {
 	Triplet string
 }
 
+// GetPackagesDir is the checkout packages/ tree when that tree is on disk
+// or this process was started with go run. Otherwise it is the packages
+// directory inside the ~/.local clone from `simplybs packages sync`.
 func GetPackagesDir() string {
-	if os.Getenv("SIMPLYBS_PACKAGES_DIR") != "" {
-		return os.Getenv("SIMPLYBS_PACKAGES_DIR")
-	}
-	if os.Getenv("SIMPLYBS_DATA_DIR") != "" {
-		guessPath := filepath.Join(os.Getenv("SIMPLYBS_DATA_DIR"), "..", "packages")
-		if _, err := os.Stat(guessPath); err == nil {
-			return guessPath
-		}
-	}
-	wd, err := os.Getwd()
-	crash.Handle(err)
-	return filepath.Join(wd, "packages")
+	return resolvePackagesDir()
 }
 
-func DataDirRoot() string {
-	if os.Getenv("SIMPLYBS_DATA_DIR") != "" {
-		return os.Getenv("SIMPLYBS_DATA_DIR")
+func cacheRoot() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return filepath.Join(string(os.PathSeparator), "tmp", "simplybs")
 	}
-	buildDir, err := os.Getwd()
-	crash.Handle(err)
-	return filepath.Join(buildDir, ".buildlib")
+	return filepath.Join(home, ".cache", "simplybs")
 }
 
-func DataDir() string {
-	return filepath.Join(DataDirRoot(), runtime.GOOS+"_"+runtime.GOARCH)
+// BuiltDir holds build archives and downloaded cache artifacts.
+func BuiltDir() string {
+	return filepath.Join(cacheRoot(), "built")
+}
+
+// SourcesDir holds downloaded package sources.
+func SourcesDir() string {
+	return filepath.Join(cacheRoot(), "sources")
+}
+
+// WorkDir holds temporary build trees.
+func WorkDir() string {
+	return filepath.Join(cacheRoot(), "work")
+}
+
+// StagingDir holds temporary staged installs.
+func StagingDir() string {
+	return filepath.Join(cacheRoot(), "staging")
 }
 
 func (h *Host) GetNativeEnvPath() string {
-	if os.Getenv("SIMPLYBS_NATIVE_ENV_DIR") != "" {
-		return filepath.Join(os.Getenv("SIMPLYBS_NATIVE_ENV_DIR"))
-	}
-	dir := DataDirRoot()
-	return filepath.Join(dir, "env-native")
+	return filepath.Join(OptRoot, "native")
 }
 
 func (h *Host) GetEnvPath() string {
-	if os.Getenv("SIMPLYBS_ENV_DIR") != "" {
-		return filepath.Join(os.Getenv("SIMPLYBS_ENV_DIR"))
-	}
-	dir := DataDirRoot()
-	return filepath.Join(dir, "env")
+	return filepath.Join(OptRoot, h.Triplet)
 }
-
-// aarch64-apple-darwin,x86_64-apple-darwin,aarch64-apple-ios,aarch64-apple-ios-simulator,x86_64-w64-mingw32,x86_64-linux-gnu,aarch64-linux-gnu,aarch64-linux-android,x86_64-linux-android,armv7a-linux-androideabi
 
 var SupportedHosts = map[string]*Host{
 	"aarch64-apple-darwin":        {Triplet: "aarch64-apple-darwin"},

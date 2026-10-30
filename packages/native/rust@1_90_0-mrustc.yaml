@@ -1,0 +1,53 @@
+package: native/rust@1_90_0-mrustc
+version: 1.90.0-mrustc
+type: native
+download:
+    - kind: git
+      sha256: be69c7479a10bdce1b86cb886789d14a143ddf34
+      url: http://github.com/thepowersgang/mrustc.git
+    - kind: blob
+      path: ./rustc-1.90.0-src.tar.gz
+      sha256: 799a9f9cba4ed5351e071048bcf6b5560755d9009648def33a407dd4961f9b7e
+      url: http://static.rust-lang.org/dist/rustc-1.90.0-src.tar.gz
+dependencies:
+    - '*_amd64:*:native/_/_'
+    - '*_amd64:*:native/bash'
+    - '*_amd64:*:native/binutils@2.46.0'
+    - '*_amd64:*:native/cmake'
+    - '*_amd64:*:native/coreutils'
+    - '*_amd64:*:native/findutils'
+    - '*_amd64:*:native/gawk'
+    - '*_amd64:*:native/_/gcc@15_2_0'
+    - '*_amd64:*:native/git'
+    - '*_amd64:*:native/grep'
+    - '*_amd64:*:native/gzip'
+    - '*_amd64:*:native/make'
+    - '*_amd64:*:native/openssl'
+    - '*_amd64:*:native/patch'
+    - '*_amd64:*:native/perl'
+    - '*_amd64:*:native/pkgconf'
+    - '*_amd64:*:native/sed'
+    - '*_amd64:*:native/tar'
+    - '*_amd64:*:native/zlib'
+build:
+    env:
+        - '*_amd64:*:SHELL=$NATIVEPREFIX/bin/bash'
+        - '*_amd64:*:PARLEVEL=$NUM_CORES'
+        - '*_amd64:*:OPENSSL_DIR=$NATIVEPREFIX'
+    steps:
+        - '*_amd64:*:$NATIVEPREFIX/bin/sed -i.bak ''s/^make$/make $@/'' build-1.90.0.sh'
+        - linux_amd64:*:$NATIVEPREFIX/bin/sed -i.bak '/samples\/no_core-1_90.rs/d' build-1.90.0.sh
+        - '*_amd64:*:$NATIVEPREFIX/bin/sed -i.bak ''s/LLVM_ENABLE_ZLIB=OFF/LLVM_ENABLE_ZLIB=OFF LLVM_ENABLE_ZSTD=OFF LLVM_ENABLE_LIBXML2=OFF/'' minicargo.mk'
+        - linux_amd64:*:REP=$NATIVEPREFIX/lib && $NATIVEPREFIX/bin/sed -i.bak "s|^RUSTC_ENV_VARS += LD_LIBRARY_PATH=|RUSTC_ENV_VARS += LD_LIBRARY_PATH=$REP:|" minicargo.mk
+        - '*_amd64:*:echo >> build-1.90.0.sh'
+        - '*_amd64:*:echo make -C run_rustc >> build-1.90.0.sh'
+        - '*_amd64:*:env -u TARGET -u LIBRARY_PATH PATH=$NATIVEPREFIX/bin:$NATIVEPREFIX/_/bin CXXFLAGS_EXTRA="$CFLAGS" LINKFLAGS_EXTRA="$LDFLAGS" $NATIVEPREFIX/bin/bash ./build-1.90.0.sh -j$NUM_CORES'
+        - '*_amd64:*:$NATIVEPREFIX/bin/mkdir -p $STAGING_DIR$NATIVEPREFIX/bin'
+        - '*_amd64:*:$NATIVEPREFIX/bin/mkdir -p $STAGING_DIR$NATIVEPREFIX/lib'
+        - '*_amd64:*:$NATIVEPREFIX/bin/cp -a run_rustc/output-1.90.0/prefix/bin/* $STAGING_DIR$NATIVEPREFIX/bin'
+        - linux_amd64:*:$NATIVEPREFIX/bin/cp -a run_rustc/output-1.90.0/prefix/lib/rustlib/*/lib/*.so $STAGING_DIR$NATIVEPREFIX/lib
+        - '*_amd64:*:$NATIVEPREFIX/bin/cp -a run_rustc/output-1.90.0/prefix/lib/* $STAGING_DIR$NATIVEPREFIX/lib'
+        - '*_amd64:none:# FIXME bad dylib paths embedded in the rustc binary, forcing install_name_tool dark magic'
+        - darwin_amd64:*:install_name_tool -change $PWD/run_rustc/output-1.90.0/build-rustc/aarch64-apple-darwin/release/deps/librustc_driver.dylib @loader_path/../lib/rustlib/aarch64-apple-darwin/lib/librustc_driver.dylib $STAGING_DIR$NATIVEPREFIX/bin/rustc_binary
+        - darwin_amd64:*:install_name_tool -change $PWD/run_rustc/output-1.90.0/build-std2/aarch64-apple-darwin/release/deps/libstd.dylib @loader_path/../lib/rustlib/aarch64-apple-darwin/lib/libstd.dylib $STAGING_DIR$NATIVEPREFIX/bin/rustc_binary
+        - darwin_amd64:*:install_name_tool -change $PWD/run_rustc/output-1.90.0/build-std2/aarch64-apple-darwin/release/deps/libstd.dylib @loader_path/libstd.dylib $STAGING_DIR$NATIVEPREFIX/lib/rustlib/aarch64-apple-darwin/lib/librustc_driver.dylib

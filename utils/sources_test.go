@@ -1,12 +1,13 @@
 package utils
 
 import (
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 func TestLoadSourcesFileBackwardCompat(t *testing.T) {
@@ -141,7 +142,7 @@ func TestSourcesFileRoundTrip(t *testing.T) {
 	}
 
 	var decoded SourcesFile
-	if err := json.Unmarshal(encoded, &decoded); err != nil {
+	if err := uniparse.Unmarshal(encoded, &decoded); err != nil {
 		t.Fatalf("unmarshal: %v", err)
 	}
 
@@ -176,7 +177,7 @@ func TestPackageGitRefsCollected(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		if d.IsDir() || !strings.HasSuffix(path, ".json") {
+		if d.IsDir() || !strings.HasSuffix(path, ".yaml") {
 			return nil
 		}
 
@@ -186,7 +187,7 @@ func TestPackageGitRefsCollected(t *testing.T) {
 		}
 
 		var data map[string]interface{}
-		if err := json.Unmarshal(pkgContent, &data); err != nil {
+		if err := uniparse.Unmarshal(pkgContent, &data); err != nil {
 			return err
 		}
 

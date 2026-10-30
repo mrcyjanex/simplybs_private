@@ -1,0 +1,33 @@
+package: torch
+version: tor-0.4.8.17
+type: host
+download:
+    - kind: git
+      sha256: 10a8d069467c03b268c94f21c6bc93c2c052ecf7
+      url: https://github.com/MrCyjaneK/torch.git
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/cmake'
+    - '*:*:native/cmake-toolchain'
+    - '*:*:native/coreutils'
+    - '*:*:native/make'
+    - '*:*:native/sed'
+    - '*:*:libevent'
+    - '*:*:openssl'
+    - '*:*:tor'
+    - '*:*:xz'
+    - '*:*:zlib'
+    - '*:*:zstd'
+build:
+    env:
+        - '*:*:config_opts=-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE'
+        - '*:*:config_opts=$config_opts -DTOR_BUILD_DIR=$PREFIX'
+        - '*:*:config_opts=$config_opts -DCMAKE_INSTALL_PREFIX=$PREFIX'
+        - '*:*-android*:config_opts=$config_opts -DCMAKE_SHARED_LINKER_FLAGS=-static-libstdc++'
+        - '*:*-android*:LDFLAGS=$LDFLAGS -static-libstdc++ -llog'
+    steps:
+        - '*:*-w64-mingw32:sed -i.bak ''s|Threads::Threads|Threads::Threads ${TOR_BUILD_DIR}/lib/libcrypto.a ws2_32 iphlpapi shlwapi crypt32|'' CMakeLists.txt'
+        - '*:*:mkdir build'
+        - '*:*:cd build && cmake .. $config_opts'
+        - '*:*:cd build && make -j$NUM_CORES'
+        - '*:*:cd build && make install DESTDIR=$STAGING_DIR'

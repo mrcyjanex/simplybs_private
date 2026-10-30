@@ -117,12 +117,27 @@ func (p *Package) GenerateSourceBuildPath(download *Download) string {
 	return utils.SourcePathForFileURL(download.URL)
 }
 
+func buildKindRoot(kind string) string {
+	switch kind {
+	case "built":
+		return host.BuiltDir()
+	case "work":
+		return host.WorkDir()
+	case "staging":
+		return host.StagingDir()
+	default:
+		log.Fatalf("unknown build path kind %q", kind)
+		return ""
+	}
+}
+
 func (p *Package) baseBuildPath(h *host.Host, kind string) string {
 	safeName := strings.ReplaceAll(p.Package+"-"+p.Version, "/", "_")
+	root := buildKindRoot(kind)
 	if p.Type == "native" {
-		return filepath.Join(host.DataDir(), kind, safeName)
+		return filepath.Join(root, safeName)
 	}
-	return filepath.Join(host.DataDir(), kind, h.Triplet, safeName)
+	return filepath.Join(root, h.Triplet, safeName)
 }
 
 func (p *Package) GenerateBuildPath(h *host.Host, kind string) string {
@@ -130,10 +145,11 @@ func (p *Package) GenerateBuildPath(h *host.Host, kind string) string {
 		log.Fatalf("Source build path is not supported")
 	}
 	safeName := strings.ReplaceAll(p.ShortName(h), "/", "_")
+	root := buildKindRoot(kind)
 	if p.Type == "native" {
-		return filepath.Join(host.DataDir(), kind, safeName)
+		return filepath.Join(root, safeName)
 	}
-	return filepath.Join(host.DataDir(), kind, h.Triplet, safeName)
+	return filepath.Join(root, h.Triplet, safeName)
 }
 
 func getNumCores() int {
@@ -154,20 +170,20 @@ func (p *Package) minimalEnvWithStaging(h *host.Host, stagingPath string) map[st
 		targetTriplet = builder.NativeTriplet()
 	}
 	return map[string]string{
-		"PATH":                   utils.BuildStepPATH(h.GetNativeEnvPath(), h.GetEnvPath(), "", utils.GetHostPath()),
-		"HOST":                   hostTriplet,
-		"TARGET":                 targetTriplet,
-		"PREFIX":                 utils.ToShellPath(h.GetEnvPath()),
-		"NATIVEPREFIX":           utils.ToShellPath(h.GetNativeEnvPath()),
-		"HOME":                   utils.ToShellPath(p.homePath(h)),
-		"HOST_PREFIX":            utils.ToShellPath(h.GetEnvPath()),
-		"NUM_CORES":              strconv.Itoa(getNumCores()),
-		"PATCH_DIR":              utils.ToShellPath(filepath.Join(getwd, "patches")),
-		"STAGING_DIR":            utils.ToShellPath(stagingPath),
-		"PKG_CONFIG_ALLOW_CROSS": "1",
-		"PKG_CONFIG_SYSROOT_DIR": utils.ToShellPath(h.GetEnvPath()),
-		"BUILDER_GOOS":           runtime.GOOS,
-		"BUILDER_GOARCH":         runtime.GOARCH,
+		"PATH":           utils.BuildStepPATH(h.GetNativeEnvPath(), h.GetEnvPath(), "", utils.GetHostPath()),
+		"HOST":           hostTriplet,
+		"TARGET":         targetTriplet,
+		"PREFIX":         utils.ToShellPath(h.GetEnvPath()),
+		"NATIVEPREFIX":   utils.ToShellPath(h.GetNativeEnvPath()),
+		"HOME":           utils.ToShellPath(p.homePath(h)),
+		"HOST_PREFIX":    utils.ToShellPath(h.GetEnvPath()),
+		"NUM_CORES":      strconv.Itoa(getNumCores()),
+		"PATCH_DIR":      utils.ToShellPath(filepath.Join(getwd, "patches")),
+		"STAGING_DIR":    utils.ToShellPath(stagingPath),
+		"BUILDER_GOOS":   runtime.GOOS,
+		"BUILDER_GOARCH": runtime.GOARCH,
+		// "PKG_CONFIG_ALLOW_CROSS": "1",
+		// "PKG_CONFIG_SYSROOT_DIR": utils.ToShellPath(h.GetEnvPath()),
 	}
 }
 

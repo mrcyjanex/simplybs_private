@@ -1,0 +1,44 @@
+package: protobuf
+version: 3.6.1
+type: host
+download:
+    - kind: tar.gz
+      sha256: b3732e471a9bb7950f090fd0457ebd2536a9ba0891b7f3785919c654fe2a2529
+      url: http://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/autoconf'
+    - '*:*:native/automake'
+    - '*:*:native/bash'
+    - '*:*:native/config'
+    - '*:*:native/coreutils'
+    - '*:*:native/gawk'
+    - '*:*:native/grep'
+    - '*:*:native/m4'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+    - '*:*:native/protobuf'
+    - '*:*:native/sed'
+patches:
+    - visibility.patch
+build:
+    env:
+        - '*:*:CPP_FOR_BUILD=$CPP'
+        - '*:*:CXXCPP_FOR_BUILD=$CXXCPP'
+        - '*:*:CXXFLAGS=$CXXFLAGS -std=c++11'
+        - '*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios'
+        - '*:*:config_opts=--host=$HOST --prefix=$PREFIX'
+        - '*:*:config_opts=$config_opts --disable-shared --with-protoc=$NATIVEPREFIX/bin/protoc'
+        - '*:*-linux-gnu:config_opts=$config_opts --with-pic'
+    steps:
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.guess config.guess'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.sub config.sub'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.guess third_party/googletest/googletest/build-aux/config.guess'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.sub third_party/googletest/googletest/build-aux/config.sub'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.guess third_party/googletest/googlemock/build-aux/config.guess'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.sub third_party/googletest/googlemock/build-aux/config.sub'
+        - '*:*-w64-*:sed -i.bak -e ''s| third_party/googletest||g'' configure'
+        - '*:*:bash ./configure $config_opts'
+        - '*:*:make -j$NUM_CORES -C src libprotobuf.la'
+        - '*:*:make -j$NUM_CORES -C src DESTDIR=$STAGING_DIR install-libLTLIBRARIES install-nobase_includeHEADERS'
+        - '*:*:make -j$NUM_CORES DESTDIR=$STAGING_DIR install-pkgconfigDATA'

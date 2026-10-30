@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/mrcyjanek/simplybs/utils/download"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 func gitCommand(args ...string) *exec.Cmd {
@@ -195,7 +195,7 @@ func loadSourcesFile() (*SourcesFile, error) {
 	}
 
 	var sources SourcesFile
-	if err := json.Unmarshal(content, &sources); err != nil {
+	if err := uniparse.Unmarshal(content, &sources); err != nil {
 		return nil, err
 	}
 
@@ -268,7 +268,7 @@ func getRepoURLFromBundlePath(bundlePath string) (string, error) {
 	}
 
 	// Extract the URL pattern from the bundle path
-	// Bundle path format: .buildlib/source/<url-path>.bundle
+	// Bundle path format: $HOME/.cache/simplybs/sources/<url-path>.bundle
 	bundleName := filepath.Base(bundlePath)
 	bundleName = strings.TrimSuffix(bundleName, ".bundle")
 

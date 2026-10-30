@@ -1,9 +1,7 @@
 package pack
 
 import (
-	"encoding/json"
 	"fmt"
-	"maps"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -14,32 +12,35 @@ import (
 	"github.com/mrcyjanek/simplybs/host"
 	"github.com/mrcyjanek/simplybs/utils"
 	"github.com/mrcyjanek/simplybs/utils/ifstring"
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 type Download struct {
-	Kind   string `json:"kind"`
-	URL    string `json:"url"`
-	Sha256 string `json:"sha256"`
-	Path   string `json:"path"`
+	Kind   string `json:"kind" yaml:"kind"`
+	URL    string `json:"url" yaml:"url"`
+	Sha256 string `json:"sha256" yaml:"sha256"`
+	Path   string `json:"path" yaml:"path"`
 }
 
 type StepProfile struct {
-	Unset []string `json:"unset,omitempty"`
-	Env   []string `json:"env,omitempty"`
+	Unset []string `json:"unset,omitempty" yaml:"unset,omitempty"`
+	Env   []string `json:"env,omitempty" yaml:"env,omitempty"`
+}
+
+type Build struct {
+	Env      []string                `json:"env" yaml:"env"`
+	Profiles map[string]*StepProfile `json:"profiles,omitempty" yaml:"profiles,omitempty"`
+	Steps    []string                `json:"steps" yaml:"steps"`
 }
 
 type Package struct {
-	Package  string      `json:"package"`
-	Version  string      `json:"version"`
-	Type     string      `json:"type"`
-	Download []*Download `json:"download"`
-	Build    struct {
-		Env      []string               `json:"env"`
-		Profiles map[string]StepProfile `json:"profiles,omitempty"`
-		Steps    []string               `json:"steps"`
-	} `json:"build"`
-	Dependencies []string `json:"dependencies"`
-	ExportEnv    []string `json:"export-env"`
+	Package      string      `json:"package" yaml:"package"`
+	Version      string      `json:"version" yaml:"version"`
+	Type         string      `json:"type" yaml:"type"`
+	Download     []*Download `json:"download" yaml:"download"`
+	Build        Build       `json:"build" yaml:"build"`
+	Dependencies []string    `json:"dependencies" yaml:"dependencies"`
+	ExportEnv    []string    `json:"export-env" yaml:"export-env"`
 }
 
 type BuiltFile struct {
@@ -61,13 +62,13 @@ var bootstrapPackages = []string{
 }
 
 func FindPackage(name string) (*Package, error) {
-	pkgPath := filepath.Join(host.GetPackagesDir(), name+".json")
+	pkgPath := filepath.Join(host.GetPackagesDir(), name+".yaml")
 	info, err := os.ReadFile(pkgPath)
 	if err != nil {
 		return nil, err
 	}
 	var pkg Package
-	err = json.Unmarshal(info, &pkg)
+	err = uniparse.Unmarshal(info, &pkg)
 	if err != nil {
 		return nil, err
 	}
@@ -114,125 +115,84 @@ func PrintPackage(pkgName string, host string) {
 
 func ScanBuiltFiles(packageName string, packageVersion string) []BuiltFile {
 	var builtFiles []BuiltFile
-	buildlibDir := host.DataDirRoot()
+	builtRoot := host.BuiltDir()
+	safePackageName := strings.ReplaceAll(packageName, "/", "_")
+	prefix := safePackageName + "-" + packageVersion + "-"
 
 	targets := make([]string, 0, len(host.SupportedHosts))
 	for k := range host.SupportedHosts {
 		targets = append(targets, k)
 	}
+	targets = append(targets, "")
 
-	for _, builder := range builder.Builders {
-		for _, target := range targets {
-			safePackageName := strings.ReplaceAll(packageName, "/", "_")
-			buildOutputDir := filepath.Join(buildlibDir, builder, "built", target, safePackageName)
-			buildOutputDir = filepath.Dir(buildOutputDir)
-
-			if _, err := os.Stat(buildOutputDir); os.IsNotExist(err) {
+	for _, target := range targets {
+		dir := builtRoot
+		if target != "" {
+			dir = filepath.Join(builtRoot, target)
+		}
+		files, err := os.ReadDir(dir)
+		if err != nil {
+			continue
+		}
+		for _, file := range files {
+			fileName := file.Name()
+			if file.IsDir() || !strings.HasPrefix(fileName, prefix) || !strings.HasSuffix(fileName, ".tar.gz") || strings.HasSuffix(fileName, "_native.tar.gz") {
 				continue
 			}
-
-			files, err := os.ReadDir(buildOutputDir)
-			if err != nil {
+			nameWithoutExt := strings.TrimSuffix(fileName, ".tar.gz")
+			parts := strings.Split(nameWithoutExt, "-")
+			if len(parts) < 3 {
 				continue
 			}
-
-			for _, file := range files {
-				fileName := file.Name()
-				fsFilepath := filepath.Join(buildOutputDir, fileName)
-				if !strings.Contains(fsFilepath, packageName) {
-					continue
-				}
-				if !strings.HasSuffix(fileName, ".tar.gz") {
-					continue
-				}
-
-				// Parse filename: ${package}-${version}-${id}.tar.gz
-				nameWithoutExt := strings.TrimSuffix(fileName, ".tar.gz")
-				parts := strings.Split(nameWithoutExt, "-")
-				if len(parts) < 3 {
-					continue
-				}
-
-				archPathRelative := filepath.Join(builder, "built", target, filepath.Dir(packageName), fileName)
-				infoPathRelative := filepath.Join(builder, "built", target, filepath.Dir(packageName), strings.TrimSuffix(fileName, ".tar.gz")+".info.txt")
-				archPath := archPathRelative
-				infoPath := infoPathRelative
-
-				fullArchPath := filepath.Join(buildlibDir, archPath)
-				info, err := os.Stat(fullArchPath)
-				var fileSize int64
-				if err == nil {
-					fileSize = info.Size()
-				}
-				id := strings.Split(parts[len(parts)-1], ".")[0]
-
-				builtFiles = append(builtFiles, BuiltFile{
-					Builder:  builder,
-					Target:   target,
-					ID:       id,
-					InfoPath: infoPath,
-					ArchPath: archPath,
-					FileSize: fileSize,
-				})
+			relDir := target
+			archPath := filepath.ToSlash(filepath.Join(relDir, fileName))
+			infoPath := filepath.ToSlash(filepath.Join(relDir, nameWithoutExt+".info.txt"))
+			fullArch := filepath.Join(builtRoot, filepath.FromSlash(archPath))
+			info, err := os.Stat(fullArch)
+			var fileSize int64
+			if err == nil {
+				fileSize = info.Size()
 			}
+			id := strings.Split(parts[len(parts)-1], ".")[0]
+			builtFiles = append(builtFiles, BuiltFile{
+				Builder:  runtime.GOOS + "_" + runtime.GOARCH,
+				Target:   target,
+				ID:       id,
+				InfoPath: infoPath,
+				ArchPath: archPath,
+				FileSize: fileSize,
+			})
 		}
 	}
-
 	return builtFiles
 }
 
 func Cleanup() {
-	buildlibDir := host.DataDirRoot()
+	builtRoot := host.BuiltDir()
+	sourcesRoot := host.SourcesDir()
 
 	packages := GetAllPackages()
 
 	keepFiles := make(map[string]bool)
 	keepSources := make(map[string]bool)
 
-	builders := []string{runtime.GOOS + "_" + runtime.GOARCH}
 	targets := make([]string, 0, len(host.SupportedHosts))
 	for k := range host.SupportedHosts {
 		targets = append(targets, k)
 	}
 
 	for _, pkg := range packages {
-		for _, builder := range builders {
-			for _, target := range targets {
-				currentBuildID := pkg.GeneratePackageInfoShortHash(host.SupportedHosts[target])
-
-				currentFileName := fmt.Sprintf("%s-%s-%s", pkg.Package, pkg.Version, currentBuildID)
-				currentFileName = strings.ReplaceAll(currentFileName, "/", "_")
-
-				var archPath, archNativePath, infoPath string
-				if pkg.Type == "native" {
-					// Native archives live flat under built/ (no target triplet dir).
-					archPath = filepath.Join(builder, "built", currentFileName+".tar.gz")
-					archNativePath = filepath.Join(builder, "built", currentFileName+"_native.tar.gz")
-					infoPath = filepath.Join(builder, "built", currentFileName+".info.txt")
-				} else {
-					archPath = filepath.Join(builder, "built", target, currentFileName+".tar.gz")
-					archNativePath = filepath.Join(builder, "built", target, currentFileName+"_native.tar.gz")
-					infoPath = filepath.Join(builder, "built", target, currentFileName+".info.txt")
-				}
-
-				// Walk uses ToSlash; keep keys must match on Windows (filepath.Join uses '\').
-				keepFiles[filepath.ToSlash(archPath)] = true
-				keepFiles[filepath.ToSlash(archNativePath)] = true
-				keepFiles[filepath.ToSlash(infoPath)] = true
+		for _, target := range targets {
+			h := host.SupportedHosts[target]
+			for _, rel := range pkg.BuiltRelPaths(h) {
+				keepFiles[filepath.ToSlash(rel)] = true
 			}
-		}
-
-		var keepFilesCopy = make(map[string]bool)
-		maps.Copy(keepFilesCopy, keepFiles)
-		for k := range keepFilesCopy {
-			if strings.HasSuffix(k, ".tar.gz") && !strings.HasSuffix(k, "_native.tar.gz") {
-				keepFiles[strings.TrimSuffix(k, ".tar.gz")+"_native.tar.gz"] = true
-			}
+			keepFiles[filepath.ToSlash(pkg.signatureRel(h))] = true
 		}
 
 		for _, download := range pkg.Download {
 			sourcePath := pkg.GenerateSourceBuildPath(download)
-			relPath, err := filepath.Rel(buildlibDir, sourcePath)
+			relPath, err := filepath.Rel(sourcesRoot, sourcePath)
 			if err == nil {
 				keepSources[filepath.ToSlash(relPath)] = true
 			}
@@ -240,96 +200,49 @@ func Cleanup() {
 	}
 
 	fmt.Printf("Cleanup: Will keep %d current build files and %d source files\n", len(keepFiles), len(keepSources))
-
-	for _, builder := range builders {
-		builderDir := filepath.Join(buildlibDir, builder)
-		if _, err := os.Stat(builderDir); os.IsNotExist(err) {
-			continue
-		}
-
-		builtDir := filepath.Join(builderDir, "built")
-		if _, err := os.Stat(builtDir); !os.IsNotExist(err) {
-			err := filepath.WalkDir(builtDir, func(path string, d os.DirEntry, err error) error {
-				if err != nil {
-					return err
-				}
-
-				if d.IsDir() {
-					return nil
-				}
-
-				relPath, err := filepath.Rel(buildlibDir, path)
-				if err != nil {
-					return nil
-				}
-
-				relPath = filepath.ToSlash(relPath)
-
-				if !keepFiles[relPath] {
-					fmt.Printf("Removing old build file: %s\n", relPath)
-					os.Remove(path)
-				}
-
-				return nil
-			})
-			if err != nil {
-				fmt.Printf("Error walking built directory %s: %v\n", builtDir, err)
-			}
-		}
-
-		workDir := filepath.Join(builderDir, "work")
-		stagingDir := filepath.Join(builderDir, "staging")
-		envDir := filepath.Join(builderDir, "env")
-
-		for _, dir := range []string{workDir, stagingDir, envDir} {
-			if _, err := os.Stat(dir); !os.IsNotExist(err) {
-				fmt.Printf("Removing directory: %s\n", filepath.Base(dir))
-				utils.RemoveAll(dir)
-			}
+	pruneTree(builtRoot, keepFiles)
+	pruneTree(sourcesRoot, keepSources)
+	for _, dir := range []string{host.WorkDir(), host.StagingDir()} {
+		if _, err := os.Stat(dir); err == nil {
+			fmt.Printf("Removing directory: %s\n", dir)
+			utils.RemoveAll(dir)
 		}
 	}
-
-	sourceDir := filepath.Join(buildlibDir, "source")
-	if _, err := os.Stat(sourceDir); !os.IsNotExist(err) {
-		err := filepath.WalkDir(sourceDir, func(path string, d os.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-
-			if d.IsDir() {
-				return nil
-			}
-
-			relPath, err := filepath.Rel(buildlibDir, path)
-			if err != nil {
-				return nil
-			}
-
-			relPath = filepath.ToSlash(relPath)
-
-			if !keepSources[relPath] {
-				fmt.Printf("Removing stale source file: %s\n", relPath)
-				os.Remove(path)
-			}
-
-			return nil
-		})
-		if err != nil {
-			fmt.Printf("Error walking source directory %s: %v\n", sourceDir, err)
-		}
-
-		filepath.WalkDir(sourceDir, func(path string, d os.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if d.IsDir() && path != sourceDir {
-				os.Remove(path)
-			}
-			return nil
-		})
-	}
-
 	fmt.Println("Cleanup completed!")
+}
+
+func pruneTree(root string, keep map[string]bool) {
+	if _, err := os.Stat(root); os.IsNotExist(err) {
+		return
+	}
+	err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		relPath, err := filepath.Rel(root, path)
+		if err != nil {
+			return nil
+		}
+		relPath = filepath.ToSlash(relPath)
+		if !keep[relPath] {
+			fmt.Printf("Removing old file: %s\n", relPath)
+			os.Remove(path)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("Error walking %s: %v\n", root, err)
+	}
+	filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
+		if err != nil || !d.IsDir() || path == root {
+			return nil
+		}
+		os.Remove(path)
+		return nil
+	})
 }
 
 func collectDependenciesByLevel(pkgName string, host string) [][]string {

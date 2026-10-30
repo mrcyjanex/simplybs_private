@@ -81,55 +81,53 @@ In order to build, let's say, `tor` for armv7a-linux-androideabi you would run t
 $ go run . -host armv7a-linux-androideabi -package tor -build
 ```
 
-## Recommended / "official" cache settings
+## Paths
+
+Install prefixes live under `/opt/_`:
+
+- `/opt/_/native` — native prefix
+- `/opt/_/<triplet>` — target prefix
+
+Package definitions are read from the checkout `packages/` directory when that tree is on disk, or when simplybs was started with `go run`. Otherwise they are read from `$HOME/.local/share/simplybs/repo/packages`.
 
 ```bash
-SIMPLYBS_ENV_DIR=/opt/_
+go run . packages sync
 ```
 
-## Build cache (GitHub Releases)
+clones `https://github.com/mrcyjanex/simplybs_private` into `$HOME/.local/share/simplybs/repo`, or fast-forwards an existing clone. A checkout and `go run` keep using the local `packages/` directory. If the installed tree is missing, simplybs exits and tells you to run `packages sync`.
+
+Local cache directories:
+
+- `$HOME/.cache/simplybs/built` — build archives
+- `$HOME/.cache/simplybs/sources` — downloaded sources
+- `$HOME/.cache/simplybs/work` — build trees
+- `$HOME/.cache/simplybs/staging` — staged installs
+
+## Build cache
 
 Built package archives are content-addressed (`package-version-<8-char-hash>`).
-They can be shared via rolling GitHub Releases without downloading the whole
-cache on every run.
+They are stored on sbscache at `https://sbs.mrcyjanek.net`. One tag holds every
+object. Each pack is `.info.txt`, `.tar.gz`, `_native.tar.gz`, and a
+clearsigned `.sig.v1.txt` over the SHA-512 of those three files.
 
-GitHub limits each Release to **1000 assets**. `SIMPLYBS_CACHE_TAG` is the
-base tag; when it fills, simplybs overflows to `$TAG.s1`, `$TAG.s2`, … .
-Lookups union every shard, so you still set only the two variables below.
+Config is `$HOME/.config/simplybs/config.json` (token, optional tag, PGP private key). The cloud is used only when a token is set. Without one, simplybs warns and builds locally. A signature from the configured key that does not match the files exits 1. A signature made by another key is ignored, and the package is built and uploaded again.
 
-Cache is enabled only when **both** required variables are set:
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `SIMPLYBS_CACHE_TAG` | yes | Base release tag (e.g. `v0-sbs-$USER-$GOOS-$GOARCH`); overflow shards are `$TAG.sN` |
-| `SIMPLYBS_CACHE_REPO` | yes | `owner/repo` hosting the release |
-| `SIMPLYBS_GH` | no | Optional path to `gh` |
-
-```bash
-# export SIMPLYBS_CACHE_TAG=v0-sbs-$USER-$(go env GOOS)-$(go env GOARCH)
-# export SIMPLYBS_CACHE_REPO=mrcyjanex/simplybs_private
-```
-
-With those set, `-build` auto-pulls artifacts up front, pulls per-package
-inside `EnsureBuilt` as a fallback, pushes each package after a successful
-local build, and runs a final tree push for anything still missing on the
-release. The up-front pull stops at a cache hit: if `native/rust@1_96_0`
-is on the release, older rust bootstraps used only to *build* that compiler
-are not downloaded.
+| Source | Purpose |
+| --- | --- |
+| `SIMPLYBS_TOKEN` | API token (`sbs_...`). Saved into the config file when the file has none. |
+| `SIMPLYBS_CACHE_TAG` | Tag override. Otherwise the `tag` field, otherwise `v0-sbs-$USER-$GOOS-$GOARCH`. |
+| `$HOME/simplybs-ci-key.txt` | Armored PGP private key. When this file exists it is the signing key. CI writes the `SIMPLYBS_PGP_KEY` secret here so every runner uses one key. |
 
 ```bash
 go run . -host x86_64-linux-gnu -package zlib -build
 ```
 
-Explicit pull/push still work:
+`-build` auto-pulls artifacts up front, pulls per-package inside `EnsureBuilt` as a fallback, pushes each package after a successful local build, and runs a final tree push. The up-front pull stops at a cache hit: if `native/rust@1_96_0` is cached, older rust bootstraps used only to *build* that compiler are not downloaded. After a cache run, simplybs refreshes retention for the objects it still wants.
 
 ```bash
+go run . status
+go run . clean
+go run . sync
 go run . -host x86_64-linux-gnu -package zlib -cache-pull
-go run . -cache-push                                          # all local built/
-go run . -host x86_64-linux-gnu -package zlib -cache-push     # that package tree only
+go run . -cache-push
 ```
-
-Push only uploads local artifacts that are not already on any shard (a
-package rebuild with a new hash is a new asset name, so “changed” caches
-upload naturally). When the current shard has no room for the upload,
-the next `$TAG.sN` release is created automatically.

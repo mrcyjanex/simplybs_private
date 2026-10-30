@@ -1,7 +1,6 @@
 package pack
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,6 +9,34 @@ import (
 	"github.com/mrcyjanek/simplybs/host"
 )
 
+func TestMain(m *testing.M) {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
+			break
+		}
+		parent := filepath.Dir(wd)
+		if parent == wd {
+			panic("could not find repo root")
+		}
+		wd = parent
+	}
+	if err := os.Chdir(wd); err != nil {
+		panic(err)
+	}
+	home, err := os.MkdirTemp("", "simplybs-test-home-")
+	if err != nil {
+		panic(err)
+	}
+	os.Setenv("HOME", home)
+	os.Unsetenv("SIMPLYBS_TOKEN")
+	os.Unsetenv("SIMPLYBS_CACHE_TAG")
+	os.Exit(m.Run())
+}
+
 func chdirRepoRoot(t *testing.T) {
 	t.Helper()
 	wd, err := os.Getwd()
@@ -17,7 +44,7 @@ func chdirRepoRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			if err := os.Chdir(wd); err != nil {
 				t.Fatal(err)
 			}
@@ -25,7 +52,7 @@ func chdirRepoRoot(t *testing.T) {
 		}
 		parent := filepath.Dir(wd)
 		if parent == wd {
-			t.Fatal("could not find repo root (packages/native/_.json)")
+			t.Fatal("could not find repo root (packages/native/_.yaml)")
 		}
 		wd = parent
 	}
@@ -58,64 +85,53 @@ func containsPlus(s string) bool {
 	return false
 }
 
-func TestCacheEnabledRequiresTagAndRepo(t *testing.T) {
+func TestCacheEnabledRequiresToken(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
 	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "")
 	if CacheEnabled() {
-		t.Fatal("expected cache disabled with neither set")
+		t.Fatal("expected cache disabled without a token")
 	}
 	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test")
 	if CacheEnabled() {
-		t.Fatal("expected cache disabled with only TAG set")
+		t.Fatal("expected cache disabled with only a tag")
 	}
-	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/repo")
-	if CacheEnabled() {
-		t.Fatal("expected cache disabled with only REPO set")
-	}
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/repo")
+	t.Setenv("SIMPLYBS_TOKEN", "sbs_test")
 	if !CacheEnabled() {
-		t.Fatal("expected cache enabled when both set")
+		t.Fatal("expected cache enabled when a token is set")
 	}
-	if CacheTag() != "v0-sbs-test" || CacheRepo() != "owner/repo" {
-		t.Fatalf("CacheTag/CacheRepo = %q / %q", CacheTag(), CacheRepo())
+	if CacheTag() != "v0-sbs-test" {
+		t.Fatalf("CacheTag = %q", CacheTag())
 	}
 }
 
-func TestPackageCacheOnReleaseDisabled(t *testing.T) {
+func TestPackageCachedRequiresToken(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
 	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "")
-	ok, err := PackageCacheOnRelease(&Package{Package: "zlib", Version: "1.3.1"}, host.SupportedHosts["x86_64-linux-gnu"])
-	if err != nil {
-		t.Fatal(err)
+	ok, err := PackageCached(&Package{Package: "zlib", Version: "1.3.1"}, host.SupportedHosts["x86_64-linux-gnu"])
+	if err == nil {
+		t.Fatal("expected error when sbscache is not configured")
 	}
 	if ok {
-		t.Fatal("expected miss when cache is disabled")
+		t.Fatal("expected no hit when sbscache is not configured")
 	}
 }
 
-func TestRequireCacheConfig(t *testing.T) {
+func TestCacheTagFallsBackWhenUnset(t *testing.T) {
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
 	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/repo")
-	if _, _, err := requireCacheConfig(); err == nil {
-		t.Fatal("expected error when TAG missing")
-	}
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "")
-	if _, _, err := requireCacheConfig(); err == nil {
-		t.Fatal("expected error when REPO missing")
-	}
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/repo")
-	tag, repo, err := requireCacheConfig()
-	if err != nil || tag != "v0-sbs-test" || repo != "owner/repo" {
-		t.Fatalf("got tag=%q repo=%q err=%v", tag, repo, err)
+	t.Setenv("USER", "tester")
+	tag := CacheTag()
+	if !strings.HasPrefix(tag, "v0-sbs-tester-") {
+		t.Fatalf("CacheTag = %q", tag)
 	}
 }
 
 func TestBuiltRelPathsNativeAndHost(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("zlib")
 	if err != nil {
 		t.Fatal(err)
@@ -152,7 +168,7 @@ func TestBuiltRelPathsNativeAndHost(t *testing.T) {
 
 func TestNeededAssetNamesIsSelective(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("zlib")
 	if err != nil {
 		t.Fatal(err)
@@ -196,7 +212,7 @@ func remoteAssetsFor(pkgs []*Package, h *host.Host, include func(*Package) bool)
 
 func TestCollectCachePullPackagesStopsAtCachedRoot(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("zlib")
 	if err != nil {
 		t.Fatal(err)
@@ -216,7 +232,7 @@ func TestCollectCachePullPackagesStopsAtCachedRoot(t *testing.T) {
 
 func TestCollectCachePullPackagesStopsAtCachedDirectDeps(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("native/rust@1_95_0")
 	if err != nil {
 		t.Fatal(err)
@@ -233,7 +249,7 @@ func TestCollectCachePullPackagesStopsAtCachedDirectDeps(t *testing.T) {
 		t.Fatal("native/rust@1_93_0 should not be a direct dep of rust@1_95_0")
 	}
 
-	// Everything except the root is on the release: pull the root + direct
+	// Everything except the root is in sbscache: pull the root + direct
 	// deps (including rust@1_94_0), but not older bootstraps.
 	remote := remoteAssetsFor(full, h, func(p *Package) bool {
 		return p.Package != pkg.Package
@@ -259,7 +275,7 @@ func TestCollectCachePullPackagesStopsAtCachedDirectDeps(t *testing.T) {
 
 func TestCollectCachePullPackagesWalksPastCacheMiss(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("native/rust@1_95_0")
 	if err != nil {
 		t.Fatal(err)
@@ -290,7 +306,7 @@ func TestCollectCachePullPackagesWalksPastCacheMiss(t *testing.T) {
 
 func TestCollectCachePullPackagesEmptyRemoteIsFullTree(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("zlib")
 	if err != nil {
 		t.Fatal(err)
@@ -310,13 +326,13 @@ func TestCollectCachePullPackagesEmptyRemoteIsFullTree(t *testing.T) {
 
 func TestCollectCachePullPackagesStopsAtLocalComplete(t *testing.T) {
 	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
+	t.Setenv("HOME", t.TempDir())
 	pkg, err := FindPackage("zlib")
 	if err != nil {
 		t.Fatal(err)
 	}
 	h := host.SupportedHosts["x86_64-linux-gnu"]
-	builtRoot := filepath.Join(host.DataDir(), "built")
+	builtRoot := host.BuiltDir()
 	for _, rel := range pkg.BuiltRelPaths(h) {
 		path := filepath.Join(builtRoot, filepath.FromSlash(rel))
 		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
@@ -333,645 +349,21 @@ func TestCollectCachePullPackagesStopsAtLocalComplete(t *testing.T) {
 	}
 }
 
-func setReleaseAssetLimit(t *testing.T, n int) {
-	t.Helper()
-	old := githubReleaseAssetLimit
-	githubReleaseAssetLimit = n
-	t.Cleanup(func() { githubReleaseAssetLimit = old })
-}
-
-func writeReleaseNames(t *testing.T, releasesDir, tag string, names []string) {
-	t.Helper()
-	if err := os.MkdirAll(releasesDir, 0755); err != nil {
-		t.Fatal(err)
+func TestHumanBytes(t *testing.T) {
+	cases := []struct {
+		n    int64
+		want string
+	}{
+		{0, "0 B"},
+		{1023, "1023 B"},
+		{1024, "1.0 KB"},
+		{1536, "1.5 KB"},
+		{1024 * 1024, "1.0 MB"},
+		{5 * 1024 * 1024 * 1024, "5.0 GB"},
 	}
-	path := filepath.Join(releasesDir, tag+".names")
-	if err := os.WriteFile(path, []byte(strings.Join(names, "\n")+"\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-}
-
-func installFakeGh(t *testing.T, releasesDir, logPath string) {
-	t.Helper()
-	fakeGh := filepath.Join(t.TempDir(), "gh")
-	script := `#!/bin/bash
-set -euo pipefail
-echo "$*" >> "$FAKE_GH_LOG"
-cmd=$1; shift
-case "$cmd" in
-  -R) shift; cmd=$1; shift ;;
-esac
-releases="${FAKE_GH_RELEASES}"
-case "$cmd" in
-  release)
-    sub=$1; shift
-    case "$sub" in
-      view)
-        tag=$1; shift
-        names="$releases/${tag}.names"
-        if [[ ! -f "$names" ]]; then
-          echo "release not found" >&2
-          exit 1
-        fi
-        if [[ "${1:-}" == "--json" ]]; then
-          echo -n '{"assets":['
-          first=1
-          while IFS= read -r n || [[ -n "$n" ]]; do
-            [[ -z "$n" ]] && continue
-            if [[ $first -eq 1 ]]; then first=0; else echo -n ','; fi
-            printf '{"name":"%s"}' "$n"
-          done < "$names"
-          echo ']}'
-        else
-          echo "tag: $tag"
-        fi
-        ;;
-      create)
-        tag=$1
-        : > "$releases/${tag}.names"
-        echo "CREATE $tag" >> "$FAKE_GH_LOG"
-        ;;
-      upload)
-        tag=$1; shift
-        names="$releases/${tag}.names"
-        if [[ ! -f "$names" ]]; then
-          echo "release not found" >&2
-          exit 1
-        fi
-        echo "UPLOAD $tag $*" >> "$FAKE_GH_LOG"
-        for f in "$@"; do
-          echo "$(basename "$f")" >> "$names"
-        done
-        ;;
-      download)
-        tag=""
-        pattern=""
-        dest="."
-        while [[ $# -gt 0 ]]; do
-          case "$1" in
-            -p) pattern=$2; shift 2 ;;
-            -D) dest=$2; shift 2 ;;
-            *)
-              if [[ -z "$tag" && "$1" != -* ]]; then
-                tag=$1
-              fi
-              shift
-              ;;
-          esac
-        done
-        names="$releases/${tag}.names"
-        if [[ ! -f "$names" ]]; then
-          echo "release not found" >&2
-          exit 1
-        fi
-        if ! grep -Fxq "$pattern" "$names"; then
-          echo "no assets match $pattern" >&2
-          exit 1
-        fi
-        echo "DOWNLOAD $tag $pattern" >> "$FAKE_GH_LOG"
-        printf 'ok' > "$dest/$pattern"
-        ;;
-      *) echo "bad sub $sub" >&2; exit 1 ;;
-    esac
-    ;;
-  *) echo "bad $cmd" >&2; exit 1 ;;
-esac
-`
-	if err := os.WriteFile(fakeGh, []byte(script), 0755); err != nil {
-		t.Fatal(err)
-	}
-	t.Setenv("SIMPLYBS_GH", fakeGh)
-	t.Setenv("FAKE_GH_LOG", logPath)
-	t.Setenv("FAKE_GH_RELEASES", releasesDir)
-}
-
-func TestCacheShardTag(t *testing.T) {
-	base := "v0-sbs-ci-linux-amd64"
-	if got := cacheShardTag(base, 0); got != base {
-		t.Fatalf("shard 0 = %q, want base", got)
-	}
-	if got := cacheShardTag(base, 1); got != base+".s1" {
-		t.Fatalf("shard 1 = %q", got)
-	}
-	if got := cacheShardTag(base, 12); got != base+".s12" {
-		t.Fatalf("shard 12 = %q", got)
-	}
-	if n, ok := parseCacheShardIndex(base, base); !ok || n != 0 {
-		t.Fatalf("parse base: n=%d ok=%v", n, ok)
-	}
-	if n, ok := parseCacheShardIndex(base, base+".s3"); !ok || n != 3 {
-		t.Fatalf("parse .s3: n=%d ok=%v", n, ok)
-	}
-	if _, ok := parseCacheShardIndex(base, base+"-extra"); ok {
-		t.Fatal("unrelated tag should not parse as a shard")
-	}
-	if _, ok := parseCacheShardIndex(base, base+".s"); ok {
-		t.Fatal("empty shard index should not parse")
-	}
-}
-
-func TestIsReleaseFullError(t *testing.T) {
-	if !isReleaseFullError(fmt.Errorf("cache: upload: exit status 1: published asset limit of 1000 assets reached")) {
-		t.Fatal("expected 1000-asset error to match")
-	}
-	if isReleaseFullError(fmt.Errorf("cache: upload: exit status 1: HTTP 403")) {
-		t.Fatal("unrelated upload error should not look like a full release")
-	}
-}
-
-func TestCachePullDownloadsOnlyNeededAssets(t *testing.T) {
-	chdirRepoRoot(t)
-	dataDir := t.TempDir()
-	t.Setenv("SIMPLYBS_DATA_DIR", dataDir)
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-
-	pkg, err := FindPackage("zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	full := neededAssetNames([]*Package{pkg}, h)
-	if len(full) < 6 {
-		t.Fatalf("expected a non-trivial zlib tree, got %d assets", len(full))
-	}
-	needed := make([]string, 0, cacheAssetSuffixes)
-	for _, rel := range pkg.BuiltRelPaths(h) {
-		needed = append(needed, AssetNameForRel(rel))
-	}
-
-	// Release contains the full zlib tree plus a large pile of unrelated
-	// assets. Pull should stop at the cached root and not fetch deps.
-	names := append([]string{}, full...)
-	for i := 0; i < 1000; i++ {
-		names = append(names, fmt.Sprintf("unrelated-pkg-%d-deadbeef.tar.gz", i))
-	}
-	releasesDir := t.TempDir()
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", names)
-	logPath := filepath.Join(t.TempDir(), "gh.log")
-	installFakeGh(t, releasesDir, logPath)
-
-	resetRemoteAssetsCache()
-	if err := CachePull([]*Package{pkg}, h); err != nil {
-		t.Fatal(err)
-	}
-
-	logData, err := os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	downloads := 0
-	for _, line := range strings.Split(string(logData), "\n") {
-		if strings.HasPrefix(line, "DOWNLOAD ") {
-			downloads++
-			name := strings.TrimPrefix(line, "DOWNLOAD ")
-			if strings.Contains(name, "unrelated-pkg-") {
-				t.Fatalf("downloaded unrelated asset %q", name)
-			}
+	for _, c := range cases {
+		if got := humanBytes(c.n); got != c.want {
+			t.Errorf("humanBytes(%d) = %q, want %q", c.n, got, c.want)
 		}
-	}
-	if downloads != len(needed) {
-		t.Fatalf("downloaded %d assets, want %d needed; log=%s", downloads, len(needed), logData)
-	}
-
-	builtRoot := filepath.Join(host.DataDir(), "built")
-	for _, name := range needed {
-		dest := filepath.Join(builtRoot, filepath.FromSlash(RelFromAssetName(name)))
-		if _, err := os.Stat(dest); err != nil {
-			t.Fatalf("missing local cache file for %s: %v", name, err)
-		}
-	}
-
-	// Second pull should not hit release download again.
-	resetRemoteAssetsCache()
-	if err := os.WriteFile(logPath, nil, 0644); err != nil {
-		t.Fatal(err)
-	}
-	if err := CachePull([]*Package{pkg}, h); err != nil {
-		t.Fatal(err)
-	}
-	logData, err = os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, line := range strings.Split(string(logData), "\n") {
-		if strings.HasPrefix(line, "DOWNLOAD ") {
-			t.Fatalf("second pull re-downloaded %q", line)
-		}
-	}
-}
-
-func TestTryPushPackageCacheUploadsOnlyMissing(t *testing.T) {
-	chdirRepoRoot(t)
-	dataDir := t.TempDir()
-	t.Setenv("SIMPLYBS_DATA_DIR", dataDir)
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	rels := pkg.BuiltRelPaths(h)
-	builtRoot := filepath.Join(host.DataDir(), "built")
-	for _, rel := range rels {
-		path := filepath.Join(builtRoot, filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(path, []byte("payload-"+rel), 0644); err != nil {
-			t.Fatal(err)
-		}
-	}
-
-	// Remote already has the .info.txt; the two archives should upload.
-	already := AssetNameForRel(rels[0])
-	releasesDir := t.TempDir()
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", []string{already})
-	logPath := filepath.Join(t.TempDir(), "gh.log")
-	installFakeGh(t, releasesDir, logPath)
-
-	resetRemoteAssetsCache()
-	TryPushPackageCache(pkg, h)
-
-	logData, err := os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	logStr := string(logData)
-	if !strings.Contains(logStr, "UPLOAD ") {
-		t.Fatalf("expected upload, log=%s", logStr)
-	}
-	if strings.Contains(logStr, already) {
-		t.Fatalf("should not re-upload existing asset %s; log=%s", already, logStr)
-	}
-	wantTar := AssetNameForRel(rels[1])
-	wantNative := AssetNameForRel(rels[2])
-	if !strings.Contains(logStr, wantTar) || !strings.Contains(logStr, wantNative) {
-		t.Fatalf("expected upload of %s and %s; log=%s", wantTar, wantNative, logStr)
-	}
-
-	// Second push should upload nothing.
-	if err := os.WriteFile(logPath, nil, 0644); err != nil {
-		t.Fatal(err)
-	}
-	TryPushPackageCache(pkg, h)
-	logData, err = os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if strings.Contains(string(logData), "UPLOAD ") {
-		t.Fatalf("second push should be a no-op, log=%s", logData)
-	}
-}
-
-func TestTryPushDisabledWithoutCacheEnv(t *testing.T) {
-	t.Setenv("SIMPLYBS_CACHE_TAG", "")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "")
-	// Must not panic / call gh when disabled.
-	TryPushPackageCache(&Package{Package: "zlib", Version: "1.0"}, host.SupportedHosts["x86_64-linux-gnu"])
-}
-
-func TestDirectDependentsOfNativeToolchain(t *testing.T) {
-	chdirRepoRoot(t)
-	all := GetAllPackages()
-	names := map[string]bool{"native/_": true}
-	android := packageNameSet(DirectDependents(all, names, host.SupportedHosts["aarch64-linux-android"]))
-	linux := packageNameSet(DirectDependents(all, names, host.SupportedHosts["x86_64-linux-gnu"]))
-
-	if !android["zlib"] || !linux["zlib"] {
-		t.Fatal("zlib lists native/_ on every host")
-	}
-	if android["native/android-clang"] || linux["native/android-clang"] {
-		t.Fatal("native/android-clang depends on native/_/_, not native/_")
-	}
-	if android["libxcb@1_17_0"] {
-		t.Fatal("libxcb@1_17_0 depends on native/_ only for linux-gnu")
-	}
-	if !linux["libxcb@1_17_0"] {
-		t.Fatal("libxcb@1_17_0 should be a linux-gnu dependent of native/_")
-	}
-}
-
-func TestAndroidToolchainEnvIsHostScoped(t *testing.T) {
-	chdirRepoRoot(t)
-	zlib, err := FindPackage("zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	android := zlib.GeneratePackageInfo(host.SupportedHosts["aarch64-linux-android"])
-	linux := zlib.GeneratePackageInfo(host.SupportedHosts["x86_64-linux-gnu"])
-	if !strings.Contains(android, "ANDROID_TOOLCHAIN_ROOT") {
-		t.Fatal("android zlib package info missing ANDROID_TOOLCHAIN_ROOT from native/_")
-	}
-	if strings.Contains(linux, "ANDROID_TOOLCHAIN_ROOT") {
-		t.Fatal("linux-gnu zlib package info includes ANDROID_TOOLCHAIN_ROOT")
-	}
-}
-
-func TestCollectNeededPackagesIncludesDeps(t *testing.T) {
-	chdirRepoRoot(t)
-	pkg, err := FindPackage("zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	needed := CollectNeededPackages([]*Package{pkg}, h)
-	found := map[string]bool{}
-	for _, p := range needed {
-		found[p.Package] = true
-	}
-	if !found["zlib"] {
-		t.Fatal("missing zlib")
-	}
-	if !found["native/make"] {
-		t.Fatal("expected transitive native/make dependency")
-	}
-}
-
-func TestPackageCacheOnReleaseUnionsShards(t *testing.T) {
-	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	rels := pkg.BuiltRelPaths(h)
-	names := make([]string, len(rels))
-	for i, rel := range rels {
-		names[i] = AssetNameForRel(rel)
-	}
-
-	releasesDir := t.TempDir()
-	// Incomplete triple on the full base release; remaining files on .s1.
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", []string{names[1]})
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64.s1", []string{names[0], names[2]})
-	installFakeGh(t, releasesDir, filepath.Join(t.TempDir(), "gh.log"))
-
-	resetRemoteAssetsCache()
-	ok, err := PackageCacheOnRelease(pkg, h)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Fatal("expected cache hit when the triple is split across shards")
-	}
-}
-
-func TestCachePullDownloadsFromOverflowShard(t *testing.T) {
-	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	needed := make([]string, 0, cacheAssetSuffixes)
-	for _, rel := range pkg.BuiltRelPaths(h) {
-		needed = append(needed, AssetNameForRel(rel))
-	}
-
-	releasesDir := t.TempDir()
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", []string{"unrelated-full-deadbeef.tar.gz"})
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64.s1", needed)
-	logPath := filepath.Join(t.TempDir(), "gh.log")
-	installFakeGh(t, releasesDir, logPath)
-
-	resetRemoteAssetsCache()
-	if err := CachePull([]*Package{pkg}, h); err != nil {
-		t.Fatal(err)
-	}
-
-	logData, err := os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	logStr := string(logData)
-	for _, name := range needed {
-		want := "DOWNLOAD v0-sbs-test-linux-amd64.s1 " + name
-		if !strings.Contains(logStr, want) {
-			t.Fatalf("expected %q; log=%s", want, logStr)
-		}
-	}
-	if strings.Contains(logStr, "DOWNLOAD v0-sbs-test-linux-amd64 "+needed[0]) {
-		t.Fatalf("downloaded from base instead of overflow shard; log=%s", logStr)
-	}
-
-	builtRoot := filepath.Join(host.DataDir(), "built")
-	for _, name := range needed {
-		dest := filepath.Join(builtRoot, filepath.FromSlash(RelFromAssetName(name)))
-		if _, err := os.Stat(dest); err != nil {
-			t.Fatalf("missing local cache file for %s: %v", name, err)
-		}
-	}
-}
-
-func TestTryPushOverflowsToNextShard(t *testing.T) {
-	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-	setReleaseAssetLimit(t, 4)
-
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	rels := pkg.BuiltRelPaths(h)
-	builtRoot := filepath.Join(host.DataDir(), "built")
-	for _, rel := range rels {
-		path := filepath.Join(builtRoot, filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(path, []byte("payload-"+rel), 0644); err != nil {
-			t.Fatal(err)
-		}
-	}
-
-	// Base is almost full (3 dummy assets, limit 4) so a 3-file package
-	// must overflow together onto .s1 rather than splitting.
-	releasesDir := t.TempDir()
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", []string{
-		"dummy-a.tar.gz", "dummy-b.tar.gz", "dummy-c.tar.gz",
-	})
-	logPath := filepath.Join(t.TempDir(), "gh.log")
-	installFakeGh(t, releasesDir, logPath)
-
-	resetRemoteAssetsCache()
-	TryPushPackageCache(pkg, h)
-
-	logData, err := os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	logStr := string(logData)
-	if !strings.Contains(logStr, "CREATE v0-sbs-test-linux-amd64.s1") {
-		t.Fatalf("expected overflow shard create; log=%s", logStr)
-	}
-	if !strings.Contains(logStr, "UPLOAD v0-sbs-test-linux-amd64.s1") {
-		t.Fatalf("expected upload to overflow shard; log=%s", logStr)
-	}
-	if strings.Contains(logStr, "UPLOAD v0-sbs-test-linux-amd64 ") {
-		t.Fatalf("should not upload the package triple onto the nearly-full base; log=%s", logStr)
-	}
-
-	ok, err := PackageCacheOnRelease(pkg, h)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Fatal("expected cache hit after overflow push")
-	}
-
-	// Completing an incomplete triple that already has one file on the full
-	// base should still land the rest on .s1 and count as a hit.
-	resetRemoteAssetsCache()
-	writeReleaseNames(t, releasesDir, "v0-sbs-test-linux-amd64", []string{
-		"dummy-a.tar.gz", "dummy-b.tar.gz", "dummy-c.tar.gz",
-		AssetNameForRel(rels[1]),
-	})
-	if err := os.Remove(filepath.Join(releasesDir, "v0-sbs-test-linux-amd64.s1.names")); err != nil && !os.IsNotExist(err) {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(logPath, nil, 0644); err != nil {
-		t.Fatal(err)
-	}
-	TryPushPackageCache(pkg, h)
-	logData, err = os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	logStr = string(logData)
-	if strings.Contains(logStr, AssetNameForRel(rels[1])) {
-		t.Fatalf("should not re-upload the file already on the base shard; log=%s", logStr)
-	}
-	if !strings.Contains(logStr, "UPLOAD v0-sbs-test-linux-amd64.s1") {
-		t.Fatalf("expected remaining files on overflow shard; log=%s", logStr)
-	}
-	ok, err = PackageCacheOnRelease(pkg, h)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Fatal("expected cache hit after completing the triple on .s1")
-	}
-}
-
-func TestTryPushCreatesBaseReleaseWhenMissing(t *testing.T) {
-	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
-	t.Setenv("SIMPLYBS_CACHE_TAG", "v0-sbs-test-linux-amd64")
-	t.Setenv("SIMPLYBS_CACHE_REPO", "owner/simplybs-cache")
-
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	builtRoot := filepath.Join(host.DataDir(), "built")
-	for _, rel := range pkg.BuiltRelPaths(h) {
-		path := filepath.Join(builtRoot, filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(path, []byte("payload"), 0644); err != nil {
-			t.Fatal(err)
-		}
-	}
-
-	releasesDir := t.TempDir()
-	logPath := filepath.Join(t.TempDir(), "gh.log")
-	installFakeGh(t, releasesDir, logPath)
-
-	resetRemoteAssetsCache()
-	TryPushPackageCache(pkg, h)
-
-	logData, err := os.ReadFile(logPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	logStr := string(logData)
-	if !strings.Contains(logStr, "CREATE v0-sbs-test-linux-amd64") {
-		t.Fatalf("expected base release create; log=%s", logStr)
-	}
-	if strings.Contains(logStr, ".s1") {
-		t.Fatalf("empty cache should not overflow; log=%s", logStr)
-	}
-	if !strings.Contains(logStr, "UPLOAD v0-sbs-test-linux-amd64 ") {
-		t.Fatalf("expected upload to base tag; log=%s", logStr)
-	}
-}
-
-func TestLocalBuiltCacheHitRequiresAllArtifacts(t *testing.T) {
-	chdirRepoRoot(t)
-	t.Setenv("SIMPLYBS_DATA_DIR", t.TempDir())
-	pkg, err := FindPackage("native/zlib")
-	if err != nil {
-		t.Fatal(err)
-	}
-	h := host.SupportedHosts["x86_64-linux-gnu"]
-	if pkg.localBuiltArtifactsPresent(h) || pkg.localBuiltCacheHit(h) {
-		t.Fatal("empty built dir must not be a cache hit")
-	}
-
-	infoPath := pkg.GenerateBuildPath(h, "built") + ".info.txt"
-	if err := os.MkdirAll(filepath.Dir(infoPath), 0755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(infoPath, []byte(pkg.GeneratePackageInfo(h)), 0644); err != nil {
-		t.Fatal(err)
-	}
-	// CI failure mode: GitHub HTTP 500 left .info.txt without the tarballs.
-	if pkg.localBuiltArtifactsPresent(h) {
-		t.Fatal("lone info.txt must not count as a complete cache")
-	}
-	if pkg.localBuiltCacheHit(h) {
-		t.Fatal("lone info.txt must not skip the build")
-	}
-
-	for _, rel := range pkg.BuiltRelPaths(h) {
-		path := filepath.Join(host.DataDir(), "built", filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-			t.Fatal(err)
-		}
-		payload := []byte("payload")
-		if strings.HasSuffix(rel, ".info.txt") {
-			payload = []byte(pkg.GeneratePackageInfo(h))
-		}
-		if err := os.WriteFile(path, payload, 0644); err != nil {
-			t.Fatal(err)
-		}
-	}
-	if !pkg.localBuiltArtifactsPresent(h) {
-		t.Fatal("expected all three artifacts to be present")
-	}
-	if !pkg.localBuiltCacheHit(h) {
-		t.Fatal("matching info.txt plus both archives should be a cache hit")
-	}
-}
-
-func TestIsRetryableCacheDownload(t *testing.T) {
-	err500 := fmt.Errorf("exit status 1")
-	if !isRetryableCacheDownload(err500, "HTTP 500 (https://api.github.com/repos/x/y/releases/assets/1)\n") {
-		t.Fatal("HTTP 500 should retry")
-	}
-	if isRetryableCacheDownload(err500, "no assets match foo.tar.gz\n") {
-		t.Fatal("missing asset should not retry")
-	}
-	if isRetryableCacheDownload(err500, "HTTP 404: Not Found\n") {
-		t.Fatal("HTTP 404 should not retry")
-	}
-	if !isRetryableCacheDownload(fmt.Errorf("exit status 1"), "stream error: INTERNAL_ERROR; received from peer") {
-		t.Fatal("INTERNAL_ERROR should retry")
 	}
 }

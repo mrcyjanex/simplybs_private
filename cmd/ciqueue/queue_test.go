@@ -19,7 +19,7 @@ func chdirRepoRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			if err := os.Chdir(wd); err != nil {
 				t.Fatal(err)
 			}
@@ -72,6 +72,20 @@ func TestPackagesFromPaths(t *testing.T) {
 	}
 	if got["cmd/ciqueue"] {
 		t.Fatal("Go source should not map to a package")
+	}
+}
+
+func TestNextQueueRequiresCache(t *testing.T) {
+	chdirRepoRoot(t)
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
+	t.Setenv("SIMPLYBS_CACHE_TAG", "")
+	_, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json"},
+		hosts:        []string{"x86_64-linux-gnu"},
+	})
+	if err == nil {
+		t.Fatal("expected error when sbscache is not configured")
 	}
 }
 

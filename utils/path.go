@@ -64,17 +64,7 @@ func ResolveGit() string {
 }
 
 func guessNativePrefix() string {
-	if v := os.Getenv("SIMPLYBS_NATIVE_ENV_DIR"); v != "" {
-		return v
-	}
-	wd, err := os.Getwd()
-	if err != nil {
-		return filepath.Join(".buildlib", "env-native")
-	}
-	if v := os.Getenv("SIMPLYBS_DATA_DIR"); v != "" {
-		return filepath.Join(v, "env-native")
-	}
-	return filepath.Join(wd, ".buildlib", "env-native")
+	return "/opt/_/native"
 }
 
 func GetHostPath() string {
