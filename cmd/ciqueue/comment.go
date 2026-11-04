@@ -20,6 +20,12 @@ const commentMarker = "<!-- simplybs-ci-state"
 // command-line argument to `ciqueue comment`.
 const remainingPreviewLimit = 20
 
+// runPreviewLimit caps slot rows. A queue rerun appends every attempt,
+// and GitHub rejects issue comments longer than 65536 characters.
+const runPreviewLimit = 40
+
+const githubCommentLimit = 65536
+
 func stateMarker(queue string) string {
 	q := strings.TrimSpace(queue)
 	if q == "" {
@@ -34,6 +40,7 @@ type CommentState struct {
 	Runs           []CommentRun `json:"runs"`
 	Remaining      []Item       `json:"remaining,omitempty"`
 	RemainingCount int          `json:"remaining_count,omitempty"`
+	RunsOmitted    int          `json:"runs_omitted,omitempty"`
 }
 
 // CommentRun is one slot/package attempt.
@@ -45,7 +52,27 @@ type CommentRun struct {
 	JobURL     string `json:"job_url,omitempty"`
 }
 
+func (st *CommentState) trimRuns() {
+	if len(st.Runs) <= runPreviewLimit {
+		return
+	}
+	extra := len(st.Runs) - runPreviewLimit
+	st.RunsOmitted += extra
+	st.Runs = append([]CommentRun(nil), st.Runs[extra:]...)
+}
+
 func renderComment(st CommentState, queue string) string {
+	st.trimRuns()
+	body := renderCommentBody(st, queue)
+	for len(body) > githubCommentLimit && len(st.Runs) > 0 {
+		st.RunsOmitted++
+		st.Runs = st.Runs[1:]
+		body = renderCommentBody(st, queue)
+	}
+	return body
+}
+
+func renderCommentBody(st CommentState, queue string) string {
 	var b strings.Builder
 	title := "## simplybs package queue"
 	q := strings.TrimSpace(queue)
@@ -56,6 +83,9 @@ func renderComment(st CommentState, queue string) string {
 	b.WriteString("\n\n")
 	if st.SHA != "" {
 		fmt.Fprintf(&b, "SHA `%s`\n\n", st.SHA)
+	}
+	if st.RunsOmitted > 0 {
+		fmt.Fprintf(&b, "%d earlier slots omitted.\n\n", st.RunsOmitted)
 	}
 	b.WriteString("| Package | Host | Status | Log |\n| --- | --- | --- | --- |\n")
 	if len(st.Runs) == 0 {

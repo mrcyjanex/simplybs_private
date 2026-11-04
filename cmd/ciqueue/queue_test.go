@@ -511,6 +511,36 @@ func TestRenderCommentHugeRemainingStaysUnderGitHubLimit(t *testing.T) {
 	}
 }
 
+func TestRenderCommentManyRunsStaysUnderGitHubLimit(t *testing.T) {
+	const n = 800
+	runs := make([]CommentRun, n)
+	for i := range runs {
+		runs[i] = CommentRun{
+			Package:    "native/jdk@22/bootstrap-maven/pom/error_prone_parent@2.47.0",
+			Host:       "aarch64-apple-ios-simulator",
+			Conclusion: "success",
+			RunURL:     "https://github.com/mrcyjanex/simplybs_private/actions/runs/41098146057",
+		}
+	}
+	body := renderComment(CommentState{SHA: "abc", Runs: runs}, "linux-arm64")
+	if len(body) > githubCommentLimit {
+		t.Fatalf("comment body %d bytes exceeds GitHub limit", len(body))
+	}
+	st, ok := parseState(body, stateMarker("linux-arm64"))
+	if !ok {
+		t.Fatal("parse failed")
+	}
+	if len(st.Runs) > runPreviewLimit {
+		t.Fatalf("stored runs %d", len(st.Runs))
+	}
+	if st.RunsOmitted+len(st.Runs) != n {
+		t.Fatalf("omitted=%d kept=%d want %d", st.RunsOmitted, len(st.Runs), n)
+	}
+	if !strings.Contains(body, "earlier slots omitted") {
+		t.Fatalf("missing omitted note:\n%s", body)
+	}
+}
+
 func TestOutputResultTruncatesRemaining(t *testing.T) {
 	res := Result{Remaining: make([]Item, 100)}
 	out := outputResult(res)
