@@ -1,0 +1,21 @@
+package: native/bison
+version: "3.8"
+type: native
+download:
+    - kind: tar.gz
+      sha256: d5d184d421aee15603939973a6b0f372f908edfb24c5bc740697497021ad9458
+      url: http://ftpmirror.gnu.org/gnu/bison/bison-3.8.tar.gz
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/m4'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+    - '*:*:native/texinfo'
+build:
+    env:
+        - '*:*:AUTOMAKE=true'
+        - '*:*:ACLOCAL=true'
+    steps:
+        - '*:*:./configure --prefix=$NATIVEPREFIX gl_cv_have_weak=no'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'

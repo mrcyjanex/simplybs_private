@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 func main() {
@@ -146,7 +148,7 @@ func cmdComment(args []string) error {
 
 	var rem []Item
 	if strings.TrimSpace(*remaining) != "" {
-		if err := json.Unmarshal([]byte(*remaining), &rem); err != nil {
+		if err := uniparse.Unmarshal([]byte(*remaining), &rem); err != nil {
 			return fmt.Errorf("parse -remaining: %w", err)
 		}
 	}

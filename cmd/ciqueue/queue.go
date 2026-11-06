@@ -63,7 +63,7 @@ func nextQueue(opts queueOpts) (Result, error) {
 	}
 	cached := opts.cached
 	if cached == nil {
-		cached = pack.PackageCacheOnRelease
+		cached = pack.PackageCached
 	}
 
 	allPkgs := pack.GetAllPackages()

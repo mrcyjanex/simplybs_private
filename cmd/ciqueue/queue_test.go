@@ -19,7 +19,7 @@ func chdirRepoRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 	for {
-		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.json")); err == nil {
+		if _, err := os.Stat(filepath.Join(wd, "packages", "native", "_.yaml")); err == nil {
 			if err := os.Chdir(wd); err != nil {
 				t.Fatal(err)
 			}
@@ -72,6 +72,20 @@ func TestPackagesFromPaths(t *testing.T) {
 	}
 	if got["cmd/ciqueue"] {
 		t.Fatal("Go source should not map to a package")
+	}
+}
+
+func TestNextQueueRequiresCache(t *testing.T) {
+	chdirRepoRoot(t)
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("SIMPLYBS_TOKEN", "")
+	t.Setenv("SIMPLYBS_CACHE_TAG", "")
+	_, err := nextQueue(queueOpts{
+		changedFiles: []string{"packages/zlib.json"},
+		hosts:        []string{"x86_64-linux-gnu"},
+	})
+	if err == nil {
+		t.Fatal("expected error when sbscache is not configured")
 	}
 }
 
@@ -494,6 +508,36 @@ func TestRenderCommentHugeRemainingStaysUnderGitHubLimit(t *testing.T) {
 	}
 	if !strings.Contains(body, "5000 still queued") {
 		t.Fatalf("missing count:\n%s", body)
+	}
+}
+
+func TestRenderCommentManyRunsStaysUnderGitHubLimit(t *testing.T) {
+	const n = 800
+	runs := make([]CommentRun, n)
+	for i := range runs {
+		runs[i] = CommentRun{
+			Package:    "native/jdk@22/bootstrap-maven/pom/error_prone_parent@2.47.0",
+			Host:       "aarch64-apple-ios-simulator",
+			Conclusion: "success",
+			RunURL:     "https://github.com/mrcyjanex/simplybs_private/actions/runs/41098146057",
+		}
+	}
+	body := renderComment(CommentState{SHA: "abc", Runs: runs}, "linux-arm64")
+	if len(body) > githubCommentLimit {
+		t.Fatalf("comment body %d bytes exceeds GitHub limit", len(body))
+	}
+	st, ok := parseState(body, stateMarker("linux-arm64"))
+	if !ok {
+		t.Fatal("parse failed")
+	}
+	if len(st.Runs) > runPreviewLimit {
+		t.Fatalf("stored runs %d", len(st.Runs))
+	}
+	if st.RunsOmitted+len(st.Runs) != n {
+		t.Fatalf("omitted=%d kept=%d want %d", st.RunsOmitted, len(st.Runs), n)
+	}
+	if !strings.Contains(body, "earlier slots omitted") {
+		t.Fatalf("missing omitted note:\n%s", body)
 	}
 }
 

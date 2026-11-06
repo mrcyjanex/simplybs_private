@@ -24,10 +24,7 @@ on:
         type: string
         default: ""
       cache_tag:
-        description: GitHub Release cache tag (CI-only, e.g. v0-sbs-ci-linux-amd64)
-        required: true
-        type: string
-      cache_repo:
+        description: sbscache tag (CI-only, e.g. v0-sbs-ci-linux-amd64)
         required: true
         type: string
       hosts:
@@ -63,7 +60,8 @@ jobs:
     container: ${{ inputs.image != '' && fromJSON(format('{{"image":"{0}","options":"--user 1001:1001","credentials":{{"username":"{1}","password":"{2}"}}}}', inputs.image, github.actor, github.token)) || fromJSON('null') }}
     env:
       SIMPLYBS_CACHE_TAG: ${{ inputs.cache_tag }}
-      SIMPLYBS_CACHE_REPO: ${{ inputs.cache_repo }}
+      SIMPLYBS_TOKEN: ${{ secrets.SIMPLYBS_TOKEN }}
+      SIMPLYBS_PGP_KEY: ${{ secrets.SIMPLYBS_PGP_KEY }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GOCACHE: /tmp/go-cache
@@ -79,6 +77,11 @@ jobs:
       - name: Container HOME
         if: ${{ inputs.image != '' }}
         run: echo "HOME=/home/ci" >> "$GITHUB_ENV"
+      - name: Writable install prefix
+        if: ${{ inputs.image == '' }}
+        run: |
+          sudo mkdir -p /opt/_
+          sudo chown "$(id -u):$(id -g)" /opt/_
       - uses: actions/setup-go@v5
         if: ${{ inputs.image == '' }}
         with:

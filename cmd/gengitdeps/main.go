@@ -10,14 +10,14 @@ import (
 )
 
 type Download struct {
-	Kind   string `json:"kind"`
-	Path   string `json:"path,omitempty"`
-	SHA256 string `json:"sha256"`
-	URL    string `json:"url"`
+	Kind   string `yaml:"kind"`
+	Path   string `yaml:"path,omitempty"`
+	SHA256 string `yaml:"sha256"`
+	URL    string `yaml:"url"`
 }
 
 type Output struct {
-	Download []Download `json:"download"`
+	Download []Download `yaml:"download"`
 }
 
 func main() {
@@ -29,18 +29,14 @@ func main() {
 
 	var downloads []Download
 
-	// Walk the directory tree
 	err = filepath.Walk(currentDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// Check if this is a .git directory (or symlink to one)
 		if info.Name() == ".git" {
-			// Check if it's a directory or a symlink to a directory
 			isGitDir := info.IsDir()
 			if !isGitDir && info.Mode()&os.ModeSymlink != 0 {
-				// It's a symlink, check if it points to a directory
 				target, err := os.Stat(path)
 				if err == nil && target.IsDir() {
 					isGitDir = true
@@ -51,24 +47,20 @@ func main() {
 				return filepath.SkipDir
 			}
 
-			// Get the repository directory (parent of .git)
 			repoDir := filepath.Dir(path)
 
-			// Get git commit hash
 			commitHash, err := getGitCommit(repoDir)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Warning: Could not get commit for %s: %v\n", repoDir, err)
 				return filepath.SkipDir
 			}
 
-			// Get git remote URL
 			remoteURL, err := getGitRemoteURL(repoDir)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Warning: Could not get remote URL for %s: %v\n", repoDir, err)
 				return filepath.SkipDir
 			}
 
-			// Calculate relative path from current directory
 			relPath, err := filepath.Rel(currentDir, repoDir)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Warning: Could not get relative path for %s: %v\n", repoDir, err)
@@ -81,14 +73,12 @@ func main() {
 				URL:    remoteURL,
 			}
 
-			// Add path only if it's not the current directory
 			if relPath != "." {
 				download.Path = relPath
 			}
 
 			downloads = append(downloads, download)
 
-			// Skip further traversal into this .git directory
 			return filepath.SkipDir
 		}
 

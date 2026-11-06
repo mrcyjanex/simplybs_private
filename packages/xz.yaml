@@ -1,0 +1,41 @@
+package: xz
+version: 5.8.1
+type: host
+download:
+    - kind: tar.gz
+      sha256: 507825b599356c10dca1cd720c9d0d0c9d5400b9de300af00e4d1ea150795543
+      url: http://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.gz
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/autoconf'
+    - '*:*:native/automake'
+    - '*:*:native/bash'
+    - '*:*:native/coreutils'
+    - '*:*:native/diffutils'
+    - '*:*:native/findutils'
+    - '*:*:native/gawk'
+    - '*:*:native/gettext'
+    - '*:*:native/grep'
+    - '*:*:native/gzip'
+    - '*:*:native/libtool'
+    - '*:*:native/m4'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+    - '*:*:native/sed'
+    - '*:*:native/tar'
+patches:
+    - fix_declaration.patch
+build:
+    env:
+        - '*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios'
+        - '*:*:config_opts=--prefix=$PREFIX --host=$HOST'
+        - '*:*:config_opts=$config_opts --disable-shared'
+        - '*:*:config_opts=$config_opts --enable-static'
+        - '*:*:config_opts=$config_opts --disable-doc'
+        - '*:*:SKIP_WERROR_CHECK=yes'
+    steps:
+        - '*:*:bash ./autogen.sh --no-po4a'
+        - '*:*:bash ./configure $config_opts'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'
+        - '*:*:rm $STAGING_DIR$PREFIX/lib/*.la'

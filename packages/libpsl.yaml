@@ -1,0 +1,26 @@
+package: libpsl
+version: 0.21.5
+type: host
+download:
+    - kind: tar.gz
+      sha256: 1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208
+      url: https://github.com/rockdaboot/libpsl/releases/download/0.21.5/libpsl-0.21.5.tar.gz
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/coreutils'
+    - '*:*:native/gawk'
+    - '*:*:native/grep'
+    - '*:*:native/make'
+    - '*:*:native/python@3.11'
+    - '*:*:native/sed'
+    - '*:*:unistring'
+build:
+    env:
+        - '*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios'
+        - '*:*:config_opts=--prefix=$PREFIX'
+        - '*:*:config_opts=$config_opts --host=$HOST'
+        - windows_*:*:config_opts=$config_opts --disable-builtin
+    steps:
+        - '*:*:./configure $config_opts'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'

@@ -1,0 +1,37 @@
+package: libiconv
+version: "1.18"
+type: host
+download:
+    - kind: tar.gz
+      sha256: 3b08f5f4f9b4eb82f151a7040bfd6fe6c6fb922efe4b1659c66ea933276965e8
+      url: http://ftpmirror.gnu.org/gnu/libiconv/libiconv-1.18.tar.gz
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/bash'
+    - '*:*:native/config'
+    - '*:*:native/coreutils'
+    - '*:*:native/findutils'
+    - '*:*:native/gawk'
+    - '*:*:native/grep'
+    - '*:*:native/make'
+    - '*:*:native/sed'
+build:
+    env:
+        - '*:aarch64-apple-ios-simulator:HOST=aarch64-apple-ios'
+        - '*:*:config_opts=--host=$HOST --prefix=$PREFIX --disable-nls --enable-static --disable-shared'
+        - '*:*:config_opts=$config_opts --disable-malloca'
+        - '*:*:config_opts=$config_opts'
+        - '*:*linux:config_opts=$config_opts --with-pic'
+        - '*:*:CC=$CC $CFLAGS'
+        - '*:*:CXX=$CXX $CXXFLAGS'
+        - '*:*:RC=$RC $RCFLAGS'
+    steps:
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.guess build-aux/'
+        - '*:*:cp -f $NATIVEPREFIX/share/config/config.sub build-aux/'
+        - '*:*:sed -i.bak ''s|#include <stdckdint.h>|#include "stdckdint.in.h"|'' ./srclib/malloca.c'
+        - '*:*:bash ./configure $config_opts'
+        - '*:*-w64-mingw32:sed -i.bak -e ''/cd srclib/d'' -e ''/cd src &&/d'' Makefile'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'
+        - '*:*:mkdir -p $STAGING_DIR$PREFIX/include'
+        - '*:*:cp include/*.h $STAGING_DIR$PREFIX/include/'

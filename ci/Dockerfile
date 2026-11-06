@@ -38,7 +38,9 @@ RUN apt-get update \
 # /__w workspace bind-mount is writable without running as root.
 # crosstool-NG (native/ct-tools) refuses uid 0.
 RUN groupadd --gid 1001 ci \
- && useradd --uid 1001 --gid 1001 --create-home --shell /bin/bash ci
+ && useradd --uid 1001 --gid 1001 --create-home --shell /bin/bash ci \
+ && mkdir -p /opt/_ \
+ && chown 1001:1001 /opt/_
 
 ENV GOCACHE=/tmp/go-cache \
     GOMODCACHE=/tmp/go-modcache \

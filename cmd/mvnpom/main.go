@@ -8,12 +8,13 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 const (
@@ -52,7 +53,7 @@ func run() error {
 
 	var moves []move
 	for _, e := range entries {
-		if e.IsDir() || !strings.HasSuffix(e.Name(), ".json") {
+		if e.IsDir() || !strings.HasSuffix(e.Name(), ".yaml") {
 			continue
 		}
 		oldPath := filepath.Join(srcDir, e.Name())
@@ -64,7 +65,7 @@ func run() error {
 			continue
 		}
 		var pkg pkgFile
-		if err := json.Unmarshal(raw, &pkg); err != nil {
+		if err := uniparse.Unmarshal(raw, &pkg); err != nil {
 			return fmt.Errorf("%s: %w", oldPath, err)
 		}
 		if !strings.HasPrefix(pkg.Package, oldPrefix) || strings.HasPrefix(pkg.Package, newPrefix) {
@@ -150,7 +151,7 @@ func rewriteTree(root string, moves []move) (int, error) {
 
 func isPomInstall(raw []byte) bool {
 	var pkg pkgFile
-	if err := json.Unmarshal(raw, &pkg); err != nil {
+	if err := uniparse.Unmarshal(raw, &pkg); err != nil {
 		return false
 	}
 	if len(pkg.Download) == 0 {

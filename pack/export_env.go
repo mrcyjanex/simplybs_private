@@ -50,6 +50,60 @@ func envKeyFromLine(line string) string {
 	return line[:idx]
 }
 
+// selfAppendKeys returns keys this package assigns with a reference to the
+// same key ($KEY or ${KEY}), matching os.Expand's variable spelling.
+func selfAppendKeys(lines []string) map[string]bool {
+	skip := map[string]bool{}
+	for _, line := range lines {
+		key := envKeyFromLine(line)
+		if key == "" {
+			continue
+		}
+		if valueReferencesEnv(line[len(key)+1:], key) {
+			skip[key] = true
+		}
+	}
+	return skip
+}
+
+func valueReferencesEnv(value, key string) bool {
+	for i := 0; i < len(value); i++ {
+		if value[i] != '$' || i+1 >= len(value) {
+			continue
+		}
+		name, width := shellName(value[i+1:])
+		if name == key {
+			return true
+		}
+		if width > 0 {
+			i += width
+		}
+	}
+	return false
+}
+
+func shellName(s string) (string, int) {
+	if s[0] == '{' {
+		end := strings.IndexByte(s, '}')
+		if end <= 1 {
+			return "", 0
+		}
+		return s[1:end], end + 1
+	}
+	i := 0
+	for i < len(s) && isEnvNameByte(s[i]) {
+		i++
+	}
+	if i == 0 {
+		return "", 0
+	}
+	return s[:i], i
+}
+
+func isEnvNameByte(c byte) bool {
+	return c == '_' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+}
+
 func (ctx *exportEnvContext) resolvedExportEnv(p *Package, h *host.Host) []EnvKV {
 	ctx.mu.Lock()
 	defer ctx.mu.Unlock()
@@ -68,16 +122,10 @@ func (ctx *exportEnvContext) resolvedExportEnvLocked(p *Package, h *host.Host) [
 	defer delete(ctx.visiting, key)
 
 	filtered := ifstring.FilterContent(p.ExportEnv, h.Triplet, builder.GetName())
-	ownKeys := make(map[string]bool, len(filtered))
-	for _, line := range filtered {
-		ownKeys[envKeyFromLine(line)] = true
-	}
-	skipFromDeps := map[string]bool{}
-	for _, k := range []string{"CFLAGS", "CXXFLAGS", "CPPFLAGS", "LDFLAGS", "LIBRARY_PATH", "PKG_CONFIG_PATH"} {
-		if ownKeys[k] {
-			skipFromDeps[k] = true
-		}
-	}
+	// KEY=$KEY chains this package's own lines. Copying a dependency's KEY
+	// into the expansion env would bake that value in. A reference to a
+	// different variable, such as CC_FOR_BUILD=$CC, still sees the dependency.
+	skipFromDeps := selfAppendKeys(filtered)
 
 	base := copyEnv(p.minimalEnvWithStaging(h, p.baseBuildPath(h, "staging")))
 	// Export-env describes the toolchain for h.Triplet; HOST/TARGET must match the

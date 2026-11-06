@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"sort"
 	"strings"
+
+	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
 
 //go:embed sources_ignored_refs.txt
@@ -131,9 +133,9 @@ func MergeDownloadMap(s *SourcesFile, download map[string]interface{}) {
 	AddDownload(s, entry)
 }
 
-func MergeDownloadsFromJSON(s *SourcesFile, content []byte) {
+func MergeDownloadsFromJSONorYAML(s *SourcesFile, content []byte) {
 	var data map[string]interface{}
-	if err := json.Unmarshal(content, &data); err != nil {
+	if err := uniparse.Unmarshal(content, &data); err != nil {
 		return
 	}
 
@@ -193,7 +195,7 @@ func CountGitRefs(s *SourcesFile) int {
 
 func SourcesFileFromRepositoriesOnlyJSON(content []byte) (*SourcesFile, error) {
 	var sources SourcesFile
-	if err := json.Unmarshal(content, &sources); err != nil {
+	if err := uniparse.Unmarshal(content, &sources); err != nil {
 		return nil, err
 	}
 	if sources.Repositories == nil {

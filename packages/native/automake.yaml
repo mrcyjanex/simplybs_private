@@ -1,0 +1,21 @@
+package: native/automake
+version: "1.18"
+type: native
+download:
+    - kind: tar.gz
+      sha256: af6043a5d4b3beef0c48161f4a6936259321cd101a34c1ab0768328515626c8a
+      url: http://ftpmirror.gnu.org/gnu/automake/automake-1.18.tar.gz
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/autoconf'
+    - '*:*:native/m4'
+    - '*:*:native/make'
+    - '*:*:native/perl'
+build:
+    env:
+        - '*:*:MAKEINFO=true'
+    steps:
+        - '*:*:./bootstrap'
+        - '*:*:./configure --prefix=$NATIVEPREFIX --disable-doc'
+        - '*:*:make -j$NUM_CORES V=1'
+        - '*:*:make install DESTDIR=$STAGING_DIR '

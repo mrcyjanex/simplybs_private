@@ -1,0 +1,25 @@
+package: readline
+version: "8.0"
+type: host
+download:
+    - kind: tar.gz
+      sha256: e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461
+      url: http://ftpmirror.gnu.org/gnu/readline/readline-8.0.tar.gz
+dependencies:
+    - '*:*:native/_'
+    - '*:*:native/gawk'
+    - '*:*:native/grep'
+    - '*:*:native/make'
+    - '*:*:native/sed'
+    - '*:*:ncurses'
+build:
+    env:
+        - '*:*:config_opts=--host=$HOST --prefix=$PREFIX --exec-prefix=$PREFIX'
+        - '*:*:config_opts=$config_opts --disable-shared --with-curses --disable-debug-mode'
+        - '*:*:SHOULD_BUILD=echo'
+        - '*:*-linux-*:SHOULD_BUILD='
+        - '*:*-apple-darwin:SHOULD_BUILD='
+    steps:
+        - '*:*:$SHOULD_BUILD ./configure $config_opts'
+        - '*:*:$SHOULD_BUILD make -j$NUM_CORES $build_opts'
+        - '*:*:$SHOULD_BUILD make -j$NUM_CORES install DESTDIR=$STAGING_DIR prefix=$PREFIX exec-prefix=$PREFIX'

@@ -1,7 +1,9 @@
 # AGENTS.md
 
 `simplybs` is a cross-compilation build system written in Go. Package definitions
-live in `packages/*.json` (and `packages/native/*.json`); patches live in `patches/`.
+live in `packages/*.yaml` (and `packages/native/*.yaml`); patches live in `patches/`.
+A checkout and `go run` read that `packages/` tree. Otherwise definitions come from
+`$HOME/.local/share/simplybs/repo/packages`, filled by `go run . packages sync`.
 
 ## Dev loop
 
@@ -28,7 +30,7 @@ Supported host triplets are defined in `host/main.go` (e.g. `x86_64-linux-gnu`,
 
 There are many ways to solve problems, here are solutions, ordered by preference
 
-1. Making a change to the .json file - adding an extra step.
+1. Making a change to the .yaml file - adding an extra step.
 2. Prefer an extra step over && - && use accepted mainly when you need to cd as each step starts at working dir
 3. Adding existing dependency from the tree
 4. Adding an extra dependnecy (**must be built from source**, unless we are moving a prebuilt dependency to an older version - in which event it is fine to add extra prebuilt)
@@ -61,7 +63,7 @@ go run ./cmd/gengitdeps        # prints download JSON to stdout
 go test ./...
 ```
 
-Note: `host.TestHosts` is data-driven from `packages/native/_.json` and may
+Note: `host.TestHosts` is data-driven from `packages/native/_.yaml` and may
 already fail on a clean checkout — unrelated to environment setup.
 
 ## Tooling
@@ -70,10 +72,10 @@ already fail on a clean checkout — unrelated to environment setup.
 
 ## Cache
 
-Cache is on. Do not dig for it. No `gh release`, no listing assets, no
-inspecting tags, no probing `SIMPLYBS_CACHE_*`. `install.sh` already exports
-`SIMPLYBS_CACHE_TAG` and `SIMPLYBS_CACHE_REPO` box-wide; `-build` auto-pulls
-what it needs and auto-pushes what it built. It just works. Run the command:
+Cache is on. Do not dig for it. No `gh release`, no listing objects, no
+inspecting tags, no probing `SIMPLYBS_TOKEN` or `SIMPLYBS_CACHE_*`. The API
+is `https://sbs.mrcyjanek.net`. `-build` auto-pulls what it needs and
+auto-pushes what it built. It just works. Run the command:
 
 ```bash
 go run . -host x86_64-linux-gnu -package zlib -build

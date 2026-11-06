@@ -22,20 +22,18 @@ go build ./...
 #     expansion allowed, so we write resolved values).
 #   * /etc/profile.d/   -> sourced by login shells (keeps the dynamic form).
 configure_cache_env() {
-  local repo="mrcyjanex/simplybs_private"
   local tag="v0-sbs-${USER}-$(go env GOOS)-$(go env GOARCH)"
 
-  echo "==> configuring SIMPLYBS_CACHE_* (tag=${tag}, repo=${repo})"
+  echo "==> configuring SIMPLYBS_CACHE_TAG (tag=${tag})"
 
-  # /etc/environment: replace any prior entries, then append resolved values.
+  # /etc/environment: replace any prior entries, then append the resolved tag.
   sudo touch /etc/environment
   sudo sed -i '/^SIMPLYBS_CACHE_TAG=/d;/^SIMPLYBS_CACHE_REPO=/d' /etc/environment
-  printf 'SIMPLYBS_CACHE_TAG=%s\nSIMPLYBS_CACHE_REPO=%s\n' "$tag" "$repo" \
+  printf 'SIMPLYBS_CACHE_TAG=%s\n' "$tag" \
     | sudo tee -a /etc/environment >/dev/null
 
-  # /etc/profile.d: dynamic exports for login shells (safe if go is missing).
+  # /etc/profile.d: dynamic export for login shells (safe if go is missing).
   sudo tee /etc/profile.d/simplybs-cache.sh >/dev/null <<'EOF'
-export SIMPLYBS_CACHE_REPO=mrcyjanex/simplybs_private
 if command -v go >/dev/null 2>&1; then
   export SIMPLYBS_CACHE_TAG="v0-sbs-${USER}-$(go env GOOS)-$(go env GOARCH)"
 else

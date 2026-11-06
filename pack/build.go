@@ -23,6 +23,9 @@ func (p *Package) EnsureBuilt(h *host.Host, buildDependencies bool) {
 		TryPullPackageCache(p, h)
 	}
 	if p.localBuiltCacheHit(h) {
+		if err := p.verifyLocalSignature(h); err != nil {
+			exitSignatureMismatch(err)
+		}
 		log.Printf("[%s][%s] Build cache found, skipping build...", h.Triplet, p.Package)
 		return
 	}
@@ -179,8 +182,8 @@ func wipeDirContents(dir string) {
 
 func resetBuildDirs() {
 	for _, dir := range []string{
-		filepath.Join(host.DataDir(), "work"),
-		filepath.Join(host.DataDir(), "staging"),
+		host.WorkDir(),
+		host.StagingDir(),
 	} {
 		utils.RemoveAll(dir)
 	}
@@ -292,7 +295,6 @@ func (p *Package) buildPackageInternal(h *host.Host, buildDependencies bool) {
 		for k, v := range env {
 			overrides[k] = v
 		}
-		applyRootBuildOverrides(overrides, os.Geteuid())
 		cmd.Env = utils.ProcessEnv(overrides)
 
 		writeDotEnv(path.Join(buildPath, "_source_me"), cmd.Env)
@@ -329,19 +331,12 @@ func (p *Package) buildPackageInternal(h *host.Host, buildDependencies bool) {
 	if err != nil {
 		log.Fatalf("Failed to write build info %s: %v", infoPath, err)
 	}
+	if err := p.writePackSignature(h); err != nil {
+		log.Fatalf("Failed to sign build %s: %v", builtArchivePath, err)
+	}
 
 	log.Printf("Package built successfully: %s", builtArchivePath)
 	TryPushPackageCache(p, h)
-}
-
-// applyRootBuildOverrides sets GNU autotools' root bypass when the builder
-// process is uid 0. GitHub Actions container jobs run as root; coreutils/tar
-// configure otherwise fail with "you should not run configure as root".
-// This is not part of GetEnv / package info, so it does not change cache hashes.
-func applyRootBuildOverrides(overrides map[string]string, euid int) {
-	if euid == 0 {
-		overrides["FORCE_UNSAFE_CONFIGURE"] = "1"
-	}
 }
 
 func writeDotEnv(path string, env []string) {
@@ -478,7 +473,6 @@ func (p *Package) StartShell(h *host.Host) {
 	for k, v := range env {
 		overrides[k] = v
 	}
-	applyRootBuildOverrides(overrides, os.Geteuid())
 	cmd.Env = utils.ProcessEnv(overrides)
 	writeDotEnv(path.Join(buildPath, "_source_me"), cmd.Env)
 

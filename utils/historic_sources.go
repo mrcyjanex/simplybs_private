@@ -61,7 +61,7 @@ func CollectHistoricDownloads(s *SourcesFile) error {
 				continue
 			}
 
-			MergeDownloadsFromJSON(s, content)
+			MergeDownloadsFromJSONorYAML(s, content)
 		}
 	}
 

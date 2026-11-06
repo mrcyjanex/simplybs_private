@@ -1,0 +1,18 @@
+package: native/gperf
+version: "0.26"
+type: native
+download:
+    - kind: tar.gz
+      sha256: fd87e0aba7e43ae054837afd6cd4db03a3f2693deb3619085e6ed9d8d9604ad8
+      url: http://ftpmirror.gnu.org/gnu/gperf/gperf-3.3.tar.gz
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/bash'
+    - '*:*:native/make'
+build:
+    env:
+        - '*:*:config_opts=--prefix=$NATIVEPREFIX'
+    steps:
+        - '*:*:bash ./configure $config_opts'
+        - '*:*:make -j$NUM_CORES'
+        - '*:*:make DESTDIR=$STAGING_DIR install'
