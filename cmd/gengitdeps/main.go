@@ -1,12 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Download struct {
@@ -90,12 +91,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Output JSON
 	output := Output{Download: downloads}
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "    ")
+	encoder := yaml.NewEncoder(os.Stdout)
+	encoder.SetIndent(4)
 	if err := encoder.Encode(output); err != nil {
-		fmt.Fprintf(os.Stderr, "Error encoding JSON: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error encoding YAML: %v\n", err)
+		os.Exit(1)
+	}
+	if err := encoder.Close(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error encoding YAML: %v\n", err)
 		os.Exit(1)
 	}
 }
