@@ -54,7 +54,7 @@ After changing sources run `go run . -lint`
 To generate git `download` entries from repos you've checked out locally:
 
 ```bash
-go run ./cmd/gengitdeps        # prints download JSON to stdout
+go run ./cmd/gengitdeps        # prints download YAML to stdout
 ```
 
 ## Tests

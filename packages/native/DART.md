@@ -45,12 +45,12 @@ gclient sync
 go run <simplybs>/cmd/gengitdeps
 ```
 
-`gengitdeps` prints JSON. The `sha256` field is the git commit, not a
-content hash. Turn each object into a `download` entry in the previous
-package’s YAML shape (`kind`, optional `path`, `sha256`, `url`). The sdk
-checkout has no `path`. Drop cipd entries (`clang`, sysroots, `d8`,
-devtools, `gsutil`). `tests/co19/src` is cipd in `DEPS` and a git checkout
-here: `https://dart.googlesource.com/co19` at `co19_rev`.
+`gengitdeps` prints the `download` list as YAML, in the same shape as a
+package file. The `sha256` field is the git commit, not a content hash.
+Paste those entries under `download`. The sdk checkout has no `path`.
+Drop cipd entries (`clang`, sysroots, `d8`, devtools, `gsutil`).
+`tests/co19/src` is cipd in `DEPS` and a git checkout here:
+`https://dart.googlesource.com/co19` at `co19_rev`.
 
 Without a full sync, copy the previous package’s `download` list and
 replace commits from that tag’s `DEPS` `vars`. Keep the path and URL.
