@@ -200,11 +200,11 @@ build:
         - '*:*:sed -i.bak ''s/"-Wno-dangling-reference",/ /g'' runtime/BUILD.gn'
         - '*:*:mkdir -p tools/sdks/dart-sdk/bin'
         - '*:*:ln -s $(which dart) tools/sdks/dart-sdk/bin/dart'
-        - '*:*:python3 ./tools/generate_package_config.py # HOOK Generate the .dart_tool/package_confg.json file.'
-        - '*:*:echo 3.13.7 > sdk/version'
         - '*:*:rm -rf third_party/devtools/devtools_shared'
         - '*:*:mkdir -p third_party/devtools'
         - '*:*:cp -a third_party/devtools_src/packages/devtools_shared third_party/devtools/devtools_shared'
+        - '*:*:python3 ./tools/generate_package_config.py # HOOK Generate the .dart_tool/package_confg.json file.'
+        - '*:*:echo 3.13.7 > sdk/version'
         - '*:*:mkdir -p third_party/devtools/web'
         - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py

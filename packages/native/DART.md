@@ -74,6 +74,11 @@ the previous `pub.dev` tarball and its sha256. If it changed, download
 `https://pub.dev/api/archives/devtools_shared-<version>.tar.gz` once,
 sha256 the file, and put that hash on a `kind: tar.gz` entry at
 `third_party/devtools/devtools_shared`. The build steps must not fetch it.
+If that version was never published, pin the devtools git repo instead and
+copy `packages/devtools_shared` to `third_party/devtools/devtools_shared`
+before `tools/generate_package_config.py`. That script runs `dart pub get`,
+which rejects a missing path dependency. A tarball download is already in
+place before the first build step, so it does not need the copy.
 
 ## Build steps
 
