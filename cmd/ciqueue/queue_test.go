@@ -59,16 +59,23 @@ func TestPackagesFromPaths(t *testing.T) {
 		names = append(names, p.Package)
 	}
 	got := packagesFromPaths([]string{
-		"packages/zlib.json",
+		"packages/zlib.yaml",
+		"packages/openssl.json",
+		"packages/native/dart@3.13.7.yaml",
+		"packages/native/DART.md",
 		"patches/zlib/does-not-need-to-exist.patch",
 		"patches/native/make/foo.patch",
 		"README.md",
+		"sources.json",
 		"cmd/ciqueue/queue.go",
 	}, names)
-	for _, want := range []string{"zlib", "native/make"} {
+	for _, want := range []string{"zlib", "openssl", "native/dart@3.13.7", "native/make"} {
 		if !got[want] {
 			t.Fatalf("expected %s in %v", want, sortedKeys(got))
 		}
+	}
+	if got["native/DART"] || got["sources"] {
+		t.Fatalf("docs and sources.json are not packages: %v", sortedKeys(got))
 	}
 	if got["cmd/ciqueue"] {
 		t.Fatal("Go source should not map to a package")
@@ -81,7 +88,7 @@ func TestNextQueueRequiresCache(t *testing.T) {
 	t.Setenv("SIMPLYBS_TOKEN", "")
 	t.Setenv("SIMPLYBS_CACHE_TAG", "")
 	_, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        []string{"x86_64-linux-gnu"},
 	})
 	if err == nil {
@@ -107,7 +114,7 @@ func TestNextQueueEmptyDiffIsDone(t *testing.T) {
 func TestNextQueueNativeToolchainRebuildsDirectDependents(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/native/_.json"},
+		changedFiles: []string{"packages/native/_.yaml"},
 		hosts:        []string{"aarch64-linux-android", "x86_64-linux-gnu"},
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return !(p.Package == "zlib" && h.Triplet == "aarch64-linux-android"), nil
@@ -127,7 +134,7 @@ func TestNextQueueNativeToolchainRebuildsDirectDependents(t *testing.T) {
 func TestNextQueueZlibPicksNativeFirst(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        DefaultHosts,
 		cached:       missCache(t),
 	})
@@ -155,7 +162,7 @@ func TestNextQueueZlibPicksNativeFirst(t *testing.T) {
 func TestNextQueueZlibWhenDepsCached(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        DefaultHosts,
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return p.Package != "zlib", nil
@@ -175,7 +182,7 @@ func TestNextQueueZlibWhenDepsCached(t *testing.T) {
 func TestNextQueueZlibSecondHostAfterFirstCached(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        DefaultHosts,
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			if p.Package != "zlib" {
@@ -246,7 +253,7 @@ func TestPackagesLinuxArm64YmlHostsIncludeAndroid(t *testing.T) {
 func TestNextQueueZlibDarwinHost(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        []string{"aarch64-apple-darwin"},
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return p.Package != "zlib", nil
@@ -340,7 +347,7 @@ func TestRenderCommentQueueMarkersDoNotCollide(t *testing.T) {
 func TestNextQueueZlibLinuxArm64HostsIncludeAndroid(t *testing.T) {
 	chdirRepoRoot(t)
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        linuxArm64CIHosts,
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return p.Package != "zlib", nil
@@ -380,7 +387,7 @@ func TestNextQueueZlibDarwinHostsSkipLinuxGnuAndMingw(t *testing.T) {
 		"armv7a-linux-androideabi",
 	}
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json"},
+		changedFiles: []string{"packages/zlib.yaml"},
 		hosts:        hosts,
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			return p.Package != "zlib", nil
@@ -407,7 +414,7 @@ func TestNextQueueDoesNotRecheckSharedDeps(t *testing.T) {
 	type key struct{ pkg, host string }
 	calls := map[key]int{}
 	_, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/zlib.json", "packages/curl.json"},
+		changedFiles: []string{"packages/zlib.yaml", "packages/curl.yaml"},
 		hosts:        []string{"x86_64-linux-gnu", "aarch64-linux-gnu"},
 		cached: func(p *pack.Package, h *host.Host) (bool, error) {
 			calls[key{p.Package, h.Triplet}]++
@@ -436,7 +443,7 @@ func TestNextQueueDedupesSharedNativeArtifacts(t *testing.T) {
 		t.Skipf("native/m4 artifacts differ across linux hosts:\n%s\n%s", a, b)
 	}
 	res, err := nextQueue(queueOpts{
-		changedFiles: []string{"packages/native/m4.json"},
+		changedFiles: []string{"packages/native/m4.yaml"},
 		hosts:        []string{"x86_64-linux-gnu", "aarch64-linux-gnu"},
 		cached:       missCache(t),
 	})
@@ -462,7 +469,7 @@ func TestNextQueueMavenTreeFinishesQuickly(t *testing.T) {
 	var files []string
 	for _, p := range pack.GetAllPackages() {
 		if strings.HasPrefix(p.Package, "native/jdk") || p.Package == "native/graalvm" {
-			files = append(files, "packages/"+p.Package+".json")
+			files = append(files, "packages/"+p.Package+".yaml")
 		}
 	}
 	if len(files) < 10 {
