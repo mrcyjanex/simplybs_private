@@ -197,7 +197,20 @@ build:
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
         - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
         - '*:*:printf ''#!/bin/sh\nexec %s "$@"\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@"\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
+        - |-
+          *:*:cat > buildtools/$BUILDTARGET/clang/bin/clang++ << 'END'
+          #!/bin/sh
+          for arg in "$@"; do
+            case $arg in
+              -nostdinc++|-nostdlib++)
+                CCC_OVERRIDE_OPTIONS="${CCC_OVERRIDE_OPTIONS:+$CCC_OVERRIDE_OPTIONS }x-stdlib=libstdc++"
+                export CCC_OVERRIDE_OPTIONS
+                break
+                ;;
+            esac
+          done
+          exec "$CXX" "$@"
+          END
         - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
         - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
@@ -213,6 +226,7 @@ build:
         - '*:*:mkdir -p third_party/devtools/web'
         - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
+        - '*:*:sed -i.bak -e ''/sanitizers += \[ "asan" \]/d'' -e ''/sanitizers += \[ "msan" \]/d'' -e ''/sanitizers += \[ "tsan" \]/d'' -e ''s/"asan",//'' -e ''s/"msan",//'' -e ''s/"tsan",//'' sdk/BUILD.gn'
         - '*:*:python3 ./tools/build.py --mode=product create_sdk'
         - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
         - linux_*:*:cp -a $(find out -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/

@@ -88,6 +88,16 @@ Copy the previous package’s `build` block.
 - `echo <version> > sdk/version` must be this package’s version.
 - Keep the clang and sysroot `.cipd_version` stubs, the `gn` / `ninja` /
   clang symlinks, and `build_devtools_from_sources = false`.
+- The `clang++` symlink must drop simplybs `-stdlib=libstdc++` when the
+  compile passes `-nostdinc++` or `-nostdlib++`. Clang turns that unused
+  flag into an error.
+- From `3.11.0-296.4.beta` on, `sdk/BUILD.gn` also copies asan, msan, and
+  tsan `dartaotruntime` binaries. Drop those three names before
+  `create_sdk`. Through `3.12.0-210.1.beta` they are `"asan",` entries.
+  From `3.12.2` and `3.12.0-327.3.beta` msan is its own
+  `sanitizers += [ "msan" ]` line, and `3.13.7` uses that form for all
+  three. The simplybs clang has no `sanitizer/msan_interface.h`, and the
+  bootstrap `dart` binary does not need the sanitized runtimes.
 - Keep the `runtime/BUILD.gn` sed while that file still lists
   `-Wno-dangling-reference`.
 - Keep the `build/mac/find_sdk.py` stand-in on Darwin. It prints the
