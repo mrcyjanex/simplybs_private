@@ -107,6 +107,13 @@ Copy the previous package’s `build` block.
   simplybs `MacOSX26.1.sdk` path and `26.1`.
 - The bootstrap `dart` on `PATH` is the dependency. The symlink into
   `tools/sdks/dart-sdk/bin/dart` replaces the cipd SDK.
+- On Darwin, `dart compile exe` re-signs Mach-O output when
+  `dartaotruntime` has an `LC_CODE_SIGNATURE`. simplybs `PATH` has no
+  `/usr/bin`, so symlink `/usr/bin/codesign` into `$NATIVEPREFIX/bin`
+  before `create_sdk`. `3.13.7` needs this: its bootstrap SDK
+  (`3.13.0-103.1.beta`) ships a signed runtime, and the build fails
+  with `codesign: No such file or directory` while producing
+  `bootstrap_compile_platform.exe`. Earlier hops did not call it.
 - Add `python3 src/util/generate_build_files.py gn` under
   `third_party/boringssl` only when `third_party/boringssl/BUILD.gn`
   imports `src/gen/sources.gni` and the pinned boringssl commit does not
