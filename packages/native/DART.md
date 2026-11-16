@@ -91,6 +91,9 @@ Copy the previous package’s `build` block.
 - The `clang++` symlink must drop simplybs `-stdlib=libstdc++` when the
   compile passes `-nostdinc++` or `-nostdlib++`. Clang turns that unused
   flag into an error.
+- From `3.11.0-296.4.beta` on, the macOS link rule runs
+  `buildtools/$BUILDTARGET/clang/bin/dsymutil`. Symlink the simplybs
+  `dsymutil` (or `llvm-dsymutil`) there on Darwin. `3.10` does not call it.
 - From `3.11.0-296.4.beta` on, `sdk/BUILD.gn` also copies asan, msan, and
   tsan `dartaotruntime` binaries. Drop those three names before
   `create_sdk`. Through `3.12.0-210.1.beta` they are `"asan",` entries.
