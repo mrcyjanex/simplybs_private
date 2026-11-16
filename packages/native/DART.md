@@ -15,20 +15,29 @@ one”.
 Walk `sdk_tag` backwards from the release you want until the commit is one
 this tree already builds. That first missing tag is the next package.
 
-Position after `native/dart@3.10.0-164.0.dev`:
+Position after `native/dart@3.13.7`:
 
 | package | `sdk_tag` resolves to | depends on |
 | --- | --- | --- |
-| `native/dart@3.9.4` | `4bb26ad346b166d759773e01ffc8247893b9681e` | `native/dart@3.9.0-27.0.dev` |
-| `native/dart@3.10.0-164.0.dev` | same commit, `Version 3.9.0-27.0.dev` | `native/dart@3.9.0-27.0.dev` |
-| next: `3.10.0-244.0.dev` | `0bf5d0bb49d7872a1a01e55dbea63ad7455d754e` | `native/dart@3.10.0-164.0.dev` |
-| then: `3.10.0` | `782552bdddc112c62db28ec7e9b2763f4457a3ea` | `native/dart@3.10.0-244.0.dev` |
+| `native/dart@3.10.0-164.0.dev` | `4bb26ad346b166d759773e01ffc8247893b9681e` | `native/dart@3.9.0-27.0.dev` |
+| `native/dart@3.10.0-244.0.dev` | `0bf5d0bb49d7872a1a01e55dbea63ad7455d754e` | `native/dart@3.10.0-164.0.dev` |
+| `native/dart@3.10.0` | `782552bdddc112c62db28ec7e9b2763f4457a3ea` | `native/dart@3.10.0-244.0.dev` |
+| `native/dart@3.11.0-296.4.beta` | same commit, `Version 3.10.0-244.0.dev` | `native/dart@3.10.0-244.0.dev` |
+| `native/dart@3.12.0-210.1.beta` | `bc20d999d68a261ae12c56bab7ba304bd0de5346` | `native/dart@3.11.0-296.4.beta` |
+| `native/dart@3.12.2` | `9ac06cdd18015c83a25921e26912c96e3fbe22c2` | `native/dart@3.12.0-210.1.beta` |
+| `native/dart@3.12.0-327.3.beta` | same commit, `Version 3.12.0-210.1.beta` | `native/dart@3.12.0-210.1.beta` |
+| `native/dart@3.13.0-89.0.dev` | `963eac24852a989a1244586fea61b173e98677dd` | `native/dart@3.12.0-327.3.beta` |
+| `native/dart@3.13.0-103.1.beta` | `9aa7097f2e3e80647d539b5575273257e1883633` | `native/dart@3.13.0-89.0.dev` |
+| `native/dart@3.13.7` | tag `3.13.0-103.1.beta` | `native/dart@3.13.0-103.1.beta` |
 
-`3.9.4` and `3.10.0-164.0.dev` are siblings. `3.10.0` stable is two hops
-further up. Resolve a commit with the tag message (`Version …`) or
-`git log -1 --format=%s <commit>` on an sdk checkout. The download `sha256`
-for the sdk itself is the peeled tag commit (`git rev-parse <tag>^{}`),
-not the annotated tag object.
+`3.10.0` and `3.11.0-296.4.beta` are siblings. `3.12.2` and
+`3.12.0-327.3.beta` are siblings. `3.12.2` is not on the way to `3.13.7`;
+it is packaged anyway. From `3.13.0-103.1.beta` upward, `sdk_tag` may be
+`version:<tag>` instead of `git_revision:<commit>`. Resolve that tag with
+`git rev-parse <tag>^{}`. Resolve a commit with the tag message
+(`Version …`) or `git log -1 --format=%s <commit>` on an sdk checkout.
+The download `sha256` for the sdk itself is the peeled tag commit
+(`git rev-parse <tag>^{}`), not the annotated tag object.
 
 ## Download list
 
@@ -65,6 +74,11 @@ the previous `pub.dev` tarball and its sha256. If it changed, download
 `https://pub.dev/api/archives/devtools_shared-<version>.tar.gz` once,
 sha256 the file, and put that hash on a `kind: tar.gz` entry at
 `third_party/devtools/devtools_shared`. The build steps must not fetch it.
+If that version was never published, pin the devtools git repo instead and
+copy `packages/devtools_shared` to `third_party/devtools/devtools_shared`
+before `tools/generate_package_config.py`. That script runs `dart pub get`,
+which rejects a missing path dependency. A tarball download is already in
+place before the first build step, so it does not need the copy.
 
 ## Build steps
 
@@ -74,12 +88,32 @@ Copy the previous package’s `build` block.
 - `echo <version> > sdk/version` must be this package’s version.
 - Keep the clang and sysroot `.cipd_version` stubs, the `gn` / `ninja` /
   clang symlinks, and `build_devtools_from_sources = false`.
+- The `clang++` symlink must drop simplybs `-stdlib=libstdc++` when the
+  compile passes `-nostdinc++` or `-nostdlib++`. Clang turns that unused
+  flag into an error.
+- From `3.11.0-296.4.beta` on, the macOS link rule runs
+  `buildtools/$BUILDTARGET/clang/bin/dsymutil`. Symlink the simplybs
+  `dsymutil` (or `llvm-dsymutil`) there on Darwin. `3.10` does not call it.
+- From `3.11.0-296.4.beta` on, `sdk/BUILD.gn` also copies asan, msan, and
+  tsan `dartaotruntime` binaries. Drop those three names before
+  `create_sdk`. Through `3.12.0-210.1.beta` they are `"asan",` entries.
+  From `3.12.2` and `3.12.0-327.3.beta` msan is its own
+  `sanitizers += [ "msan" ]` line, and `3.13.7` uses that form for all
+  three. The simplybs clang has no `sanitizer/msan_interface.h`, and the
+  bootstrap `dart` binary does not need the sanitized runtimes.
 - Keep the `runtime/BUILD.gn` sed while that file still lists
   `-Wno-dangling-reference`.
 - Keep the `build/mac/find_sdk.py` stand-in on Darwin. It prints the
   simplybs `MacOSX26.1.sdk` path and `26.1`.
 - The bootstrap `dart` on `PATH` is the dependency. The symlink into
   `tools/sdks/dart-sdk/bin/dart` replaces the cipd SDK.
+- On Darwin, `dart compile exe` re-signs Mach-O output when
+  `dartaotruntime` has an `LC_CODE_SIGNATURE`. simplybs `PATH` has no
+  `/usr/bin`, so symlink `/usr/bin/codesign` into `$NATIVEPREFIX/bin`
+  before `create_sdk`. `3.13.7` needs this: its bootstrap SDK
+  (`3.13.0-103.1.beta`) ships a signed runtime, and the build fails
+  with `codesign: No such file or directory` while producing
+  `bootstrap_compile_platform.exe`. Earlier hops did not call it.
 - Add `python3 src/util/generate_build_files.py gn` under
   `third_party/boringssl` only when `third_party/boringssl/BUILD.gn`
   imports `src/gen/sources.gni` and the pinned boringssl commit does not

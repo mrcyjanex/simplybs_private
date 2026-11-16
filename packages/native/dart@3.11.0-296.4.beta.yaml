@@ -1,0 +1,254 @@
+package: native/dart@3.11.0-296.4.beta
+version: 3.11.0-296.4.beta
+type: native
+download:
+    - kind: git
+      sha256: bc20d999d68a261ae12c56bab7ba304bd0de5346
+      url: https://dart.googlesource.com/sdk.git
+    - kind: git
+      path: build/secondary/third_party/protobuf
+      sha256: ca669f79945418f6229e4fef89b666b2a88cbb10
+      url: https://fuchsia.googlesource.com/protobuf-gn
+    - kind: git
+      path: tests/co19/src
+      sha256: 911100f1901c7e6de8ba5c8c290a0a3b7e33a997
+      url: https://dart.googlesource.com/co19
+    - kind: git
+      path: third_party/WebCore
+      sha256: bcb10901266c884e7b3740abc597ab95373ab55c
+      url: https://dart.googlesource.com/webcore.git
+    - kind: git
+      path: third_party/binaryen/src
+      sha256: 6ec7b5f9c615d3b224c67ae221d6812c8f8e1a96
+      url: https://chromium.googlesource.com/external/github.com/WebAssembly/binaryen.git
+    - kind: git
+      path: third_party/boringssl/src
+      sha256: 9f138d05879fcf61965d1ea9d6c8b2cfc8bc12cb
+      url: https://boringssl.googlesource.com/boringssl.git
+    - kind: git
+      path: third_party/cpu_features/src
+      sha256: 936b9ab5515dead115606559502e3864958f7f6e
+      url: https://chromium.googlesource.com/external/github.com/google/cpu_features.git
+    - kind: git
+      path: third_party/emsdk
+      sha256: e41b8c68a248da5f18ebd03bd0420953945d52ff
+      url: https://dart.googlesource.com/external/github.com/emscripten-core/emsdk.git
+    - kind: git
+      path: third_party/icu
+      sha256: 1b2e3e8a421efae36141a7b932b41e315b089af8
+      url: https://chromium.googlesource.com/chromium/deps/icu.git
+    - kind: git
+      path: third_party/jinja2
+      sha256: 2222b31554f03e62600cd7e383376a7c187967a1
+      url: https://chromium.googlesource.com/chromium/src/third_party/jinja2.git
+    - kind: git
+      path: third_party/libc
+      sha256: 5af39a19a1ad51ce93972cdab206dcd3ff9b6afa
+      url: https://llvm.googlesource.com/llvm-project/libc
+    - kind: git
+      path: third_party/libcxx
+      sha256: bd557f6f764d1e40b62528a13b124ce740624f8f
+      url: https://llvm.googlesource.com/llvm-project/libcxx
+    - kind: git
+      path: third_party/libcxxabi
+      sha256: a4dda1589d37a7e4b4f7a81ebad01b1083f2e726
+      url: https://llvm.googlesource.com/llvm-project/libcxxabi
+    - kind: git
+      path: third_party/markupsafe
+      sha256: 8f45f5cfa0009d2a70589bcda0349b8cb2b72783
+      url: https://chromium.googlesource.com/chromium/src/third_party/markupsafe.git
+    - kind: git
+      path: third_party/mdn/browser-compat-data/src
+      sha256: ac8cae697014da1ff7124fba33b0b4245cc6cd1b
+      url: https://chromium.googlesource.com/external/github.com/mdn/browser-compat-data
+    - kind: git
+      path: third_party/pkg/ai
+      sha256: a3a196bf4773c7a7a9f93b6798232fb0d8220bc3
+      url: https://dart.googlesource.com/ai.git
+    - kind: git
+      path: third_party/pkg/core
+      sha256: cbb485437c61d37753bcc98818beca54d5b38f69
+      url: https://dart.googlesource.com/core.git
+    - kind: git
+      path: third_party/pkg/dart_style
+      sha256: e8190bf2242654daee7ebf21fd6d8c8046989822
+      url: https://dart.googlesource.com/dart_style.git
+    - kind: git
+      path: third_party/pkg/dartdoc
+      sha256: 6d1aa6f5045c33d3723aba05e3e0dc1403b763c0
+      url: https://dart.googlesource.com/dartdoc.git
+    - kind: git
+      path: third_party/pkg/ecosystem
+      sha256: eac66d93142907b39f2271647c111f36ff3365b9
+      url: https://dart.googlesource.com/ecosystem.git
+    - kind: git
+      path: third_party/pkg/http
+      sha256: a22386e9c390290c916d1c53a3d3c1447ec120ce
+      url: https://dart.googlesource.com/http.git
+    - kind: git
+      path: third_party/pkg/i18n
+      sha256: dd8a792a8492370a594706c8304d2eb8db844d7a
+      url: https://dart.googlesource.com/i18n.git
+    - kind: git
+      path: third_party/pkg/leak_tracker
+      sha256: f5620600a5ce1c44f65ddaa02001e200b096e14c
+      url: https://dart.googlesource.com/leak_tracker.git
+    - kind: git
+      path: third_party/pkg/native
+      sha256: 9a11537944f2ee295df46104624fb714c3dd7741
+      url: https://dart.googlesource.com/native.git
+    - kind: git
+      path: third_party/pkg/protobuf
+      sha256: 9e30258e0aa6a6430ee36c84b75308a9702fde42
+      url: https://dart.googlesource.com/protobuf.git
+    - kind: git
+      path: third_party/pkg/pub
+      sha256: b21ac685bc64f6e81050ec0093aa83543d66e2fd
+      url: https://dart.googlesource.com/pub.git
+    - kind: git
+      path: third_party/pkg/shelf
+      sha256: dd830a0338b31bee92fe7ebc20b9bb963403b6b0
+      url: https://dart.googlesource.com/shelf.git
+    - kind: git
+      path: third_party/pkg/sync_http
+      sha256: 6666fff944221891182e1f80bf56569338164d72
+      url: https://dart.googlesource.com/sync_http.git
+    - kind: git
+      path: third_party/pkg/tar
+      sha256: 13479f7c2a18f499e840ad470cfcca8c579f6909
+      url: https://dart.googlesource.com/external/github.com/simolus3/tar.git
+    - kind: git
+      path: third_party/pkg/test
+      sha256: f95c0f5c10fa9af35014117cb00ec17d2a117265
+      url: https://dart.googlesource.com/test.git
+    - kind: git
+      path: third_party/pkg/tools
+      sha256: 87270e60a5c92f127acb29d6e0dbc2d920c3f669
+      url: https://dart.googlesource.com/tools.git
+    - kind: git
+      path: third_party/pkg/vector_math
+      sha256: 70a9a2cb610d040b247f3ca2cd70a94c1c6f6f23
+      url: https://dart.googlesource.com/external/github.com/google/vector_math.dart.git
+    - kind: git
+      path: third_party/pkg/web
+      sha256: 35fc98dd8f9da175ed0a2dcf246299e922e1e1e2
+      url: https://dart.googlesource.com/web.git
+    - kind: git
+      path: third_party/pkg/webdev
+      sha256: 234e44c2ba0aa6cee5a36026538ca89457bf0d55
+      url: https://dart.googlesource.com/webdev.git
+    - kind: git
+      path: third_party/pkg/webdriver
+      sha256: 09104f459ed834d48b132f6b7734923b1fbcf2e9
+      url: https://dart.googlesource.com/external/github.com/google/webdriver.dart.git
+    - kind: git
+      path: third_party/pkg/webkit_inspection_protocol
+      sha256: 0f7685804d77ec02c6564d7ac1a6c8a2341c5bdf
+      url: https://dart.googlesource.com/external/github.com/google/webkit_inspection_protocol.dart.git
+    - kind: git
+      path: third_party/ply
+      sha256: 604b32590ffad5cbb82e4afef1d305512d06ae93
+      url: https://chromium.googlesource.com/chromium/src/third_party/ply.git
+    - kind: git
+      path: third_party/protobuf
+      sha256: 24487dd1045c7f3d64a21f38a3f0c06cc4cf2edb
+      url: https://fuchsia.googlesource.com/third_party/protobuf
+    - kind: git
+      path: third_party/zlib
+      sha256: 470d3a2ee4ef721688ce6961bc865a99fcb64070
+      url: https://chromium.googlesource.com/chromium/src/third_party/zlib.git
+    - kind: git
+      path: third_party/perfetto/src
+      sha256: 13ce0c9e13b0940d2476cd0cff2301708a9a2e2b
+      url: https://android.googlesource.com/platform/external/perfetto
+    - kind: tar.gz
+      path: third_party/devtools/devtools_shared
+      sha256: 275e48a8a145fa09c7ae433a96fd433c01cc079d39b40acf5ba883236ae2c887
+      url: https://pub.dev/api/archives/devtools_shared-12.0.0.tar.gz
+dependencies:
+    - '*:*:native/_/_'
+    - '*:*:native/dart@3.10.0-244.0.dev'
+    - '*:*:native/git'
+    - '*:*:native/gn'
+    - '*:*:native/libc++'
+    - '*:*:native/llvm-ar'
+    - '*:*:native/llvm-nm'
+    - '*:*:native/llvm-strip'
+    - '*:*:native/make'
+    - '*:*:native/ninja'
+    - '*:*:native/python@3.11'
+    - '*:*:native/zlib'
+build:
+    env:
+        - linux_amd64:*:BUILDTARGET=linux-x64
+        - linux_arm64:*:BUILDTARGET=linux-arm64
+        - darwin_arm64:*:BUILDTARGET=mac-arm64
+        - linux_*:*:DART_USE_SYSROOT=x64=$NATIVEPREFIX/_/sysroot,arm64=$NATIVEPREFIX/_/sysroot
+    steps:
+        - '*:*:mkdir -p buildtools/mac-x64/clang/.versions'
+        - '*:*:mkdir -p buildtools/mac-arm64/clang/.versions'
+        - '*:*:mkdir -p buildtools/linux-x64/clang/.versions'
+        - '*:*:mkdir -p buildtools/linux-arm64/clang/.versions'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/mac-amd64","instance_id": "AWO66yebzYxWzasSzjx1wmeozi-xq9r0RnNyEhKtwAIC"}'' > ./buildtools/mac-x64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/mac-arm64","instance_id": "i41U-bFSUAOHPpKs_6lCF-EPqOLaa8LwT48ciXzHK3EC"}'' > ./buildtools/mac-arm64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/linux-amd64","instance_id": "-f7MR6VniTzxeWcp2k9ZkII4oK21j44tQvYuCBaHpqEC"}'' > ./buildtools/linux-x64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/linux-arm64","instance_id": "-f7MR6VniTzxeWcp2k9ZkII4oK21j44tQvYuCBaHpqEC"}'' > ./buildtools/linux-arm64/clang/.versions/clang.cipd_version'
+        - '*:*:mkdir -p buildtools/sysroot/linux/.versions'
+        - '*:*:mkdir -p buildtools/sysroot/focal/.versions'
+        - '*:*:echo ''{"package_name": "dart/sysroot/linux","instance_id": "simplybs"}'' > ./buildtools/sysroot/linux/.versions/sysroot.cipd_version'
+        - '*:*:echo ''{"package_name": "dart/sysroot/focal","instance_id": "simplybs"}'' > ./buildtools/sysroot/focal/.versions/sysroot.cipd_version'
+        - '*:*:echo build_devtools_from_sources = false > build/config/gclient_args.gni'
+        - '*:*:ln -s $(which gn) buildtools/gn'
+        - '*:*:mkdir -p buildtools/ninja'
+        - '*:*:ln -s $(which ninja) buildtools/ninja/ninja'
+        - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/bin'
+        - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
+        - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@"\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
+        - |-
+          *:*:cat > buildtools/$BUILDTARGET/clang/bin/clang++ << 'END'
+          #!/bin/sh
+          for arg in "$@"; do
+            case $arg in
+              -nostdinc++|-nostdlib++)
+                CCC_OVERRIDE_OPTIONS="${CCC_OVERRIDE_OPTIONS:+$CCC_OVERRIDE_OPTIONS }x-stdlib=libstdc++"
+                export CCC_OVERRIDE_OPTIONS
+                break
+                ;;
+            esac
+          done
+          exec "$CXX" "$@"
+          END
+        - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
+        - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
+        - '*:*:ln -s $(which llvm-strip) buildtools/$BUILDTARGET/clang/bin/llvm-strip'
+        - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-objcopy buildtools/$BUILDTARGET/clang/bin/llvm-objcopy'
+        - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-readelf buildtools/$BUILDTARGET/clang/bin/llvm-readelf'
+        - |-
+          darwin_*:*:for src in "$NATIVEPREFIX/_/bin/dsymutil" "$NATIVEPREFIX/_/bin/llvm-dsymutil" "$NATIVEPREFIX/_/bin/llvm-dsymutil-21"; do
+            if [ -e "$src" ]; then
+              ln -sf "$src" "buildtools/$BUILDTARGET/clang/bin/dsymutil"
+              break
+            fi
+          done
+          test -e "buildtools/$BUILDTARGET/clang/bin/dsymutil"
+        - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/llvm-ar'
+        - '*:*:sed -i.bak ''s/"-Wno-dangling-reference",/ /g'' runtime/BUILD.gn'
+        - '*:*:mkdir -p tools/sdks/dart-sdk/bin'
+        - '*:*:ln -s $(which dart) tools/sdks/dart-sdk/bin/dart'
+        - '*:*:python3 ./tools/generate_package_config.py # HOOK Generate the .dart_tool/package_confg.json file.'
+        - '*:*:echo 3.11.0-296.4.beta > sdk/version'
+        - '*:*:mkdir -p third_party/devtools/web'
+        - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
+        - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
+        - '*:*:sed -i.bak ''s/"asan",//; s/"msan",//; s/"tsan",//'' sdk/BUILD.gn'
+        - '*:*:python3 ./tools/build.py --mode=product create_sdk'
+        - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/include $STAGING_DIR$NATIVEPREFIX/
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/lib $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/include $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/lib $STAGING_DIR$NATIVEPREFIX/
+        - '*:*:$STAGING_DIR$NATIVEPREFIX/bin/dart --version'

@@ -289,12 +289,16 @@ func packagesFromPaths(files, packageNames []string) map[string]bool {
 
 func packagesAffectedByPath(file string, packageNames []string, nameSet map[string]bool) []string {
 	file = strings.TrimPrefix(file, "./")
-	if strings.HasPrefix(file, "packages/") && strings.HasSuffix(file, ".json") {
-		name := strings.TrimSuffix(strings.TrimPrefix(file, "packages/"), ".json")
-		if nameSet[name] {
-			return []string{name}
+	if strings.HasPrefix(file, "packages/") {
+		rel := strings.TrimPrefix(file, "packages/")
+		ext := path.Ext(rel)
+		if ext == ".yaml" || ext == ".json" {
+			name := strings.TrimSuffix(rel, ext)
+			if nameSet[name] {
+				return []string{name}
+			}
+			return nil
 		}
-		return nil
 	}
 	if !strings.HasPrefix(file, "patches/") {
 		return nil
