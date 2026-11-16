@@ -225,7 +225,14 @@ build:
         - '*:*:ln -s $(which llvm-strip) buildtools/$BUILDTARGET/clang/bin/llvm-strip'
         - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-objcopy buildtools/$BUILDTARGET/clang/bin/llvm-objcopy'
         - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-readelf buildtools/$BUILDTARGET/clang/bin/llvm-readelf'
-        - 'darwin_*:*:ln -sf $NATIVEPREFIX/_/bin/dsymutil buildtools/$BUILDTARGET/clang/bin/dsymutil || ln -sf $NATIVEPREFIX/_/bin/llvm-dsymutil buildtools/$BUILDTARGET/clang/bin/dsymutil || ln -sf $NATIVEPREFIX/_/bin/llvm-dsymutil-21 buildtools/$BUILDTARGET/clang/bin/dsymutil'
+        - |-
+          darwin_*:*:for src in "$NATIVEPREFIX/_/bin/dsymutil" "$NATIVEPREFIX/_/bin/llvm-dsymutil" "$NATIVEPREFIX/_/bin/llvm-dsymutil-21"; do
+            if [ -e "$src" ]; then
+              ln -sf "$src" "buildtools/$BUILDTARGET/clang/bin/dsymutil"
+              break
+            fi
+          done
+          test -e "buildtools/$BUILDTARGET/clang/bin/dsymutil"
         - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/llvm-ar'
         - '*:*:sed -i.bak ''s/"-Wno-dangling-reference",/ /g'' runtime/BUILD.gn'
         - '*:*:mkdir -p tools/sdks/dart-sdk/bin'
