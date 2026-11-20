@@ -100,11 +100,17 @@ rebuilds the whole chain back to `native/dart-bin`.
 
 ## Later, downward
 
-The same rule applies below the current tip. The floor for a seed that
-already runs natively on linux-amd64, linux-arm64, and macOS-arm64 is
-`2.14.1` (8 Sept 2021). linux-arm64 host builds start at 2.6; macOS-arm64
-stable starts at 2.14.1. That seed is a binary, the same shape as
-`native/dart-bin`. From there, hop upward one `sdk_tag` at a time.
+Walk one `sdk_tag` down from the package the current source tip is built
+by. Build that package from the recipe above it, move the prebuilt to
+its compiler, then rebuild the two newer packages so the new SDK still
+bootstraps them. Stop on a hop that will not build.
+
+The prebuilt is now `native/dart-bin@3.4.0-108.0.dev`. It builds
+`native/dart@3.4.0-247.0.dev`, which builds `native/dart@3.5.0-278.0.dev`.
+
+Host builds on an arm64 Mac stop at `2.16.2`: `GuessArchitecture` treats
+`platform.machine() == "arm64"` as 32-bit `arm`. `2.17.0` checks `arm64`
+first. That seed is a binary, the same shape as `native/dart-bin`.
 
 `2.14.1` runs on an arm64 Mac. Its `create_sdk` scripts still treat that
 Mac as a cross compile; they learned it is a native host in the
