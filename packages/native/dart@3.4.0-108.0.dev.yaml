@@ -339,7 +339,7 @@ download:
       url: https://pub.dev/api/archives/devtools_shared-6.0.4.tar.gz
 dependencies:
     - '*:*:native/_/_'
-    - '*:*:native/dart-bin@3.3.0-279.1.beta'
+    - '*:*:native/dart@3.3.0-279.1.beta'
     - '*:*:native/git'
     - '*:*:native/gn'
     - '*:*:native/libc++'
