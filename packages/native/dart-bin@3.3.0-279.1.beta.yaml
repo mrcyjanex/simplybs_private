@@ -1,0 +1,28 @@
+package: native/dart-bin@3.3.0-279.1.beta
+version: 3.3.0-279.1.beta
+type: native
+download:
+    - kind: blob
+      path: ./dartsdk-darwin_arm64.zip
+      sha256: 3bf607bfbf06880702887eb9858cef5c4e12fc09c9f4c09442f5079502e5cb67
+      url: https://storage.googleapis.com/dart-archive/channels/beta/release/3.3.0-279.1.beta/sdk/dartsdk-macos-arm64-release.zip
+    - kind: blob
+      path: ./dartsdk-linux_amd64.zip
+      sha256: a7ed5168acabce7cfb292de210d5fedb33a481548470a6e8142b20946ca81cfb
+      url: https://storage.googleapis.com/dart-archive/channels/beta/release/3.3.0-279.1.beta/sdk/dartsdk-linux-x64-release.zip
+    - kind: blob
+      path: ./dartsdk-linux_arm64.zip
+      sha256: e9516c29f1261dd985685a0d1e68ec85c531795e6aed6d7da72604a9a978e9b9
+      url: https://storage.googleapis.com/dart-archive/channels/beta/release/3.3.0-279.1.beta/sdk/dartsdk-linux-arm64-release.zip
+dependencies:
+    - '*:*:native/7zip'
+    - '*:*:native/_/_'
+build:
+    env: []
+    steps:
+        - '*:*:mkdir build'
+        - '*:*:cd build && 7zz x ../dartsdk-${BUILDER_GOOS}_${BUILDER_GOARCH}.zip'
+        - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
+        - '*:*:mv build/dart-sdk/lib $STAGING_DIR$NATIVEPREFIX'
+        - '*:*:mv build/dart-sdk/include $STAGING_DIR$NATIVEPREFIX'
+        - '*:*:mv build/dart-sdk/bin $STAGING_DIR$NATIVEPREFIX'
