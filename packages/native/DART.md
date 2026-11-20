@@ -139,8 +139,8 @@ by. Build that package from the recipe above it, move the prebuilt to
 its compiler, then rebuild the two newer packages so the new SDK still
 bootstraps them. Stop on a hop that will not build.
 
-The prebuilt is now `native/dart-bin@3.2.0-150.0.dev`. It builds
-`native/dart@3.3.0-279.1.beta`, which builds `native/dart@3.4.0-108.0.dev`.
+The prebuilt is now `native/dart-bin@3.1.0-298.0.dev`. It builds
+`native/dart@3.2.0-150.0.dev`, which builds `native/dart@3.3.0-279.1.beta`.
 
 Host builds on an arm64 Mac stop at `2.16.2`: `GuessArchitecture` treats
 `platform.machine() == "arm64"` as 32-bit `arm`. `2.17.0` checks `arm64`
