@@ -463,6 +463,7 @@
                 "d50a305d1b4455b4e72ba45a2cf2ab1c37004bc6",
                 "dd66678fea1d11bc6295a688ed5f8e726034f762",
                 "e22ff5fbafd675c54df23e5de22da13b8d7b68d8",
+                "e8141111c3315b0a9c151fcac0e14656dcfddac5",
                 "ea1107d66f543f79ce865522ddd63718c8eb109e"
             ]
         },
@@ -557,6 +558,7 @@
                 "14d33d3a120ad3ce621bbcf0a545dc3adeccd7e7",
                 "1a7952b13858ed307185a28f9b4ea861c0abb1c5",
                 "2522559623bdbaf471d09b3c9d77bd378d70d6d2",
+                "2bbe649a2139d0672e94bc69d78e815a290d2c8d",
                 "34561d6ebf5fa89ca1f93b981de96a75ff573562",
                 "3ce64a3d7da6702a4342bdfd0723b750fddeb35a",
                 "59dc475ac538b63073d9fc1e9e6ca5d4e5ce0769",
@@ -816,6 +818,7 @@
         },
         "https://dart.googlesource.com/linter.git": {
             "refs": [
+                "07c4d177bca9e3b670ab67a7c9a8cffeb90aa318",
                 "27b46ce246204a2c0170a4bd5b23b94095e89a22",
                 "7c7db85d29b46af51e3f4a5e0a33440c4e3791fc",
                 "e36813b302817c7a4aaa39480d1654502c786b14",
@@ -1009,6 +1012,7 @@
                 "3a7dc04eda4e7c359aed35176658bb2acc264f2e",
                 "42819a1e10f803eb7f6296692c5a976e1c647360",
                 "469eb6193c0a49495ea2ce7432cf749f077ad596",
+                "4bd757ce1dad04035fb0dbc6156879af23d8b3b8",
                 "52f512315bc886de487061091ef82056abf9dab8",
                 "58de642dc1d07601f6eb2b4ecd94555c0210106b",
                 "639536aa78f7382b4a948669bfdc283f830b2ae9",
@@ -1049,6 +1053,7 @@
                 "20d25283c9644bbfcfaba7ac2ef7988741a5a6ac",
                 "2d5dfe32cf2e6b3c3d6b396885502a5402b4fc72",
                 "2f5a888a5e6a7316074416822a9584d54e3f5ab5",
+                "45a360d262c259d1cb04973dca9c3377d59b6b7c",
                 "4a4ff9fba9ca67e9406743a24a3c47ad64d9e9c2",
                 "4bb26ad346b166d759773e01ffc8247893b9681e",
                 "51d6128b190eef58fc16e160937b069631776cce",
@@ -7097,6 +7102,24 @@
             "kind": "blob",
             "url": "https://storage.googleapis.com/dart-archive/channels/beta/release/3.9.0-100.2.beta/sdk/dartsdk-macos-arm64-release.zip",
             "sha256": "73063836c198c6ebcf09d9d38737badfc86bfa8dd8316fe7bd85d144d8c9dec9",
+            "path": "./dartsdk-darwin_arm64.zip"
+        },
+        {
+            "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/dev/release/3.0.0-322.0.dev/sdk/dartsdk-linux-arm64-release.zip",
+            "sha256": "3e29693eeb844bd04a83893a350766fa4f11aa4db2e3287fd2828d3c05613703",
+            "path": "./dartsdk-linux_arm64.zip"
+        },
+        {
+            "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/dev/release/3.0.0-322.0.dev/sdk/dartsdk-linux-x64-release.zip",
+            "sha256": "667ccd540931217e27d5f1f522a70009b5c7a1f030f7d68de2370779363ae672",
+            "path": "./dartsdk-linux_amd64.zip"
+        },
+        {
+            "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/dev/release/3.0.0-322.0.dev/sdk/dartsdk-macos-arm64-release.zip",
+            "sha256": "0416c7dc726888041a3cabb9b0a11d674be9f734ed52ca175df9868c01c77f39",
             "path": "./dartsdk-darwin_arm64.zip"
         },
         {
