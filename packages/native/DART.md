@@ -142,6 +142,9 @@ bootstraps them. Stop on a hop that will not build.
 The prebuilt is now `native/dart-bin@2.19.0-374.0.dev`. It builds
 `native/dart@2.19.0`, which builds `native/dart@3.0.0-187.0.dev`.
 
+`native/dart@2.17.0` is built by its own prebuilt, `native/dart-bin@2.17.0`.
+Its `DEPS` still names `2.16.2` as the checked-in compiler.
+
 Host builds on an arm64 Mac stop at `2.16.2`: `GuessArchitecture` treats
 `platform.machine() == "arm64"` as 32-bit `arm`. `2.17.0` checks `arm64`
 first. That seed is a binary, the same shape as `native/dart-bin`.
