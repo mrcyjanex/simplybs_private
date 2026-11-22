@@ -365,8 +365,8 @@ dependencies:
 build:
     env:
         - linux_amd64:*:BUILDTARGET=linux-x64
-        - linux_arm64:*:BUILDTARGET=linux-arm64
-        - darwin_arm64:*:BUILDTARGET=mac-arm64
+        - linux_arm64:*:BUILDTARGET=linux-x64
+        - darwin_arm64:*:BUILDTARGET=mac-x64
         - linux_*:*:DART_USE_SYSROOT=x64=$NATIVEPREFIX/_/sysroot,arm64=$NATIVEPREFIX/_/sysroot
     steps:
         - '*:*:mkdir -p buildtools/mac-x64/clang/.versions'
@@ -410,6 +410,18 @@ build:
         - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
         - '*:*:sed -i.bak ''s/-std=c++14/-std=c++17/g'' ./third_party/boringssl/BUILD.gn'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
+        - darwin_*:*:ln -sf /usr/sbin/sysctl "$NATIVEPREFIX/bin/sysctl"
+        - |-
+          *:*:python3 -c "
+          from pathlib import Path
+          p = Path('tools/utils.py')
+          t = p.read_text()
+          old = \"    if os_id.startswith('armv6'):\n\"
+          new = \"    if os_id.startswith('aarch64') or os_id == 'arm64':\n        return 'arm64'\n    elif os_id.startswith('armv6'):\n\"
+          if old not in t:
+              raise SystemExit('GuessArchitecture pattern missing')
+          p.write_text(t.replace(old, new, 1))
+          "
         - '*:*:python3 ./tools/build.py --mode=product create_sdk --verbose'
         - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
         - linux_*:*:cp -a $(find out -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/

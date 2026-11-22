@@ -145,13 +145,15 @@ The prebuilt is now `native/dart-bin@2.16.2`. It builds
 
 `2.16.2`'s `DEPS` names `2.15.1`. The compiler used here is the
 `2.16.2` prebuilt. Clang 21 needs
-`-Wno-missing-designated-field-initializers` for this SDK. An arm64
-Mac still misreads `arm64` as 32-bit `arm` in this version's
-`GuessArchitecture`.
+`-Wno-missing-designated-field-initializers` for this SDK.
 
-Host builds on an arm64 Mac stop at `2.16.2`: `GuessArchitecture` treats
-`platform.machine() == "arm64"` as 32-bit `arm`. `2.17.0` checks `arm64`
-first. That seed is a binary, the same shape as `native/dart-bin`.
+This SDK's clang toolchains live in `buildtools/linux-x64` and
+`buildtools/mac-x64`, including the arm64 ones. The recipe installs
+the compiler wrapper there on arm64 Linux and arm64 macOS. On Darwin,
+`tools/gn.py` runs `sysctl` to detect Rosetta, so `/usr/sbin/sysctl` is
+linked onto `PATH`. `GuessArchitecture` checks `arm64` before the
+`arm` prefix, which is what `2.17.0` does. Without that, an arm64 Mac
+builds 32-bit `arm`.
 
 `2.14.1` runs on an arm64 Mac. Its `create_sdk` scripts still treat that
 Mac as a cross compile; they learned it is a native host in the
