@@ -139,12 +139,15 @@ by. Build that package from the recipe above it, move the prebuilt to
 its compiler, then rebuild the two newer packages so the new SDK still
 bootstraps them. Stop on a hop that will not build.
 
-The prebuilt is now `native/dart-bin@2.17.0`. It builds
-`native/dart@2.17.0`, which builds `native/dart@2.18.0`, which builds
-`native/dart@2.19.0-374.0.dev`.
+The prebuilt is now `native/dart-bin@2.16.2`. It builds
+`native/dart@2.16.2`, which builds `native/dart@2.17.0`, which builds
+`native/dart@2.18.0`.
 
-`2.17.0`'s `DEPS` names `2.16.2`. The compiler used here is the
-`2.17.0` prebuilt.
+`2.16.2`'s `DEPS` names `2.15.1`. The compiler used here is the
+`2.16.2` prebuilt. Clang 21 needs
+`-Wno-missing-designated-field-initializers` for this SDK. An arm64
+Mac still misreads `arm64` as 32-bit `arm` in this version's
+`GuessArchitecture`.
 
 Host builds on an arm64 Mac stop at `2.16.2`: `GuessArchitecture` treats
 `platform.machine() == "arm64"` as 32-bit `arm`. `2.17.0` checks `arm64`

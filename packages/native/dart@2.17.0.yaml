@@ -351,7 +351,7 @@ download:
       url: https://github.com/flutter/devtools.git
 dependencies:
     - '*:*:native/_/_'
-    - '*:*:native/dart-bin@2.17.0'
+    - '*:*:native/dart@2.16.2'
     - '*:*:native/git'
     - '*:*:native/gn'
     - '*:*:native/libc++'
