@@ -351,6 +351,7 @@ download:
       url: https://github.com/flutter/devtools.git
 dependencies:
     - '*:*:native/_/_'
+    - darwin_*:*:native/sysctl
     - '*:*:native/dart-bin@2.16.2'
     - '*:*:native/git'
     - '*:*:native/gn'
@@ -410,7 +411,6 @@ build:
         - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
         - '*:*:sed -i.bak ''s/-std=c++14/-std=c++17/g'' ./third_party/boringssl/BUILD.gn'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
-        - darwin_*:*:ln -sf /usr/sbin/sysctl "$NATIVEPREFIX/bin/sysctl"
         - |-
           darwin_*:*:python3 -c "
           from pathlib import Path

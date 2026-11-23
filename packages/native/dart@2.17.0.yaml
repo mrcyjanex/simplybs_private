@@ -351,6 +351,7 @@ download:
       url: https://github.com/flutter/devtools.git
 dependencies:
     - '*:*:native/_/_'
+    - darwin_*:*:native/sysctl
     - '*:*:native/dart@2.16.2'
     - '*:*:native/git'
     - '*:*:native/gn'
@@ -366,7 +367,7 @@ build:
     env:
         - linux_amd64:*:BUILDTARGET=linux-x64
         - linux_arm64:*:BUILDTARGET=linux-arm64
-        - darwin_arm64:*:BUILDTARGET=mac-arm64
+        - darwin_arm64:*:BUILDTARGET=mac-x64
         - linux_*:*:DART_USE_SYSROOT=x64=$NATIVEPREFIX/_/sysroot,arm64=$NATIVEPREFIX/_/sysroot
     steps:
         - '*:*:mkdir -p buildtools/mac-x64/clang/.versions'
@@ -388,8 +389,8 @@ build:
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/bin'
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
         - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-unused-command-line-argument\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-unused-command-line-argument\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
         - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
@@ -410,6 +411,22 @@ build:
         - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
         - '*:*:sed -i.bak ''s/-std=c++14/-std=c++17/g'' ./third_party/boringssl/BUILD.gn'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
+        - |-
+          darwin_*:*:python3 -c "
+          from pathlib import Path
+          p = Path('third_party/zlib/zutil.h')
+          t = p.read_text()
+          old_if = \"#if defined(MACOS) || defined(TARGET_OS_MAC)\\n\"
+          old_fd = \"#        define fdopen(fd,mode) NULL /* No fdopen() */\\n\"
+          old_code = \"#  define OS_CODE  7\\n\"
+          for label, old in (('zlib mac guard', old_if), ('zlib fdopen stub', old_fd), ('zlib OS_CODE 7', old_code)):
+              if old not in t:
+                  raise SystemExit(label + ' missing')
+          t = t.replace(old_if, \"#if defined(MACOS)\\n\", 1)
+          t = t.replace(old_fd, '', 1)
+          t = t.replace(old_code, '', 1)
+          p.write_text(t)
+          "
         - '*:*:python3 ./tools/build.py --mode=product create_sdk --verbose'
         - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
         - linux_*:*:cp -a $(find out -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/

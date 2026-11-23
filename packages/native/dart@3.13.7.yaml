@@ -151,6 +151,7 @@ download:
       url: https://dart.googlesource.com/external/github.com/flutter/devtools.git
 dependencies:
     - '*:*:native/_/_'
+    - darwin_*:*:native/sysctl
     - '*:*:native/dart@3.13.0-103.1.beta'
     - '*:*:native/git'
     - '*:*:native/gn'
