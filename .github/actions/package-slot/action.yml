@@ -165,7 +165,7 @@ runs:
         if [ -n "$QUEUE" ]; then
           queue_args=(-queue "$QUEUE")
         fi
-        go run ./cmd/ciqueue comment \
+        if ! go run ./cmd/ciqueue comment \
           -pr "$PR" \
           -sha "$SHA" \
           -package "$PKG" \
@@ -174,7 +174,9 @@ runs:
           -run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
           -remaining "${REMAINING:-[]}" \
           -remaining-count "${REMAINING_COUNT:-0}" \
-          "${queue_args[@]}"
+          "${queue_args[@]}"; then
+          echo "comment update failed"
+        fi
 
     - name: Decide continue
       id: decide

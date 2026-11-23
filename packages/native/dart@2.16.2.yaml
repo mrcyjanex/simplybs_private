@@ -388,8 +388,8 @@ build:
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/bin'
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
         - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
         - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
@@ -411,6 +411,16 @@ build:
         - '*:*:sed -i.bak ''s/-std=c++14/-std=c++17/g'' ./third_party/boringssl/BUILD.gn'
         - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
         - darwin_*:*:ln -sf /usr/sbin/sysctl "$NATIVEPREFIX/bin/sysctl"
+        - |-
+          darwin_*:*:python3 -c "
+          from pathlib import Path
+          p = Path('third_party/zlib/zutil.h')
+          t = p.read_text()
+          old = \"#        define fdopen(fd,mode) NULL /* No fdopen() */\n\"
+          if old not in t:
+              raise SystemExit('zlib fdopen stub missing')
+          p.write_text(t.replace(old, '', 1))
+          "
         - |-
           *:*:python3 -c "
           from pathlib import Path
