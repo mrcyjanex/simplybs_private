@@ -388,8 +388,8 @@ build:
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/bin'
         - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
         - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
-        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument -Wno-macro-redefined -Wno-deprecated-non-prototype\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-missing-designated-field-initializers -Wno-unused-command-line-argument -Wno-macro-redefined -Wno-deprecated-non-prototype\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
         - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
         - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
@@ -416,10 +416,16 @@ build:
           from pathlib import Path
           p = Path('third_party/zlib/zutil.h')
           t = p.read_text()
-          old = \"#        define fdopen(fd,mode) NULL /* No fdopen() */\n\"
-          if old not in t:
-              raise SystemExit('zlib fdopen stub missing')
-          p.write_text(t.replace(old, '', 1))
+          old_if = \"#if defined(MACOS) || defined(TARGET_OS_MAC)\\n\"
+          old_fd = \"#        define fdopen(fd,mode) NULL /* No fdopen() */\\n\"
+          old_code = \"#  define OS_CODE  7\\n\"
+          for label, old in (('zlib mac guard', old_if), ('zlib fdopen stub', old_fd), ('zlib OS_CODE 7', old_code)):
+              if old not in t:
+                  raise SystemExit(label + ' missing')
+          t = t.replace(old_if, \"#if defined(MACOS)\\n\", 1)
+          t = t.replace(old_fd, '', 1)
+          t = t.replace(old_code, '', 1)
+          p.write_text(t)
           "
         - |-
           *:*:python3 -c "
