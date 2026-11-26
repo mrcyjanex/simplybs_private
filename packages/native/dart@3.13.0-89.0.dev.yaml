@@ -159,6 +159,7 @@ download:
       url: https://pub.dev/api/archives/devtools_shared-12.1.0.tar.gz
 dependencies:
     - '*:*:native/_/_'
+    - darwin_*:*:native/sysctl
     - '*:*:native/dart@3.12.0-327.3.beta'
     - '*:*:native/git'
     - '*:*:native/gn'

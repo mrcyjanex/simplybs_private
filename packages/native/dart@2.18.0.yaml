@@ -1,0 +1,402 @@
+package: native/dart@2.18.0
+version: 2.18.0
+type: native
+download:
+    - kind: git
+      sha256: 63c2197b976931c6472d9dc9574f98ff2ae9408c
+      url: https://dart.googlesource.com/sdk.git
+    - kind: git
+      path: tests/co19/src
+      sha256: 9849573cd1b8317e58247b8c1672e89b1cd842e2
+      url: https://dart.googlesource.com/co19
+    - kind: git
+      path: third_party/WebCore
+      sha256: bcb10901266c884e7b3740abc597ab95373ab55c
+      url: https://dart.googlesource.com/webcore.git
+    - kind: git
+      path: third_party/boringssl
+      sha256: ced85ef0a00bbca77ce5a91261a5f2ae61b1e62f
+      url: https://dart.googlesource.com/boringssl_gen.git
+    - kind: git
+      path: third_party/boringssl/src
+      sha256: 87f316d7748268eb56f2dc147bd593254ae93198
+      url: https://boringssl.googlesource.com/boringssl.git
+    - kind: git
+      path: third_party/icu
+      sha256: 81d656878ec611cb0b42d52c82e9dae93920d9ba
+      url: https://chromium.googlesource.com/chromium/deps/icu.git
+    - kind: git
+      path: third_party/jinja2
+      sha256: 2222b31554f03e62600cd7e383376a7c187967a1
+      url: https://chromium.googlesource.com/chromium/src/third_party/jinja2.git
+    - kind: git
+      path: third_party/markupsafe
+      sha256: 8f45f5cfa0009d2a70589bcda0349b8cb2b72783
+      url: https://chromium.googlesource.com/chromium/src/third_party/markupsafe.git
+    - kind: git
+      path: third_party/mdn/browser-compat-data/src
+      sha256: ac8cae697014da1ff7124fba33b0b4245cc6cd1b
+      url: https://chromium.googlesource.com/external/github.com/mdn/browser-compat-data
+    - kind: git
+      path: third_party/pkg/args
+      sha256: 73e8d3b55cbedc9765f8e266f3422d8914f8e62a
+      url: https://dart.googlesource.com/args.git
+    - kind: git
+      path: third_party/pkg/async
+      sha256: f3ed5f690e2ec9dbe1bfc5184705575b4f6480e5
+      url: https://dart.googlesource.com/async.git
+    - kind: git
+      path: third_party/pkg/bazel_worker
+      sha256: 9710de6c9c70b1b583183db9d9721ba64e5a16fe
+      url: https://dart.googlesource.com/bazel_worker.git
+    - kind: git
+      path: third_party/pkg/benchmark_harness
+      sha256: 4183c76739ed7a27c260ca9ebaab6e0f210d1a37
+      url: https://dart.googlesource.com/benchmark_harness.git
+    - kind: git
+      path: third_party/pkg/boolean_selector
+      sha256: 1d3565e2651d16566bb556955b96ea75018cbd0c
+      url: https://dart.googlesource.com/boolean_selector.git
+    - kind: git
+      path: third_party/pkg/browser_launcher
+      sha256: 981ca8847dd2b0fe022f9e742045cfb8f214d35f
+      url: https://dart.googlesource.com/browser_launcher.git
+    - kind: git
+      path: third_party/pkg/characters
+      sha256: 559755d67af2c78b9beaaeb7ca57d7c4ae0b836d
+      url: https://dart.googlesource.com/characters.git
+    - kind: git
+      path: third_party/pkg/cli_util
+      sha256: b0adbba89442b2ea6fef39c7a82fe79cb31e1168
+      url: https://dart.googlesource.com/cli_util.git
+    - kind: git
+      path: third_party/pkg/clock
+      sha256: 2507a228773c5e877fc9e3330080b234aad965c0
+      url: https://dart.googlesource.com/clock.git
+    - kind: git
+      path: third_party/pkg/collection
+      sha256: 414ffa1bc8ba18bd608bbf916d95715311d89ac1
+      url: https://dart.googlesource.com/collection.git
+    - kind: git
+      path: third_party/pkg/convert
+      sha256: 7145da14f9cd730e80fb4c6a10108fcfd205e8e7
+      url: https://dart.googlesource.com/convert.git
+    - kind: git
+      path: third_party/pkg/crypto
+      sha256: 223e0a62c0f762fd2b510f753861445b52e14fc3
+      url: https://dart.googlesource.com/crypto.git
+    - kind: git
+      path: third_party/pkg/csslib
+      sha256: ba2eb2d80530eedefadaade338a09c2dd60410f3
+      url: https://dart.googlesource.com/csslib.git
+    - kind: git
+      path: third_party/pkg/dart_style
+      sha256: d7b73536a8079331c888b7da539b80e6825270ea
+      url: https://dart.googlesource.com/dart_style.git
+    - kind: git
+      path: third_party/pkg/dartdoc
+      sha256: adc5a45ddafb57e3a600ee7d9e88dc81061d1410
+      url: https://dart.googlesource.com/dartdoc.git
+    - kind: git
+      path: third_party/pkg/ffi
+      sha256: 18b2b549d55009ff594600b04705ff6161681e07
+      url: https://dart.googlesource.com/ffi.git
+    - kind: git
+      path: third_party/pkg/file
+      sha256: 0132eeedea2933513bf230513a766a8baeab0c4f
+      url: https://dart.googlesource.com/external/github.com/google/file.dart
+    - kind: git
+      path: third_party/pkg/fixnum
+      sha256: 164712f6547cdfb2709b752188186baf31fd1730
+      url: https://dart.googlesource.com/fixnum.git
+    - kind: git
+      path: third_party/pkg/glob
+      sha256: 1d51fcc172e5adfbae6e82c3f8f119774cb2fca2
+      url: https://dart.googlesource.com/glob.git
+    - kind: git
+      path: third_party/pkg/html
+      sha256: 8243e967caad9932c13971af3b2a7c8f028383d5
+      url: https://dart.googlesource.com/html.git
+    - kind: git
+      path: third_party/pkg/http
+      sha256: 843c5ecb1ea2233ba7b7049833b5801b149fba86
+      url: https://dart.googlesource.com/http.git
+    - kind: git
+      path: third_party/pkg/http_multi_server
+      sha256: 20bf079c8955d1250a45afb9cb096472a724a551
+      url: https://dart.googlesource.com/http_multi_server.git
+    - kind: git
+      path: third_party/pkg/http_parser
+      sha256: eaa63304c333316acd114e3be7ed701d7d7ba32c
+      url: https://dart.googlesource.com/http_parser.git
+    - kind: git
+      path: third_party/pkg/intl
+      sha256: e9b573679de5e703d89a242b9dca331c772979ef
+      url: https://dart.googlesource.com/intl.git
+    - kind: git
+      path: third_party/pkg/json_rpc_2
+      sha256: 805e6536dd961d66f6b8cd46d8f3e61774f957c9
+      url: https://dart.googlesource.com/json_rpc_2.git
+    - kind: git
+      path: third_party/pkg/lints
+      sha256: 8294e5648ab49474541527e2911e72e4c5aefe55
+      url: https://dart.googlesource.com/lints.git
+    - kind: git
+      path: third_party/pkg/linter
+      sha256: 1ddc70948d94f2449fec69a95e3ceb7b6b6c8348
+      url: https://dart.googlesource.com/linter.git
+    - kind: git
+      path: third_party/pkg/logging
+      sha256: f6979e3bc3b6e1847a08335b7eb6304e18986195
+      url: https://dart.googlesource.com/logging.git
+    - kind: git
+      path: third_party/pkg/markdown
+      sha256: e3f4bd28c9e61b522f75f291d4d6cfcfeccd83ee
+      url: https://dart.googlesource.com/markdown.git
+    - kind: git
+      path: third_party/pkg/matcher
+      sha256: 1a7fcae0d7af1604781afabe61fd35d9b404d8ed
+      url: https://dart.googlesource.com/matcher.git
+    - kind: git
+      path: third_party/pkg/mime
+      sha256: 0a75a41445eb642674a0a271eecde78cb025ee60
+      url: https://dart.googlesource.com/mime.git
+    - kind: git
+      path: third_party/pkg/mockito
+      sha256: 25d25dab6b57ac710c0be0e759def7505b352ea7
+      url: https://dart.googlesource.com/mockito.git
+    - kind: git
+      path: third_party/pkg/package_config
+      sha256: cff98c90acc457a3b0750f0a7da0e351a35e5d0c
+      url: https://dart.googlesource.com/package_config.git
+    - kind: git
+      path: third_party/pkg/path
+      sha256: 7a0ed40280345b1c11df4c700c71e590738f4257
+      url: https://dart.googlesource.com/path.git
+    - kind: git
+      path: third_party/pkg/pool
+      sha256: fa84ddd0e39f45bf3f09dcc5d6b9fbdda7820fef
+      url: https://dart.googlesource.com/pool.git
+    - kind: git
+      path: third_party/pkg/protobuf
+      sha256: 2d6c6037cee6c5f683e8f38e598443f9bec74b94
+      url: https://dart.googlesource.com/protobuf.git
+    - kind: git
+      path: third_party/pkg/pub
+      sha256: 27adcf41ab43023c45dafb4ef9b1e3ec0885f102
+      url: https://dart.googlesource.com/pub.git
+    - kind: git
+      path: third_party/pkg/pub_semver
+      sha256: 5c0b4bfd5ca57fe16f1319c581dc8c882e9b8cb2
+      url: https://dart.googlesource.com/pub_semver.git
+    - kind: git
+      path: third_party/pkg/shelf
+      sha256: 8f8f3703efd241f9cf6b18e36e0067ca74c47fd8
+      url: https://dart.googlesource.com/shelf.git
+    - kind: git
+      path: third_party/pkg/source_map_stack_trace
+      sha256: 72dbf21a33293b2b8434d0a9751e36f9463981ac
+      url: https://dart.googlesource.com/source_map_stack_trace.git
+    - kind: git
+      path: third_party/pkg/source_maps
+      sha256: e93565b43a7b6b367789de8ffba969c4ebeeb317
+      url: https://dart.googlesource.com/source_maps.git
+    - kind: git
+      path: third_party/pkg/source_span
+      sha256: 24151fd80e4557a626f81f2bc0d6a2ebde172cae
+      url: https://dart.googlesource.com/source_span.git
+    - kind: git
+      path: third_party/pkg/sse
+      sha256: 2df072848a6090d3ed67f30c69e86ec4d6b96cd6
+      url: https://dart.googlesource.com/sse.git
+    - kind: git
+      path: third_party/pkg/stack_trace
+      sha256: 17f09c2c6845bb31c7c385acecce5befb8527a13
+      url: https://dart.googlesource.com/stack_trace.git
+    - kind: git
+      path: third_party/pkg/stream_channel
+      sha256: 8e0d7ef1f4a3fb97fbd82e11cd539093f58511f3
+      url: https://dart.googlesource.com/stream_channel.git
+    - kind: git
+      path: third_party/pkg/string_scanner
+      sha256: c637deb8d998b72a5807afbd06aba8370db725c0
+      url: https://dart.googlesource.com/string_scanner.git
+    - kind: git
+      path: third_party/pkg/sync_http
+      sha256: 39509d69fd5a9c3da46eab48fcafdf62e6ad4580
+      url: https://dart.googlesource.com/sync_http.git
+    - kind: git
+      path: third_party/pkg/term_glyph
+      sha256: 741efdedf9da62ee66a06c295d36fa28f8780e24
+      url: https://dart.googlesource.com/term_glyph.git
+    - kind: git
+      path: third_party/pkg/test
+      sha256: fb4ccaf6c68fcc1d208c5c53a52d8e0e718bdffe
+      url: https://dart.googlesource.com/test.git
+    - kind: git
+      path: third_party/pkg/test_descriptor
+      sha256: 5ed5d7f6bf1191592995dcb8eedbbc17df69d386
+      url: https://dart.googlesource.com/test_descriptor.git
+    - kind: git
+      path: third_party/pkg/test_process
+      sha256: 3e695bcfeab551473ddc288970f345f30e5e1375
+      url: https://dart.googlesource.com/test_process.git
+    - kind: git
+      path: third_party/pkg/test_reflective_loader
+      sha256: 8d0de01bbe852fea1f8e33aba907abcba50a8a1e
+      url: https://dart.googlesource.com/test_reflective_loader.git
+    - kind: git
+      path: third_party/pkg/typed_data
+      sha256: bb10b64f9a56b8fb49307d4465474bf1c1309f6d
+      url: https://dart.googlesource.com/typed_data.git
+    - kind: git
+      path: third_party/pkg/usage
+      sha256: 1d3c31e780af665fb796a27898a441fcb7d263db
+      url: https://dart.googlesource.com/usage.git
+    - kind: git
+      path: third_party/pkg/vector_math
+      sha256: cdcee487bde4353a6ba7a29bfc7db3840426e50f
+      url: https://dart.googlesource.com/external/github.com/google/vector_math.dart.git
+    - kind: git
+      path: third_party/pkg/watcher
+      sha256: e00c0ea769e32821d91c0880da8eb736839a6e6d
+      url: https://dart.googlesource.com/watcher.git
+    - kind: git
+      path: third_party/pkg/web_components
+      sha256: 8f57dac273412a7172c8ade6f361b407e2e4ed02
+      url: https://dart.googlesource.com/web-components.git
+    - kind: git
+      path: third_party/pkg/web_socket_channel
+      sha256: 99dbdc5769e19b9eeaf69449a59079153c6a8b1f
+      url: https://dart.googlesource.com/web_socket_channel.git
+    - kind: git
+      path: third_party/pkg/webdev
+      sha256: 9c4428472b04f50748ea4871829897cff43455a3
+      url: https://dart.googlesource.com/webdev.git
+    - kind: git
+      path: third_party/pkg/webdriver
+      sha256: e1a9ad671ee82e05eee463f922a34585ed2d2f15
+      url: https://dart.googlesource.com/external/github.com/google/webdriver.dart.git
+    - kind: git
+      path: third_party/pkg/webkit_inspection_protocol
+      sha256: 57522d6b29d94903b765c757079d906555d5a171
+      url: https://dart.googlesource.com/external/github.com/google/webkit_inspection_protocol.dart.git
+    - kind: git
+      path: third_party/pkg/yaml
+      sha256: fda5b15692ccfa0feb7793a27fe3829b3d0f77fa
+      url: https://dart.googlesource.com/yaml.git
+    - kind: git
+      path: third_party/pkg/yaml_edit
+      sha256: 01589b3ce447b03aed991db49f1ec6445ad5476d
+      url: https://dart.googlesource.com/yaml_edit.git
+    - kind: git
+      path: third_party/ply
+      sha256: 604b32590ffad5cbb82e4afef1d305512d06ae93
+      url: https://chromium.googlesource.com/chromium/src/third_party/ply.git
+    - kind: git
+      path: third_party/root_certificates
+      sha256: 692f6d6488af68e0121317a9c2c9eb393eb0ee50
+      url: https://dart.googlesource.com/root_certificates.git
+    - kind: git
+      path: third_party/tcmalloc/gperftools
+      sha256: bf8b714bf5075d0a6f2f28504b43095e2b1e11c5
+      url: https://chromium.googlesource.com/external/github.com/gperftools/gperftools.git
+    - kind: git
+      path: third_party/zlib
+      sha256: 27c2f474b71d0d20764f86f60ef8b00da1a16cda
+      url: https://chromium.googlesource.com/chromium/src/third_party/zlib.git
+    - kind: git
+      path: third_party/pkg/oauth2
+      sha256: 199ebf15cbd5b07958438184f32e41c4447a57bf
+      url: https://dart.googlesource.com/oauth2.git
+    - kind: git
+      path: third_party/devtools_src
+      sha256: 95d292626da26505b02417735f77e8922783b477
+      url: https://github.com/flutter/devtools.git
+dependencies:
+    - '*:*:native/_/_'
+    - darwin_*:*:native/sysctl
+    - '*:*:native/dart@2.17.0'
+    - '*:*:native/git'
+    - '*:*:native/gn'
+    - '*:*:native/libc++'
+    - '*:*:native/llvm-ar'
+    - '*:*:native/llvm-nm'
+    - '*:*:native/llvm-strip'
+    - '*:*:native/make'
+    - '*:*:native/ninja'
+    - '*:*:native/python@3.11'
+    - '*:*:native/zlib'
+build:
+    env:
+        - linux_amd64:*:BUILDTARGET=linux-x64
+        - linux_arm64:*:BUILDTARGET=linux-arm64
+        - darwin_arm64:*:BUILDTARGET=mac-x64
+        - linux_*:*:DART_USE_SYSROOT=x64=$NATIVEPREFIX/_/sysroot,arm64=$NATIVEPREFIX/_/sysroot
+    steps:
+        - '*:*:mkdir -p buildtools/mac-x64/clang/.versions'
+        - '*:*:mkdir -p buildtools/mac-arm64/clang/.versions'
+        - '*:*:mkdir -p buildtools/linux-x64/clang/.versions'
+        - '*:*:mkdir -p buildtools/linux-arm64/clang/.versions'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/mac-amd64","instance_id": "AWO66yebzYxWzasSzjx1wmeozi-xq9r0RnNyEhKtwAIC"}'' > ./buildtools/mac-x64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/mac-arm64","instance_id": "i41U-bFSUAOHPpKs_6lCF-EPqOLaa8LwT48ciXzHK3EC"}'' > ./buildtools/mac-arm64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/linux-amd64","instance_id": "-f7MR6VniTzxeWcp2k9ZkII4oK21j44tQvYuCBaHpqEC"}'' > ./buildtools/linux-x64/clang/.versions/clang.cipd_version'
+        - '*:*:echo ''{"package_name": "fuchsia/third_party/clang/linux-arm64","instance_id": "-f7MR6VniTzxeWcp2k9ZkII4oK21j44tQvYuCBaHpqEC"}'' > ./buildtools/linux-arm64/clang/.versions/clang.cipd_version'
+        - '*:*:mkdir -p buildtools/sysroot/linux/.versions'
+        - '*:*:mkdir -p buildtools/sysroot/focal/.versions'
+        - '*:*:echo ''{"package_name": "dart/sysroot/linux","instance_id": "simplybs"}'' > ./buildtools/sysroot/linux/.versions/sysroot.cipd_version'
+        - '*:*:echo ''{"package_name": "dart/sysroot/focal","instance_id": "simplybs"}'' > ./buildtools/sysroot/focal/.versions/sysroot.cipd_version'
+        - '*:*:echo build_devtools_from_sources = false > build/config/gclient_args.gni'
+        - '*:*:ln -s $(which gn) buildtools/gn'
+        - '*:*:mkdir -p buildtools/ninja'
+        - '*:*:ln -s $(which ninja) buildtools/ninja/ninja'
+        - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/bin'
+        - '*:*:mkdir -p buildtools/$BUILDTARGET/clang/lib'
+        - '*:*:ln -s $NATIVEPREFIX/lib/libc++.a buildtools/$BUILDTARGET/clang/lib/libc++.a'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-unused-command-line-argument\n'' "$CC" > buildtools/$BUILDTARGET/clang/bin/clang'
+        - '*:*:printf ''#!/bin/sh\nexec %s "$@" -Wno-cast-function-type-mismatch -Wno-unused-but-set-variable -Wno-unused-command-line-argument\n'' "$CXX" > buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/clang buildtools/$BUILDTARGET/clang/bin/clang++'
+        - '*:*:ln -s $(which llvm-ar) buildtools/$BUILDTARGET/clang/bin/llvm-ar'
+        - '*:*:ln -s $(which llvm-nm) buildtools/$BUILDTARGET/clang/bin/llvm-nm'
+        - '*:*:ln -s $(which llvm-strip) buildtools/$BUILDTARGET/clang/bin/llvm-strip'
+        - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-objcopy buildtools/$BUILDTARGET/clang/bin/llvm-objcopy'
+        - '*:*:ln -s $NATIVEPREFIX/_/bin/llvm-readelf buildtools/$BUILDTARGET/clang/bin/llvm-readelf'
+        - '*:*:chmod +x buildtools/$BUILDTARGET/clang/bin/llvm-ar'
+        - '*:*:sed -i.bak ''s/"-Wno-dangling-reference",/ /g'' runtime/BUILD.gn'
+        - '*:*:sed -i.bak ''s|#include "platform/growable_array.h"|#include <initializer_list>\n#include "platform/growable_array.h"|'' runtime/vm/growable_array.h'
+        - '*:*:sed -i.bak ''s/if (auto\* const slot = alloc->SlotForInput(i))/if (alloc->SlotForInput(i))/'' runtime/vm/compiler/backend/redundancy_elimination.cc'
+        - '*:*:mkdir -p tools/sdks/dart-sdk/bin'
+        - '*:*:ln -s $(which dart) tools/sdks/dart-sdk/bin/dart'
+        - '*:*:mkdir -p third_party/devtools'
+        - '*:*:cp -a third_party/devtools_src/packages/devtools_shared third_party/devtools/devtools_shared'
+        - '*:*:python3 ./tools/generate_package_config.py # HOOK Generate the .dart_tool/package_confg.json file.'
+        - '*:*:echo 2.18.0 > sdk/version'
+        - '*:*:mkdir -p third_party/devtools/web'
+        - '*:*:echo ''no devtools :('' > third_party/devtools/web/index.html'
+        - '*:*:sed -i.bak ''s/-std=c++14/-std=c++17/g'' ./third_party/boringssl/BUILD.gn'
+        - darwin_*:*:printf 'print("%s")\nprint("26.1")\n' "$NATIVEPREFIX/_/SDK/MacOSX26.1.sdk" > build/mac/find_sdk.py
+        - |-
+          darwin_*:*:python3 -c "
+          from pathlib import Path
+          p = Path('third_party/zlib/zutil.h')
+          t = p.read_text()
+          old_if = \"#if defined(MACOS) || defined(TARGET_OS_MAC)\\n\"
+          old_fd = \"#        define fdopen(fd,mode) NULL /* No fdopen() */\\n\"
+          old_code = \"#  define OS_CODE  7\\n\"
+          for label, old in (('zlib mac guard', old_if), ('zlib fdopen stub', old_fd), ('zlib OS_CODE 7', old_code)):
+              if old not in t:
+                  raise SystemExit(label + ' missing')
+          t = t.replace(old_if, \"#if defined(MACOS)\\n\", 1)
+          t = t.replace(old_fd, '', 1)
+          t = t.replace(old_code, '', 1)
+          p.write_text(t)
+          "
+        - '*:*:python3 ./tools/build.py --mode=product create_sdk --verbose'
+        - '*:*:mkdir -p $STAGING_DIR$NATIVEPREFIX'
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/include $STAGING_DIR$NATIVEPREFIX/
+        - linux_*:*:cp -a $(find out -name dart-sdk -type d)/lib $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/bin $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/include $STAGING_DIR$NATIVEPREFIX/
+        - darwin_*:*:cp -a $(find xcodebuild -name dart-sdk -type d)/lib $STAGING_DIR$NATIVEPREFIX/
+        - '*:*:$STAGING_DIR$NATIVEPREFIX/bin/dart --version'

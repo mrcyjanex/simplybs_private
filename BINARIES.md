@@ -5,7 +5,7 @@
 - native/_/linux_arm64_clang21
 - native/_/windows_amd64_cygwin_clang
 - native/apple-sdk
-- native/dart-bin@3.4.0-247.0.dev
+- native/dart-bin@2.16.2
 - native/go-bin@1.25
 - native/jdk@11-bin
 - native/jdk@20-bin

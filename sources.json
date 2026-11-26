@@ -52,7 +52,8 @@
         },
         "https://android.googlesource.com/platform/external/perfetto": {
             "refs": [
-                "13ce0c9e13b0940d2476cd0cff2301708a9a2e2b"
+                "13ce0c9e13b0940d2476cd0cff2301708a9a2e2b",
+                "b8da07095979310818f0efde2ef3c69ea70d62c5"
             ]
         },
         "https://android.googlesource.com/platform/external/python/astroid": {
@@ -232,7 +233,9 @@
                 "5e73d0302c50cc38324686f937a75233d13ae4f0",
                 "706742e482d89214f13a642ccfcdad596a24a32f",
                 "739613d2e62bd6ab3e7378bf70a5767b50e3c4bf",
+                "74646566e93de7551bfdfc5f49de7462f13d1d05",
                 "822902749a5956bba09c7e9e451104e8a74f02c5",
+                "87f316d7748268eb56f2dc147bd593254ae93198",
                 "9a74210911fd45b13274f4b9784c4c6a9c6de0f0",
                 "9f138d05879fcf61965d1ea9d6c8b2cfc8bc12cb",
                 "a1c146745137642dfb53a1ec12ebe79817b31584",
@@ -275,8 +278,12 @@
         "https://chromium.googlesource.com/chromium/src/third_party/zlib.git": {
             "refs": [
                 "108fa50cda23ed4a712a098d058dccbbfd248206",
+                "14dd4c4455602c9b71a1a89b5cafd1f4030d2e3f",
+                "27c2f474b71d0d20764f86f60ef8b00da1a16cda",
                 "3008c4b3a06bd65392c31db8846000a21e3d03c5",
-                "470d3a2ee4ef721688ce6961bc865a99fcb64070"
+                "470d3a2ee4ef721688ce6961bc865a99fcb64070",
+                "bf44340d1b6be1af8950bbdf664fec0cf5a831cc",
+                "faff052b6b6edcd6dd548513fe44ac0941427bf0"
             ]
         },
         "https://chromium.googlesource.com/external/github.com/WebAssembly/binaryen.git": {
@@ -284,6 +291,7 @@
                 "1d2e23d5e55788091a51420ba3a9889d4efe7509",
                 "204c3f88bb2e2c92b103b0cfbf4e0a4863c12c87",
                 "3f6831c0bd147ae1ae0ab1d9187d37bce7cca38b",
+                "4471b81a0a0b94c75bad6e81d0413860944ecb1f",
                 "58de22cdfd0ccb38ce68632695c0493c587af932",
                 "604f547f5ccb51cdc02c1b12fe96a6d045c602d5",
                 "654ee6e2504f11fb0e982a2cf276bafa750f694b",
@@ -291,9 +299,14 @@
                 "8470f1b1f157201d1bc62f3202e474e7043df0ba",
                 "87f9dac127b387715d8d96ac7ec8fd469d8c2dab",
                 "93883fde36ac158fd415dcd6dbd387dcfd928d3c",
+                "9784f012848a7eb321c2037bdb363dfe0eab8bc9",
                 "9926156a583cec3d22d521232b31c70fa9a87dc1",
+                "a51bd6df919a5b79574f0996a760cc20cb05697e",
                 "b4bdcc33115b31758c56b83bb9de4642c411a042",
-                "d844d2e77b402d562ade8cf8fd96759b587bf09d"
+                "b9b5f162ca8bf5b899ff0f0351491d7d403d7ed9",
+                "cdb7aeab40b4c522de20b242019f7e88641445d5",
+                "d844d2e77b402d562ade8cf8fd96759b587bf09d",
+                "ec53f4b2d5b0d52ae703c5b696ecf052ad5fffbb"
             ]
         },
         "https://chromium.googlesource.com/external/github.com/google/cpu_features.git": {
@@ -304,6 +317,12 @@
         "https://chromium.googlesource.com/external/github.com/google/perfetto": {
             "refs": [
                 "13ce0c9e13b0940d2476cd0cff2301708a9a2e2b"
+            ]
+        },
+        "https://chromium.googlesource.com/external/github.com/gperftools/gperftools.git": {
+            "refs": [
+                "180bfa10d7cb38e8b3784d60943d50e8fcef0dcb",
+                "bf8b714bf5075d0a6f2f28504b43095e2b1e11c5"
             ]
         },
         "https://chromium.googlesource.com/external/github.com/mdn/browser-compat-data": {
@@ -325,63 +344,184 @@
         },
         "https://dart.googlesource.com/args.git": {
             "refs": [
+                "03386ba1cc338086af46f1c742ef944c6a402862",
                 "09c0fca1785c9df39288a48f767994eed80bed40",
-                "6a5a2e6b1f0020b873c7ffbdd36a784c4f9ee300"
+                "3b3f55766af13d895d2020ec001a28e8dc147f91",
+                "46d5033377d277d70bc6ec68504730b9384b1db1",
+                "5a4e16f1e4c08b01498a9dce8aeda1a60161cd52",
+                "5ac2ba1d93f037c7aee2975703bf071f88597a76",
+                "6a5a2e6b1f0020b873c7ffbdd36a784c4f9ee300",
+                "73e8d3b55cbedc9765f8e266f3422d8914f8e62a",
+                "7a5e3b07c882d300a570031df8a45f8a0b067053",
+                "7dc7fe0430709229ccc87c3eaae729aeffe10c56",
+                "9305d5a2ca817a065a1ded3734655d99cd717f2c",
+                "a23ea85cfd5c467c8671aef2ef9dfe45759ff974",
+                "aaf671c1462108d62b1dba0e4a74f98ed233d939",
+                "da037acc018a8dd267d109eb634454490b7ff759",
+                "da56b18ebcb600e050bf57b9c1103b1d2a9fb2ff",
+                "f0f6cd22d29f15f86b3d2caab053bae029d30c9a"
             ]
         },
         "https://dart.googlesource.com/async.git": {
             "refs": [
+                "012781315e0f4659bc8d7806352e350e8fff8048",
+                "1556660ca5159d84bf28239825a25dca58f1fde3",
+                "18a780efd914c3d848ddc1af5f6c83903a8b2d2d",
+                "3f58c326bd4928fca9ddc10c72b19cb7ac659256",
                 "5f70a996f673d625e3502597084653686c3e754c",
+                "75efa6cc08b2fc906fac4b6fdfdbcf6da7d0a2da",
+                "80886150a5e6c58006c8ae5a6c2aa7108638e2a9",
+                "96c29d0af81436443a3a24683915d39202172cde",
+                "992457079da78dede35a56257d698288c467dc91",
                 "a00437017231ebb6c3e3e8ecdfc9dd03522ab828",
+                "b65622afa33c5bfc574ae6b34d5a61f18a98f83c",
                 "c0d81f8699682d01d657a9bf827107d11904a247",
-                "d7c0cd5a458308ab5e5a0d0deebdce32c4391ec6"
+                "c59c7c51cc2a1b1fc49a2d853d413bd3a92126e9",
+                "d7c0cd5a458308ab5e5a0d0deebdce32c4391ec6",
+                "e83d054b3ea0ff6cb25e5849c5408cd7c4fc1d3f",
+                "f3ed5f690e2ec9dbe1bfc5184705575b4f6480e5",
+                "f454380c2691728530e0b2421af7676a9621481b",
+                "f700e9aa61148b00a6cc27bb2bae0a0fed77be71"
             ]
         },
         "https://dart.googlesource.com/bazel_worker.git": {
             "refs": [
+                "03717ca4c2bbf1d74f26c89673426e076288242a",
+                "159e67182044b2d5edd89d12a873487d1d1343c1",
+                "3d9cd5823fc96872b7275fe99a4fabc4dcfe57c8",
+                "53871c5fe36438b734a0f75c91055e75111a7210",
+                "8619b92baa9959e55b9fc49d2afcd6dda2ec1c10",
+                "9710de6c9c70b1b583183db9d9721ba64e5a16fe",
+                "9f21e1de12d1f7e7450e70b314c81631526c22d0",
                 "aa3cc9e826350b960e0c5a67e6065bcedba8b0ac",
-                "c76d7c86381a6ed594641ba03b55c65b84ee11a6"
+                "b35c25e6cecced319b80c6686b9d025e462c7053",
+                "c29d1620b1a935dc88d13a4eec0d9950d3e9df27",
+                "c76d7c86381a6ed594641ba03b55c65b84ee11a6",
+                "ceeba0982d4ff40d32371c9d35f3d2dc1868de20",
+                "d5f88375b41def124aa65be1d4da8a2c9e82e076",
+                "d9b389f30848253d3310f931a9b8d39ca07102b1"
             ]
         },
         "https://dart.googlesource.com/benchmark_harness.git": {
             "refs": [
+                "4183c76739ed7a27c260ca9ebaab6e0f210d1a37",
                 "44f125ae1d045aa3de09fe88a8dd70cb7352d563",
-                "f6ef33dc88d7cbc9e4a8a087f1e652eb0d6cc254"
+                "6a116758f2b96e92659194bcda990f42106a01d3",
+                "725534a08c321536a805049e27a32e2b5e6ce1af",
+                "76881df31f4b76ff7bc50e3389d540b7fb2a69e6",
+                "7d0d28e7946702db34ae121543774f60bf8cf03c",
+                "a62e4169c120ac04b1f5bfdf8f14346459529781",
+                "a6a0891e5430ce10518d19a52b6fa6c4ad18a6f2",
+                "c546dbd9f639f75cd2f75de8df2eb9f8ea15e8e7",
+                "c8a0c8b1883dc16c7558a43cee1c3f4f9a163418",
+                "e591ec4111be03bd80f890a07d1da50bf248efe4",
+                "e717ad41a2c7f9b14e197a1ffdf598f2470b5eda",
+                "ee7a253fe11922791379d3849310f0cbcb199d8a",
+                "f6ef33dc88d7cbc9e4a8a087f1e652eb0d6cc254",
+                "fde73cb8810b1f8efed41e1994bc7b8327047379"
             ]
         },
         "https://dart.googlesource.com/boolean_selector.git": {
             "refs": [
+                "16e6ad3c8000e08a7f1c213aef2a692d872a16c7",
+                "1d3565e2651d16566bb556955b96ea75018cbd0c",
+                "28dc03d893e5ac4141b48d8e7ef80eacb04de071",
+                "303635d0262e679fb6a81686724a5dc1dbc850a7",
+                "3a1c982002f580b835b4380f44d9f8e5bc37fc4f",
+                "437e7f06c7e416bed91e16ae1df453555897e945",
+                "5082b3debf97421c071be957063763d98412b2e2",
                 "62f82f6a333b419b457e62cadc17b7a9c0545873",
+                "665e6921ab246569420376f827bff4585dff0b14",
+                "ba7d86b66382aa808576cd55840d4c34f0225066",
+                "be88351e521648d381b96350bfe62c34abacee6d",
                 "c5468f44fd9ca0ea3435e1a0a84ff9b6fac38261",
-                "d6c7c36ae1111f11cc24306d71d3ab2deea8fa68"
+                "caea8d41cab1b7f4cc3c86d15a27c011ab01766b",
+                "d6c7c36ae1111f11cc24306d71d3ab2deea8fa68",
+                "ea0ad2775cc682078571997f6c0512c384ac30f0",
+                "f255921c7155da2167e8c96e04e527180787aafb"
             ]
         },
         "https://dart.googlesource.com/boringssl_gen.git": {
             "refs": [
                 "7322fc15cc065d8d2957fccce6b62a509dc4d641",
                 "9c7294fd58261a79794f5afaa26598cf1442ad20",
+                "a468ba9fec3f59edf46a7db98caaca893e1e4d96",
+                "ced85ef0a00bbca77ce5a91261a5f2ae61b1e62f",
                 "fef055e8d2749b82c79c8f043be1cbe5e8e4b40c"
             ]
         },
         "https://dart.googlesource.com/browser_launcher.git": {
             "refs": [
+                "1f69393d63a2f8d36d00b86cdd20df70c347af82",
+                "27ec600af41b0d0ebe9a3db6ad36e9ed11976b84",
+                "40e431543840cbe7fc05b95a2f851d9f1bd3bc14",
+                "5fa0bd6cddc33785f43c920576fc03dcee1c3caa",
                 "60126904a26b761d29b4f2d76292ff3c089160de",
                 "7348ceae6508e5350771979c2951a54313303416",
-                "e5fc5d488eb5038bfec2a6690c72ab8dd353e101"
+                "79562306c86e5c087359a31a60309c8d65a699d3",
+                "981ca8847dd2b0fe022f9e742045cfb8f214d35f",
+                "ba4e02851d2e3d5b2889c6b44f6189baea584ce1",
+                "bc2dc4ef53a6619032e9f01450848e9ed40a9437",
+                "c68ec25e36187b050ac918d2b614f2d6320f0045",
+                "c6cc1025d6901926cf022e144ba109677e3548f1",
+                "e5fc5d488eb5038bfec2a6690c72ab8dd353e101",
+                "f2f01e4c7e719c633ca3c35d55c5331d4fe8b54b"
+            ]
+        },
+        "https://dart.googlesource.com/characters.git": {
+            "refs": [
+                "3281cc7b76731de06dcbafa95516681710ba8d5e",
+                "3ef888399ab2c211518bdbfd62ca2331a63bfcce",
+                "4526aa83c584cbba4333111809a1ffd1ccd15c07",
+                "4ffccb88a98c026f3351671479c85a886451dc33",
+                "559755d67af2c78b9beaaeb7ca57d7c4ae0b836d",
+                "6ec389c4dfa8fce14820dc5cbf6e693202e7e052",
+                "7633a16a22c626e19ca750223237396315268a06",
+                "ba8d557d23e090a23355209d8a58096dc7706d79",
+                "ec844db851b940d9013719f8474f064e35a01d0f"
+            ]
+        },
+        "https://dart.googlesource.com/charcode.git": {
+            "refs": [
+                "84ea427711e24abf3b832923959caa7dd9a8514b"
             ]
         },
         "https://dart.googlesource.com/cli_util.git": {
             "refs": [
+                "32bc0779a604c1bde1bb0782789c99cac222e651",
+                "44118e35e55c75f84fbc5ead051424ee1e73e406",
+                "5a499478ff0df4766f89eac7ca2033f2a7a9c7bc",
                 "64192706344d0598784bebe1abc4a9bfc2608de0",
+                "6c318c29c4ad0efcbe2e847dd5cebac1e379c8f5",
+                "91747f7dd9bdf2457f081d3cf035de5672dd4a02",
+                "9b7ce784c2889d62be0d6f66022331cb1e53b5b6",
+                "b0adbba89442b2ea6fef39c7a82fe79cb31e1168",
                 "c36b3941e38092d6d6f87ac27d9e88f153d3ac38",
-                "c37d5e14f50e72a268c1ad86149cecfa4b58c494"
+                "c37d5e14f50e72a268c1ad86149cecfa4b58c494",
+                "e5b38ac76887e6eefaf417f5222c317929eed278",
+                "edcf1c357dfc92f760ea0f1bbdb94f9b72d26b71",
+                "ffeb5d2869b44b28d1b9035b540d164af44f3f1c"
             ]
         },
         "https://dart.googlesource.com/clock.git": {
             "refs": [
+                "1e75f08d3428bcd6f4b7cf70e788f24fc9b661e1",
+                "21caac1cbcea147708fc26989733cd6a486177e7",
+                "2507a228773c5e877fc9e3330080b234aad965c0",
+                "263e508a36ed90e4d85b60dd70552d20e71a9ae9",
+                "5631a0612f4ac7e1b32f7c9a00fc7c00a41615e1",
+                "5abb4816bad6cf3bfab64d65d501752d19760bd0",
+                "65e8a13ddf26c9d21884ccc8f8532725697d40df",
                 "7956d60042f4ea979c4554d43eeb57d087627869",
                 "7cbf08e36a92f14f22132d255846610c1b065324",
-                "ad428ea8b75fa0d7ba629791552d40478745c54a"
+                "8a8231fa7912d84c7e99236b7800cfbef5ea7ae5",
+                "93d9f56106fdba330bc8fade194038a5561ec730",
+                "97026d1657566bb0c9f5a33642712ec350e45084",
+                "984642ee406e951e398ae5e47671383990da1c98",
+                "a494269254ba978e7ef8f192c5f7fec3fc05b9d3",
+                "ad428ea8b75fa0d7ba629791552d40478745c54a",
+                "daf0fadabc5b3dc8e6e71bf3fb27ef9c3b79df5c",
+                "f975668839f45bad561d6227f88297bbbcff03fa"
             ]
         },
         "https://dart.googlesource.com/co19": {
@@ -391,34 +531,73 @@
                 "2c7f9a6a379cfc49b3e9019d1f616d7ec9edd766",
                 "36d96a9edcf73a1b5c745cf44f13f0a1dc4f1462",
                 "3a1b6f75c771d62e7150f2dd69595a98fd6930f4",
+                "48d7f551cbc64b452c625351ab212180d3a2721c",
                 "4e646407a6ab60d1eabfc0c39e39caf0ed7b147e",
                 "4ebc13c27af77129889a11fd1f95cff04dccd8f9",
                 "506c0dea4875bc96004c28776fbd283aa5c92f7d",
+                "642b786a850a9de5ab75ce872c98d7d560fe9fc2",
+                "6472c72a65dac708a4f420666837a37c7ff4f54d",
                 "677a4913274d00d7e8bdfb60c8dbbe6d64904b3b",
                 "6dd7cfd216aa4ffb532832837ddf9242f7055665",
+                "6f34e53fa54396f17bcffcd307528f714a099e03",
                 "7b457e8d8c10361424beb7b432347f668c974439",
+                "7baaec7cf49188b92ceed2af98beb1caf8939756",
                 "7e4321a5cb2d8fcf9c3c818e62ef6d6f4fd87626",
                 "82e02cfcd4e67965c491557e3cfb4c14f3a33758",
                 "831b22d5e496fe63a813ca1c1b64f533c2f9fa0c",
+                "866b487c88e24b6a02e9fd95de4f4982aba34a32",
+                "89ec72cfbf8de66ce8190433d6bcdfdaf3599e23",
                 "911100f1901c7e6de8ba5c8c290a0a3b7e33a997",
+                "9849573cd1b8317e58247b8c1672e89b1cd842e2",
+                "a4144628905e0d3326b2549c9a1425bfca06c681",
                 "a5d7b62b78dd9278c30a44cb2d22b8870b360a0e",
+                "abb96bbca3fc36e6a594967509687431d138e998",
+                "af2ac968c0ca28b7dd94325b00a3acf569f6e858",
                 "afcd7d1d84dccaeeba01d9f77aa76d99a0052004",
+                "c1aef806ebbc20bedee6043bf517785f33fd1094",
                 "d285ef839784162ca988a9d149522249d0c00c5c",
                 "d50a305d1b4455b4e72ba45a2cf2ab1c37004bc6",
-                "dd66678fea1d11bc6295a688ed5f8e726034f762"
+                "dd66678fea1d11bc6295a688ed5f8e726034f762",
+                "e22ff5fbafd675c54df23e5de22da13b8d7b68d8",
+                "e2e8dd01102f4856574c5cd7bed02ebfa63fed9c",
+                "e8141111c3315b0a9c151fcac0e14656dcfddac5",
+                "ea1107d66f543f79ce865522ddd63718c8eb109e"
             ]
         },
         "https://dart.googlesource.com/collection.git": {
             "refs": [
+                "0d0e184a5f70ca4e23dab23df686127ec40bfb11",
+                "2d57a82ad079fe2d127f5a9b188170de2f5cdedc",
+                "414ffa1bc8ba18bd608bbf916d95715311d89ac1",
                 "887b826b50f48d6a9cd2c0684aa353e8e3a0fad0",
-                "9354f386de3c57f5486b01ab4dfa1a2f033307d9"
+                "91afde43f488eef618454b896301c6ff59af72e0",
+                "9354f386de3c57f5486b01ab4dfa1a2f033307d9",
+                "9db854d03529ccf8d0d665868ded65a4c1403c0f",
+                "a37bd51c63b7720799869e3448eafbc19c88bfa6",
+                "a4c941ab94044d118b2086a3f261c30377604127",
+                "a566328f793cd26c52f3fa4010fe331bb8700383",
+                "db343da9fa9653882951c64a05df2eba63a02e21",
+                "e1407da23b9f17400b3a905aafe2b8fa10db3d86",
+                "efd709fc1760a595f8575f4137a1847de1b49d76",
+                "fc616ff8fd7b732c07b2b19e31b6601e59900ccf"
             ]
         },
         "https://dart.googlesource.com/convert.git": {
             "refs": [
                 "0c9eab7d4656be97329c4970659afd53a78910e6",
+                "20d136c2fa4edc229fc3d7684bbeb8df5105580b",
+                "4feeb10d2f26d22eab461469da0739a57d001edf",
+                "7145da14f9cd730e80fb4c6a10108fcfd205e8e7",
+                "79ee174280149817f9925db0613983aadb46eeca",
+                "83886e3fd895211a98e49b7595a92796fa216641",
+                "8812e4034235bf90e89eea7635e10512a35d62e6",
                 "9035cafefc1da4315f26058734d0c2a19d5ab56a",
-                "d361833e117cb2438d2a2a6d0b0acb28ff0910fb"
+                "9a387f0554381537afc61212c58df3beaabbbce1",
+                "c058c8f4ebfdc09a5122db7988acd9e117a7da48",
+                "d361833e117cb2438d2a2a6d0b0acb28ff0910fb",
+                "d4d6368cffb8f4f25522875ef8e1d5f7d158bbad",
+                "e063fdca4bebffecbb5e6aa5525995120982d9ce",
+                "f8a72d67a10805bca358be8d7e189a62f79d86b9"
             ]
         },
         "https://dart.googlesource.com/core.git": {
@@ -439,43 +618,91 @@
         "https://dart.googlesource.com/crypto.git": {
             "refs": [
                 "1216790ba704a0ab194f9cd0da2d65e1767f3342",
+                "1e26879c8f166850288e8722c590a465b4461f1f",
+                "216931ae7dce946e41adb3904d3b33095dfaf51a",
+                "223e0a62c0f762fd2b510f753861445b52e14fc3",
                 "3d26ef4cf22d4b218ba30e616544ad3cf52f64a1",
-                "813e35e913d12e16de67ac57523cd0ff4b07c012"
+                "7cf89d35b3d90786d9f7f75211b3b3cd7e4d173f",
+                "813e35e913d12e16de67ac57523cd0ff4b07c012",
+                "8a03816370b2f856ab52bf302472a7bf1286094d",
+                "8b704c601f4843050624cd334e3b74f6c17315a4",
+                "9efb888e9b06489bd7c861b1d01f4c4eebb05b60",
+                "b5024e4de2b1c474dd558bef593ddbf0bfade152",
+                "bf0c33b42eb7e5991ee98429318884695e576c2b",
+                "f059196bae4718187c9f421565f9cd1f8fb43898",
+                "f2efb981b461dcae43d0cf18a3a970142abfee35",
+                "f854f2fa730acb107aa41ebe431403081f7161e4"
             ]
         },
         "https://dart.googlesource.com/csslib.git": {
             "refs": [
+                "158bfa94eed08c12c07a8ee0a3fded0ebdcd1fcb",
                 "192d720f121792ab05ca157ea280edc7e0410e9c",
+                "1ad2d1ec461fb1836180e917220a5a48fd641897",
                 "23c314bb6b247a71348cfb0987ba0eb29574abb6",
+                "34203c09f073ed8267f5d6e333daddb02e6ff609",
+                "518761b166974537f334dbf264e7f56cb157a96a",
+                "5836863a4e73da8fb88b9a65901eb653339b1196",
+                "62ae85e84590f61169fddbca650e91a57544834b",
+                "7054945b62bd83c4c7a0fab693fa73c3f137c202",
+                "7e91228c2c2428455e5bc63bbf89c7bf0f3401b0",
                 "a3700b05bbcc42782e8a7024790dbf019d89c249",
-                "b70fef222c8a98abca39c3f729ec34632089697e"
+                "b2b9b55ada8ba0c6efb1eb9db0983ac4f6ab522d",
+                "b671738dc6de7d212b5f943b4258f9bb099d3e83",
+                "b70fef222c8a98abca39c3f729ec34632089697e",
+                "ba2eb2d80530eedefadaade338a09c2dd60410f3",
+                "bd30a1a773ec66d3e435dfc53fc140f1967716da",
+                "d32bdd49026e66c139b37244e0eb2f098ae4cc22",
+                "ec86ee57c89f683352e66c55542bcc1daa425c13"
             ]
         },
         "https://dart.googlesource.com/dart_style.git": {
             "refs": [
+                "08b0294d0a500d5c02168ef57dcb8868d0c3cb48",
                 "100db45075abdd66fd8788b205243e90ff0595df",
                 "1de89eb3bd340315f9ff5f2afc319cc1d6131b8d",
                 "20ab21773a526f480ca5948f32cf8c77e37d0dc9",
                 "21de99ec0ff8ace4d946a746fb427fffd6afa535",
+                "2956b1a705953f880a5dae9d3a0969df0fc45e99",
                 "39edc2d946a5d7bd1caf6f1695f366b00f7b873c",
                 "44e8cfe7ba5a873ef81b6b39c07d50171eccf021",
+                "568333db2650e77c0f96ebc77969c9469cf514f0",
                 "5d35f4d829ffb8532d345d95d3e9504ae6cd839e",
+                "633b01cba68f4b42ddc2985c3d521c22149d5ce3",
+                "6c9bc10cf2dc6496b2ce863c8d614aa0781abf90",
+                "8b1f24a8475a0116757172cd9acca4acbf87d973",
                 "9b302dd20b4b38979352f21cf515b44617d344ce",
+                "a36eb2030765592701ec0f54b4085c0932c39991",
+                "a3f1b041f3c5045d1fee7f1129075d0ad6a4a96e",
                 "a6ad7693555a9add6f98ad6fd94de80d35c89415",
                 "a6b10dcc3db33597d058cdd602c6059137550b9b",
                 "c9975c66895011079bb3a98dc2271f4e038d45e8",
                 "ca019b0498692ad78f5f0f0f6208a1258e17fc90",
+                "d0c6b1da52c9f80679a7aaa05e5935ef5c6bb52f",
+                "d7b73536a8079331c888b7da539b80e6825270ea",
                 "e8190bf2242654daee7ebf21fd6d8c8046989822",
-                "f1d10e1e052116aeb3851f90ace55e5447b3bc21"
+                "f1d10e1e052116aeb3851f90ace55e5447b3bc21",
+                "f79a9828ad07e50d6e8352ac154cc16eb4d78d5c"
             ]
         },
         "https://dart.googlesource.com/dartdoc.git": {
             "refs": [
+                "0746cdae534decbf3763ca460024f392a079d1c2",
+                "11c4b3c9723bfa7155efcf0fef02329233a6381d",
                 "14d33d3a120ad3ce621bbcf0a545dc3adeccd7e7",
+                "179ada02c1bf8e0d69c3255c49742c7513e33f6f",
+                "1a7952b13858ed307185a28f9b4ea861c0abb1c5",
                 "1d56f263955f329b6701d8f84f069eb0aef353a4",
+                "1f4221632777d21a7c0d0a0266fe6a495f5170ce",
+                "2522559623bdbaf471d09b3c9d77bd378d70d6d2",
+                "2bbe649a2139d0672e94bc69d78e815a290d2c8d",
+                "334072b0cad436c05f6bcecf8a1a59f2f0809b84",
                 "34561d6ebf5fa89ca1f93b981de96a75ff573562",
                 "3b019e40d6365af9456bea886da0476e5b7fdff4",
+                "3ce64a3d7da6702a4342bdfd0723b750fddeb35a",
                 "4df6dbe5e651e3c8a4f199e4752b12366d7eeef4",
+                "59dc475ac538b63073d9fc1e9e6ca5d4e5ce0769",
+                "5cac62b6071c899d52553fcd417ca5faeeb507c1",
                 "62aefbb788baf5b73b2d704d66d9735a7ca56a69",
                 "6d1aa6f5045c33d3723aba05e3e0dc1403b763c0",
                 "77a52b6125ce8cc8a88a8a399d80701254e43838",
@@ -483,7 +710,12 @@
                 "80c6f18f34b387d4b9ce89ddd2e3049093335f9d",
                 "882aea9351262d618c955322f4c9aafe9540b848",
                 "88df88c9278ec4ec31df818f3ae33d4f91c8cd64",
+                "98fa859c8e7e9c0ee9a8873a09aed4d96aab4d3b",
                 "a57f497ae9df6e6073b5eb7ddf253d0b2eb470c3",
+                "adc5a45ddafb57e3a600ee7d9e88dc81061d1410",
+                "adc76e6d5057b70318a1e36797c9dbe081258ce3",
+                "b001a15069bfd7cfec5edf5b441a2f0a9b4223eb",
+                "bc7bdc44b03c558c9993f178d19ad989ed1c5f12",
                 "c01cf5378252dfd6b58cd03e12a0b2023f52dc91",
                 "c7f11603effa88ddacabfd555993f322fca8b3fe",
                 "d40067626b8c419e451897447e4dae74d25bcc37",
@@ -497,11 +729,13 @@
                 "23172636e60c52384b40e6bd1240d12c8e860122",
                 "248b1801131ddc2e738c8181fc32d488e1312052",
                 "2d58550f9e3fd8ecbc3b2e4444095fcb204a66c6",
+                "2e6c3ecc5f43327e615d912c19c2169d1ff5a227",
                 "31148cd81bdb3c248fc30cd345ef49a978ed454c",
                 "319ff812d463fc194999a0d4b682097450279332",
                 "36e514d52c5d056227e4cea98b784ade50b5b4f1",
                 "3bd43d6db5187d1663954227e41e2a9681004846",
                 "54ca01abe4b7b62419ee88814d3dc98df36ff8ff",
+                "5a900ca68466efe8680d3500bc0a6172d07ef5a7",
                 "6b2164f8f57583a7bcaa32341eaa219efd8fd2d3",
                 "7f6f1c1d53173307bde1aa4f4ee851d260cc7e69",
                 "815d4ba2e7d11f8695a26f6cbe1262e3b8ff8d0d",
@@ -509,8 +743,11 @@
                 "8ada2ee303383cf62cace9b2a97e8a3cc983e5c1",
                 "9589e304b10069b51742b68e94d42a6874a1c9bb",
                 "96ee86147a5f4c70aed64262e1521b745936cdb1",
+                "9ee08a41b85973e5cc2f6144ff4de69bf9aed244",
+                "b34db4f96504d8b255540d834b6dd6a4879a1837",
                 "d5233c6dd0767cffa5742e32c4bc7c230c9c4b12",
                 "d6370fba3826f217890073b03ea0c6eafe5c35d1",
+                "dc44e820d0cbe943192bec1e0499aa176463b91f",
                 "eac66d93142907b39f2271647c111f36ff3365b9",
                 "efe4ee4af6ac2e4c90aa525fae213b65c97295a9"
             ]
@@ -527,119 +764,260 @@
         },
         "https://dart.googlesource.com/external/github.com/google/file.dart": {
             "refs": [
+                "0132eeedea2933513bf230513a766a8baeab0c4f",
                 "07cacaed6679a173e29176747e6ce0325742749f",
-                "6842feaef1c4e06239bd30f8d3ef722838b1c97e"
+                "0e09370f581ab6388d46fda4cdab66638c0171a1",
+                "1ebc38852ffed24b564910317982298b56c2cedd",
+                "3aa06490bf34bddf04c7ea964a50c177a4ca0de7",
+                "5d9a6027756b5846e8f5380f983390f61f564a75",
+                "6842feaef1c4e06239bd30f8d3ef722838b1c97e",
+                "72a67c33f90bfb7e10057e286e06d2fe3baa4d98",
+                "a18ad1ce88eaeb5a11a13ef8fc25d1e78b546c59",
+                "b2e31cb6ef40b223701dbfa0b907fe58468484d7",
+                "b768f79dcd104a5feabafab47101c4355b71cd8f",
+                "cd3a9324f6483f313ba1f0f3ff382ea4e6982ef2"
             ]
         },
         "https://dart.googlesource.com/external/github.com/google/vector_math.dart.git": {
             "refs": [
+                "0c9f5d68c047813a6dcdeb88ba7a42daddf25025",
+                "0cbed0914d49a6a44555e6d5444c438a4a4c3fc1",
                 "13f185f7e97d559e003f5ac79201da12f9a01049",
+                "1e4d000f55512ca55d0fcef4e13fc03010d54251",
+                "1eee95b15e5d35cf519514cc253037b19705fb7a",
                 "2cfbe2c115a57b368ccbc3c89ebd38a06764d3d1",
+                "38a00c35575b71a095903467141e5ee60c94d011",
                 "3939545edc38ed657381381d33acde02c49ff827",
                 "433fb6c829b18719fd0db4a703b607a26b7d81f4",
                 "533c513771d35312dcd0f69e662d729979882df1",
                 "66d590b3cbb73397ed1b8aa87b55b2251c536008",
                 "70a9a2cb610d040b247f3ca2cd70a94c1c6f6f23",
                 "7bf60fb95e0fbbd7648944071de9ab5e32ce7387",
+                "7dec98433b3e016fbe49107ad4320b31f519eb70",
+                "7e705f734e94917e9a5347578e6e496f8db38ac6",
                 "a7b7e9ccb931348dbfa669e0f8fea1bf97705b16",
                 "bd4b574b2a457a3955d223694f1a979a0c0f38c9",
+                "c14703830d47818a82ce8a9fcb70029e5e8e6a16",
+                "cb976c731f5f9011f09311cd1c39d5778d4f8f2e",
+                "cdcee487bde4353a6ba7a29bfc7db3840426e50f",
                 "cf3b5db7340d317dd3489e5a35434b408020a852",
+                "d54af8a2b8b8d935a475a4da6ea5a1b343f29562",
                 "dc9d379674f50bb5559e99ee3a9f64729df9d3c8",
+                "e3de8da3e7db3b9b4f56a16061e9e480539fb08c",
                 "e7b11a234638bd5d76a05bae99d20b937637dfe8",
                 "f08d7d2652e9ecf7d8f8605d9983335174511c95"
             ]
         },
         "https://dart.googlesource.com/external/github.com/google/webdriver.dart.git": {
             "refs": [
+                "00c887daa14de516c0dd02f1021225d478f503c1",
                 "09104f459ed834d48b132f6b7734923b1fbcf2e9",
+                "21976d657e6505ad113f714bd104420aee23faac",
                 "26326d37c0279f201a59c4114c1389977928c0ca",
+                "2c1b6f8b9d684caf62d72bb327c24f738a4e7455",
+                "336dd3d1208d0b390ac437a785a78760ca7cac7d",
                 "3a711ebb36871eac997c5d5d2429f7414873dc63",
+                "562aa06353d513586b806ce1c9655dac3971879f",
                 "718e4c37d004fceb9856de980782c46bf9576df5",
+                "73a7ac8c0dcb0f84eae47e2133805295176aa972",
                 "9b6e829cfe4e6ca0cff7910e2ec58ed809dbc303",
                 "accfed557c005c87df56ffb626458f87da9f2125",
                 "b4fd8592fb9b1405fea3979cab88bcd857f2addb",
+                "c28cf51fcd0bd306a11fa7d10743b8fe7434ea71",
                 "cfab787b30fbfb5509f9fc45cfce51157fb9f369",
+                "d0f78d004a5ea7bfc8c492639248b0a1b04c1d62",
                 "d83d6a3cbaab152ff9b99b29382d1f48b5d5ba23",
+                "e1a9ad671ee82e05eee463f922a34585ed2d2f15",
                 "f52afbf72895ae980bd4129d877305c2182d6cbc",
-                "f85779edd7c9f66198d4391ed3631db1d97a5b11"
+                "f85779edd7c9f66198d4391ed3631db1d97a5b11",
+                "ff5ccb1522edf4bed578ead4d65e0cbc1f2c4f02"
             ]
         },
         "https://dart.googlesource.com/external/github.com/google/webkit_inspection_protocol.dart.git": {
             "refs": [
                 "0f7685804d77ec02c6564d7ac1a6c8a2341c5bdf",
+                "15244ffbab9221f1603eb04eaae74ae7c7ca3944",
+                "153fea4fe5ac45bebf0c2e76bb3d76b0f1fcdaae",
                 "32fffa53df3f54005c742ddf4f859fb585a6b254",
+                "39a3c297ff573635e7936b015ce4f3466e4739d6",
                 "5740cc91eaeb13a02007b77b128fccf4b056db6e",
+                "57522d6b29d94903b765c757079d906555d5a171",
+                "667c55e6f65638592768e0325b75420e39b01d2e",
                 "762115a971d1968bc940454ad1e88d506d8c5640",
+                "8401098ace995e4dcd9855a2741c2dacccaa780b",
                 "b459c427b74bf5e0919a083a97a167fb74d8bff1",
+                "b825c8f6a12200d619729903207ac826cce278da",
+                "dd6fb5d8b536e19cedb384d0bbf1f5631923f1e8",
+                "ddb624cd85954dd384056cc253a8fc2b9da5364d",
                 "effa75205516757795683d527c3dea9546eb0c32"
             ]
         },
         "https://dart.googlesource.com/external/github.com/simolus3/tar.git": {
             "refs": [
+                "0fc831c6e93be5342d4863d9e464428e73007cce",
                 "13479f7c2a18f499e840ad470cfcca8c579f6909",
                 "552a49d7595e444184d4f91e9afd533aa253a31d",
                 "5a1ea943e70cdf3fa5e1102cdbb9418bd9b4b81a",
+                "6150a0c88d9bd17e3e961593a9a7a9564866e8b4",
                 "d511a1dc4f197a29bc06479f4614135abb168b6e"
+            ]
+        },
+        "https://dart.googlesource.com/ffi.git": {
+            "refs": [
+                "04fa38ab45cb2957f9059e03031b53906c2c4385",
+                "17a8142da8114a065e03200467c7657b5368a86d",
+                "18b2b549d55009ff594600b04705ff6161681e07",
+                "2a56c2a9a87122c057168874bde384debbb806b0",
+                "32f5eefea59d4461e8ab40e83f157e49d5abe0da",
+                "4dd32429880a57b64edaf54c9d5af8a9fa9a4ffb",
+                "7f4acbd7532d94a793452030ff96bfef8cd96b68",
+                "c926657618443ff4821411ede01684096b503f84",
+                "d36e05af55293bcc511d6b3a99ea4b8cb69f6323",
+                "f01dfca0b3c9a63155bfb86aae12be982571a860",
+                "fb5f2667826c0900e551d19101052f84e35f41bf"
             ]
         },
         "https://dart.googlesource.com/fixnum.git": {
             "refs": [
+                "00fa1207768bd07d04c895cbe0f1fe99af14e727",
+                "164712f6547cdfb2709b752188186baf31fd1730",
+                "16d3890c6dc82ca629659da1934e412292508bba",
+                "3e08c0d7ce1a0cd832a17391444898ec610b5f89",
+                "570b28adcfbfdd5b8a7230ea1d6ec0f9587493f1",
                 "6c19e60366ce3d5edfaed51a7c12c98e7977977e",
+                "71f0d4d16054e6be7d8e22bdb3b082b9f82061be",
                 "83293b8ed86ccd574a94fcf4a2da43f31c1b43e0",
-                "a8157d87f17d5184e210403f2ed63d354b854132"
+                "848341f061359ef7ddc0cad472c2ecbb036b28ac",
+                "87ed0658f32f992dc7360b77513eadfa7056aa9d",
+                "92ec336bbd0d03e02be0208483bdfaf68b4b6b7c",
+                "a8157d87f17d5184e210403f2ed63d354b854132",
+                "bca3816daf641397f7b5ab9cf865a6d10d30c625",
+                "d9b9a2a288d5eb467fb1597e80beb063b05cd4f6",
+                "e0b17cc1f639c55a9c24947392c64b5a68992535",
+                "f8379d94436f3a73f71ea078f3207897c6700498"
             ]
         },
         "https://dart.googlesource.com/glob.git": {
             "refs": [
                 "00a9c82d31c01ae88ec9ae4021d842e9b832aa52",
+                "073007c5d00822a0ddc964c027785d1eb5559d68",
+                "109121d9993c1ef8d078e185160a9d477c82defd",
+                "1d51fcc172e5adfbae6e82c3f8f119774cb2fca2",
+                "379d60c7cc5c0e9fe7d0d45549ad0b1ca51396c8",
+                "4579281741e59e2e4ad02a197e0b1f4d6558dede",
+                "5b243935154daf53c54981b98f625bace90b2112",
                 "6d3ba5ec02817e62d17ace040590bb81a3e1242f",
+                "7c9a121e92687b7ac6456ec0796eb1e5c0373d90",
+                "7f97bf5be6bfe8c90a92283e4c590dba2a676083",
                 "994191a107b99a1911a3ef52ca238cd9305c8d37",
+                "9c1996f9f9326d776fe151f292912113b8b64aa3",
+                "a62acf590598f458d3198d9f2930c1c9dd4b1379",
+                "da1f4595ee2f87982cbcc663d4cac244822d9227",
+                "eaa878b6af1ec7f7deeab0d2f9e830a7a7da2a8c",
                 "eaec6a448576048b748475d80bfac2795ad5a267",
-                "eee18d1a577d5f965f6afbbd251798e065dced43"
+                "eee18d1a577d5f965f6afbbd251798e065dced43",
+                "f378dc8734f9f2413e93951f95d278420e4a03e0"
             ]
         },
         "https://dart.googlesource.com/html.git": {
             "refs": [
+                "00cd3c22dac0e68e6ed9e7e4945101aedb1b3109",
+                "06bc148600b1d1a70f2256bdf788c213f1f60f55",
+                "08643e9e2baac0f20ce4a3b8baed820107972270",
+                "0bf601959ac98e6cdf1925a1cdab70bd6a5ddc45",
                 "0da420ca1e196cda54ede476d0d8d3ecf55375ef",
+                "28fb8b97acf471bedcfa4eaf38899a0f65d5e30d",
+                "327e37a6a4dd46599737ee982f280d73a8f646f7",
                 "3bc803d7e655491b243418f19300ef0c6112bcea",
-                "6d3bc86cf2ab530ef3fa5f84b5980dc318a02af4"
+                "3dd00b0ca99e222697e6b6dc653774dc877da420",
+                "4060496b0443451c38f8b789db2e44c0d7966171",
+                "57b747d7052aba08901adb366ffb2836facaa04d",
+                "6d3bc86cf2ab530ef3fa5f84b5980dc318a02af4",
+                "8243e967caad9932c13971af3b2a7c8f028383d5",
+                "910f6d703ed0193318fb095be09e8ddf1bec3e05",
+                "92eacabadf40aa24c8f4289682ef2822c5d7e414",
+                "a1b193e95f13c995e7f7200ce0d363de5952e383",
+                "f108bce59d136c584969fd24a5006914796cf213"
             ]
         },
         "https://dart.googlesource.com/http.git": {
             "refs": [
+                "047d6ed015d397be169a7fb892d75141d9bfd58f",
+                "092bb2d5ed1d522c55ef6781a469ba1e53cee2a8",
                 "1b6e28d7e1c61f7b0f8561be7aee9c35b03de193",
+                "1e42ffa181b263f7790f276a5465832bff7ce615",
                 "2c53fa3c558ec5d1dd9fce4360d435113dba11e5",
                 "30013eb7bc9d7023c39efc18738cd46e00f47dc6",
                 "4d8e7ef73d6135a8cc9b5e53db1beb43977d44b0",
                 "5d94ef52582867e077bf41c3fa20fb8b1d1d834e",
+                "5dfea721993fd22363a5800ab7a2f3aeecee25f5",
+                "63390263e230bbd0aa2dae286fd7a64098e09029",
                 "6bfe07f26384637fad6d1713de9ba9d2bb5d8c88",
                 "6ecd13a88b82c2fdc8a555f218bafb0ad0370f51",
+                "74f9d3df83545f83338794d1decc28d10a94d290",
                 "79470d014b467f01b0e7c5b63ab6c86b22dec8db",
                 "7d2d87ebfba86035a9ca6b79160ccc2ac1253c0c",
+                "7fb6fd686f6ce60af300be71a84defcc336d272e",
+                "805a14742e293fb51c0b89004b51add50d825792",
+                "843c5ecb1ea2233ba7b7049833b5801b149fba86",
                 "8c325b9ca33d878a86d69c5048a8e6e18379663c",
                 "8d893851904d8cd292a66e39812b59aca2cc4d96",
                 "900da9fe7d576caa4882053cf26d3a70bd3106e0",
                 "a22386e9c390290c916d1c53a3d3c1447ec120ce",
                 "c140dc012da1df74b0fb99230b8736438b8eba6a",
+                "c148a3acbef72a4a507be46c0e62894c616e8702",
                 "d6dd5ec9a24e66b386cc38d52c6d4e8decb26902",
+                "dfec389ba5e5bad98d657ff0c7095b249ec89057",
                 "e4ddd3e3d3a3d0ba7c9e48506e9d2e8620af30a8",
                 "ef05b3744424885d93f88a6a50664fb5b7d5cbdb",
+                "f0a02f98f7c921e86ecc81c70f38bb6fbccc81b9",
+                "f35d1e1467092f6a5edb2abf7071c4a99e8c737a",
                 "f59cd79e1322c6272481e4f2ccfa9afcb37a6525",
-                "fa2d2c21cf6f8d9e72bb962d2cd5f613a7102a71"
+                "fa2d2c21cf6f8d9e72bb962d2cd5f613a7102a71",
+                "ffb44388762716f8d93aaa8541f8c5f2de159b71"
+            ]
+        },
+        "https://dart.googlesource.com/http_io.git": {
+            "refs": [
+                "2fa188caf7937e313026557713f7feffedd4978b"
             ]
         },
         "https://dart.googlesource.com/http_multi_server.git": {
             "refs": [
+                "20bf079c8955d1250a45afb9cb096472a724a551",
                 "25941e260658efb324de857e6022f418faf9bdd1",
+                "34bf7f04b61cce561f47f7f275c2cc811534a05a",
+                "491f7c613198d38c489ee0010b9c5377ad29afde",
+                "7bd190c70288361ed01ad31668e93544bcc5cf2b",
+                "9d62ea396d7d282592edf994378f67fcde982ce8",
+                "a209cd59d99b52ff08b32ba37bdc9fc1a79bc9f2",
+                "aa128cfaf6ef1c9c1ace962ca2dcf6e5dddad441",
+                "ae484896624cee8b0a8a97a0fb1ea323c4c3d31f",
+                "ba9d07f3596b24718ddf45c9e071d40879cca565",
+                "cce50802b66d33f703f82b3189988aa8e51976ac",
+                "de1b312164c24a1690b46c6e97bd47eff40c4649",
+                "e0b5d357890eb09f0a7b3d26ddf643dee6977c4b",
+                "e31c6988e3869fb4019429254604066338f86095",
                 "e7515b5896b83d522189802a1e14e103e19426c0",
                 "f6a748819139b8cbf513d5fc36b10676b0cb066f"
             ]
         },
         "https://dart.googlesource.com/http_parser.git": {
             "refs": [
+                "1ef3e56ebc5e505dbf375f2e27faa40956eb0da1",
+                "202391286ddc13c4c3c284ac5b511f04697250ed",
+                "224c1a9d24b46c7a9da1f09147e0e1fbda78089d",
                 "23d775898ee90be9daf3297e298a8869bc755d84",
+                "6f73e4a399df013ded8f4c81f151d122b36d361b",
                 "71b4c2c448b333397d5ff3235825d8cea773291c",
-                "9bf7bd981a39137da1e5d7fe64f4652b078c7aa9"
+                "84db8b029d9b51859a0bb4966859af009f9442e3",
+                "9bf7bd981a39137da1e5d7fe64f4652b078c7aa9",
+                "b3b283b9f139640b932d604e8815460bbd3ecab5",
+                "bbe37dd228ec59f58a73df4b328ef747757165c7",
+                "c14fbf6aa7ada5e8912eab4581eb26ff4d101452",
+                "c73967535ce31120e218120f70ef98cc22688c82",
+                "d2d03e7dfa3b7a99515b16f827650d6e210799b5",
+                "eaa63304c333316acd114e3be7ed701d7d7ba32c"
             ]
         },
         "https://dart.googlesource.com/i18n.git": {
@@ -659,35 +1037,97 @@
         },
         "https://dart.googlesource.com/intl.git": {
             "refs": [
-                "5d65e3808ce40e6282e40881492607df4e35669f"
+                "5d65e3808ce40e6282e40881492607df4e35669f",
+                "946c34c155073c0c7dbbc6ce06f5d0c35570019d",
+                "9669926609e7efc17dfd74fbb44ec719a7e573cc",
+                "a127902594a964f2090239fb454adadf7c1a77ef",
+                "a958db01c90d041f0cd357d1732ae9813b620ee0",
+                "dda8ade30e8865843c6650a20a18bbf94387adee",
+                "e9b573679de5e703d89a242b9dca331c772979ef",
+                "fca552f2ec5d682b5fa36f02bdd72a5a4e2edcee"
             ]
         },
         "https://dart.googlesource.com/json_rpc_2.git": {
             "refs": [
+                "0280ac6cb4f3905d81c47ba927123ba2b95f7940",
+                "16fed53fbebd38edf170f58c1da1de2a325b2b98",
+                "509f71eef90ec5afb5486b69dab7fed97b9f1eef",
+                "50a37863be221f43ef07533c0c154ae676fc5df0",
                 "5b1cbd679756700d5f319bf10a217da53e98ea52",
+                "5da270592006e4d43fd5a6ac736829f955881240",
                 "616937f6d3837e38a2a287653ddaf722de260702",
-                "c9b616bded8cdb5bfdc836ba7648afa6aba40062"
+                "639857be892050159f5164c749d7947694976a4a",
+                "73467f3651669af4870260fea4e99d7ba6ccb7ec",
+                "7e00f893440a72de0637970325e4ea44bd1e8c8e",
+                "805e6536dd961d66f6b8cd46d8f3e61774f957c9",
+                "ac1fabddd51fc90aa6fa4e1248f1a7141899eb4a",
+                "c9b616bded8cdb5bfdc836ba7648afa6aba40062",
+                "e73c4ad2f7b5cbf083569f00ac7fe6d7151afe22"
             ]
         },
         "https://dart.googlesource.com/leak_tracker.git": {
             "refs": [
+                "098bafcf99a5220e3c352d895d991e163568ee03",
+                "4a5b077739886f61bd6dc11c78865ef487c917c2",
+                "85bd7fb23bfdfdcc66390e8d6ae81aafd65fe51e",
+                "8644f8b1c78009e9149e08e0c349d06c304110a9",
+                "9c6e9b370ebedc93696299b76ab49fcb8bb41983",
                 "f5620600a5ce1c44f65ddaa02001e200b096e14c"
+            ]
+        },
+        "https://dart.googlesource.com/linter.git": {
+            "refs": [
+                "07c4d177bca9e3b670ab67a7c9a8cffeb90aa318",
+                "14c916a16e78315e212cf79e7ccf4c19159a1bda",
+                "1ddc70948d94f2449fec69a95e3ceb7b6b6c8348",
+                "27b46ce246204a2c0170a4bd5b23b94095e89a22",
+                "2fbca9ad2ae211682f35a03f28b4c47e37c7d3a8",
+                "7c7db85d29b46af51e3f4a5e0a33440c4e3791fc",
+                "7fe671cdadb52139295bae0abf62c014369af93a",
+                "8f7b75f8a3501ca2c4d5bbc1f003d90d66447544",
+                "dcf3a079c573487b6ab64518604e5686be899601",
+                "e36813b302817c7a4aaa39480d1654502c786b14",
+                "e8c878360595c1d268d93f54c09bc843815a42d7",
+                "f2c55484e8ebda0aec8c2fea637b3bd5b17258ca"
             ]
         },
         "https://dart.googlesource.com/lints.git": {
             "refs": [
+                "16bdefe1df529262a6596f79e91003ddbdbd3890",
+                "3810f8b3dc3205cfaa4ccc0054b021e68046d851",
                 "5016d63c889936b2100520f999591d0492d9afe3",
+                "72f107a3be948a22d080e994257be3ba63f1bb41",
+                "8294e5648ab49474541527e2911e72e4c5aefe55",
+                "8d5f7500024320654adb1e799e49fc10c5304ae7",
                 "baaaa5616370243c3c8c6a9f67fb83d26bdac552",
+                "dfded5e265015f21ce154577fe8488dc244e33c2",
+                "e03dc048796fa4bfb64c11eadcb44b5dc76a5757",
                 "e1d4794412aacd3bbb370956d44b9a10c3f892f3",
-                "f6b5d36485f6f067ac0f5a7193006ebe82ee6113"
+                "ead770872e272e25a64315c120950ea8ad5b2509",
+                "f09399a2574eb4e3f485881cf977fca72628f443",
+                "f6b5d36485f6f067ac0f5a7193006ebe82ee6113",
+                "f9670df2a66e0ec12eb51554e70c1cbf56c8f5d0"
             ]
         },
         "https://dart.googlesource.com/logging.git": {
             "refs": [
                 "240ec33e23720091e0e5a029d569a3770ddccf1c",
+                "399100a2737e3924dbd4d6f916846366c0612a53",
+                "4d35a4e02b9237bd794378413e7ce3deb52ffcaf",
+                "521498757ed3eeae151c2d4796404e8947baa04c",
+                "575781ef196e4fed4fb737e38fb4b73d62727187",
                 "6c3fb37fecb2e30415072f327b834a3e95517fa9",
                 "6fa056098ceca03d399bff64592822b2ae5dee6e",
-                "dbd682919708316e9a6d1e2fa472c9ad9225c2b4"
+                "787030a2b3d0d5d53ce57f1c7dc74f27ecb07b0b",
+                "7a7bd5e31ddfe23e34d37ded82d6d0cd5706862c",
+                "7ba155ac2cf09ab29d0bf41a5e67d03e12760cf0",
+                "abef3717d958158eb8b0ddb2871f4b15a9804cd4",
+                "bcaad0f781a889d6e5cf8fc564fd0722c446b96e",
+                "dbd682919708316e9a6d1e2fa472c9ad9225c2b4",
+                "dfbe88b890c3b4f7bc06da5a7b3b43e9e263b688",
+                "e04942dadc6ed9ed177ab0c6b8d0e80a789cd176",
+                "f322480fb9d9e83e677c08db6d09067059f7ff74",
+                "f6979e3bc3b6e1847a08335b7eb6304e18986195"
             ]
         },
         "https://dart.googlesource.com/markdown.git": {
@@ -696,44 +1136,104 @@
                 "3d8d7a8f14b74bb646bb6e4ae35e0bf2beb74154",
                 "4d5dbc659955973902f2585c54e94d453532db70",
                 "62424376d0b5fe35a2957b3caed4b75db010ba82",
-                "d53feae0760a4f0aae5ffdfb12d8e6acccf14b40"
+                "6cfd6f17651a8ba31b5a268f1139bb2c039dd4d4",
+                "7479783f0493f6717e1d7ae31cb37d39a91026b2",
+                "9c6b1afc3721571af37eaaefe043a6ae7637bd09",
+                "a8288ca3a3023228f1a8a832b78d00e11f0c4b30",
+                "b4bdde2eb7de89d94e69f3bad37faba5ba95aaad",
+                "bd6ae8d741327e24319f3e036d57107f91229843",
+                "d2e790305d136b4eb39d329c884bb49d5a5f1411",
+                "d437c85188806fe2bfa4f3616159300ba9dc6d2a",
+                "d53feae0760a4f0aae5ffdfb12d8e6acccf14b40",
+                "e3f4bd28c9e61b522f75f291d4d6cfcfeccd83ee",
+                "ecbffa9bf9109d490b9388e9cb1f2bb801aee63c",
+                "ee3f4e976efcfed87c6ec78364bc2dd3c6e717b9",
+                "f3873403f5b1a0319f78632a8fbc2b22315a7b83"
             ]
         },
         "https://dart.googlesource.com/matcher.git": {
             "refs": [
+                "07595a7739d47a8315caba5a8e58fb9ae3d81261",
                 "0abd4054c47a923486a6c0c04b5c974ba13ad2da",
+                "15d4af21002ae9adee952110192a3face96307c7",
+                "1a7fcae0d7af1604781afabe61fd35d9b404d8ed",
                 "31f13583630e093731c8cf2b843c14196d748c5c",
-                "d6d573d0f8d65b36550ce62aad3ce6b5e987b642"
+                "6a9b83bbd73e50df2058b3e8e4aa301df49569c6",
+                "6ba4a6d68bdfacff3d572c9ea98333dfc66fd6bf",
+                "7e1011772566a8d1817c725a71f091e2791721c8",
+                "80910d6698576ba486ace6e5fdf0e27324f138db",
+                "c1a07043de3da4968e1736fcde1c521802821859",
+                "cb6b68c603d2c57a51bbddfff08fa211bba7dcd3",
+                "ce8f40934c90e12992071172795b3bca29fac295",
+                "d6d573d0f8d65b36550ce62aad3ce6b5e987b642",
+                "d954c8d979579b4b46427b0ea1d9c721117c191e",
+                "d9cf4f69e3f557718ab5be042dd5503afcacac51",
+                "dc310d95663da10a90e7898cd4e322695f693d4f",
+                "deedda179c33b00b3e06aa107ebfc3dd2f8a5f49",
+                "fcbd3616c1dbe636d22d2b164aee3f1c32c52a42"
             ]
         },
         "https://dart.googlesource.com/mime.git": {
             "refs": [
+                "034471a60d5603a6988de6d9811bee1cb0657f70",
+                "0a75a41445eb642674a0a271eecde78cb025ee60",
                 "11fec7d6df509a4efd554051cc27e3bf82df9c96",
-                "4ca2f5edaafe21f462922d34db99486a44bb08b8"
+                "1a51be02b3cbc742c79d83575bd096ae8c295c1f",
+                "24448401f621b9e154d165c900a3c8decd8a23f4",
+                "2d8496df6a6e851816610c3f99eae0d9663f54c4",
+                "37ef637c35896e289fdd37c0ea4680df4ab9f543",
+                "4ca2f5edaafe21f462922d34db99486a44bb08b8",
+                "99fbdcc745e2f2cfb85be4a4c6c7b520cd25c2dd",
+                "9a168712d6db610c3822617c132daea72d4fd2b5",
+                "bdb66bdd354156280bddc30e2d322a4ad355f671",
+                "c0c4c47a3d7bf696f1aa1959fb83d598baadb33c",
+                "c2c5ffd594674f32dc277521369da1557a1622d3",
+                "c931f4bed87221beaece356494b43731445ce7b8",
+                "ca9f059d2334bb2657683e0a7f5949817cb4b0e6",
+                "d80f4d09067af87d84d9cb647acfa4d2d313d795"
             ]
         },
         "https://dart.googlesource.com/mockito.git": {
             "refs": [
+                "0422551a774cbf72eea87ba80e71f7b5d81199f3",
+                "094d07cdceca1f9f4ef863fb57045295298e8682",
+                "153c145604db47798ee2ff21d2a07aa543fca168",
                 "2302814df66e651b6710311366501523dbee2e11",
+                "25d25dab6b57ac710c0be0e759def7505b352ea7",
+                "28e8eda2ef16f2e9c5e2e8fef48a834afd33ce44",
+                "347d3e4cc64752b2ff7b5d35fe5cd1b281b17413",
+                "3ef744f8749864f2a036eba60c4203cc8f638949",
+                "412c0beb51a12ed4a8833db7f542558ab92c0c65",
+                "451f756fe12a32d2a943db80124b522ecbd557af",
+                "57a7c820ffae61e3df0dbc279ad98b92751175f0",
                 "57d484f9b8e7f6a504966a901174358a42fa932a",
-                "a7fdf7101fbd31132a59188a6057d21004345927"
+                "a7fdf7101fbd31132a59188a6057d21004345927",
+                "d2a8df169706d1c1e5daaf0c96ee03b8238bd599",
+                "d39ac507483b9891165e422ec98d9fb480037c8b",
+                "ed5bd84f7bd7b651c96fbd7f449e92984a902502"
             ]
         },
         "https://dart.googlesource.com/native.git": {
             "refs": [
                 "028f89d4a59448f9ecda5bd3d4519e2d7c742072",
+                "0605d9ae6d2497737077539273992f8e1411286b",
+                "0eafd544d6ebce07b42007560ae9e0858c885d89",
                 "14368a80bae9e3f381a2e59c91405338d82451ee",
                 "2f0b168e61588a7c504cba544036be3c3b63f6e6",
+                "3e1cf186069dfef2b4c0a24c30f3893513afa38a",
                 "3ec573500f743d4a1393f7802143aef50fec0a47",
                 "445cb0af620328ff04aeed028a60065ec6e5c7ce",
                 "49a8912734162e5dc6ad009fc080fe54e9985470",
                 "4e71c281e4e3c262b28b7ab5b3306e4029b78b1c",
+                "4fc6a333badace5d569bde4496462cc237dc3363",
                 "659511886501bcce638c3966590df04984909ef0",
                 "723cd56a5edc89699db32bca1b5bf91aa0bcf0cf",
                 "8c3f3ecd2e8f06b0922951e3d433f8754cb4dd4c",
                 "99456dec33c4c1f8927c9948ac2138ae6961abf6",
                 "9a11537944f2ee295df46104624fb714c3dd7741",
+                "a2dfedc35960711eb24cb04dcb906793d2222295",
                 "d51c53334486af69435b0b45c4bdfe303a830170",
+                "de1b0ccf24a89315fe76116090d9fe1b8bd774bb",
                 "debb5bddc4ce0aef9d70bb949495e0c65cc976d4",
                 "f08677646f9e5e9a8a233fed1ec324a003609260",
                 "f1fa5be4b0d7449fa8fe4077113ac0413d2b16bf",
@@ -741,28 +1241,86 @@
                 "fef40aebc3cf34654919e8a5785b6c50b3ea445c"
             ]
         },
+        "https://dart.googlesource.com/oauth2.git": {
+            "refs": [
+                "199ebf15cbd5b07958438184f32e41c4447a57bf",
+                "7cd3284049fe5badbec9f2bea2afc41d14c01057",
+                "ee5c9b1ef5bfcd282c0637f319155f89634385ed"
+            ]
+        },
         "https://dart.googlesource.com/package_config.git": {
             "refs": [
                 "07097d7ae60d40b34ce8daabdce318ecc168b7d1",
+                "203de2022af26b3ab2bcec18cc49614d9e502897",
+                "33dd24659147bd7ed2fa87aeacc52d199be766b4",
+                "3d90e6955ef19b7ce4f1b742a06a20ed4260700a",
+                "3fe81c4701d6c664fd817f0e4885bc763caec42c",
+                "5a0bc197fde3db2907d0e35e0470e601bee20845",
+                "74ac1cb90ad7f4f05bd92c952eaf9756c516fca3",
                 "76f2f6c245451da1fa24d7bbb00251b909e729a5",
+                "7e09db12e968482ef81e309de3ce233463b4cd7e",
+                "8731bf10b5375542792a32a0f7c8a6f370583d96",
                 "903a0e528f91aef90821c8f5eaafbc1ae27198ab",
-                "bafff8e90be25e1985f7e3ee40ea1d22571a93e6"
+                "abb4aec904ab8c739b6dcec516d44f56d96c8115",
+                "ae7ad83de97aba507fd05e97cc372bc6695c1759",
+                "bafff8e90be25e1985f7e3ee40ea1d22571a93e6",
+                "be0c4411cb7607abe3fd531c9653b0ba53c87c0f",
+                "cff98c90acc457a3b0750f0a7da0e351a35e5d0c",
+                "fb736aa12316dd2d882b202a438a6946a4b4bea0"
             ]
         },
         "https://dart.googlesource.com/path.git": {
             "refs": [
                 "04807b61c25f98f328b322ec511451f9f86f98bb",
-                "e969f42ed112dd702a9453beb9df6c12ae2d3805"
+                "12ce876fdd8873128671acfec54c8ad88da361fa",
+                "23e33194c4073c0fdd818a70dd944afd5ad206e6",
+                "24b58a2499440cc3d12d2b3c2f52b95f91ff1c0a",
+                "282dd18bd9ae2e265ea40a29b2c637194e9be8b7",
+                "57a049cff2e2be7a302dd9683b2b194c6d06e2d4",
+                "7a0ed40280345b1c11df4c700c71e590738f4257",
+                "96d9183ad4f9e48109fa8d4b8269cf75f13922dd",
+                "9768908ef81cf92fc77cb259c2cf01ca8725de88",
+                "9955b27b9bb98d87591208e19eb01c51d29fd467",
+                "a7b696071bd83d3ee0a0f1b57ac94d6b1f05cac4",
+                "baedce9d2ca11ea2cdf54395a74eb038087777a4",
+                "e969f42ed112dd702a9453beb9df6c12ae2d3805",
+                "f8d15c2775835fd61ea5e06bb0ab99232f5ec446"
+            ]
+        },
+        "https://dart.googlesource.com/pedantic.git": {
+            "refs": [
+                "66f2f6c27581c7936482e83be80b27be2719901c"
+            ]
+        },
+        "https://dart.googlesource.com/platform.dart.git": {
+            "refs": [
+                "1ffad63428bbd1b3ecaa15926bacfb724023648c"
             ]
         },
         "https://dart.googlesource.com/pool.git": {
             "refs": [
+                "1ea5b031cfda37786d305292cb8104dffb45d9ae",
+                "4c490001446d8ba3d361b99d8befd6a4f61abc7a",
+                "650e5d3eff10529c65ef45b5fcb4bca270c7ea8f",
+                "694cfd867d8d84857fc42a8d07933013f0d25305",
+                "77001024a16126cc5718e654ea3e57bbf6e7fac3",
+                "7abe634002a1ba8a0928eded086062f1307ccfae",
                 "7bfc71b39742753a88688e56e55a828a2f5dc0bf",
                 "832c5ab5eaee444354a8c796f7998bf744f169af",
                 "88e463600c636a0d8cdb5dc306524ebf04b06baf",
                 "924fb04353cec915d927f9f1aed88e2eda92b98a",
+                "a10a0f918802f7b3856cb1f4c78f9073f28a0dd8",
+                "a5bee3540a2b5b3a3c34038667e7cd7bb514dc62",
+                "ad4e2a7fde6a2937b2f7f59af271b437376d8e3d",
                 "bf27900420ba382b6e5c0484ab3c79daad703dcd",
-                "f85209d83cb0aa3c5612ed80de32df51ba580abd"
+                "c118f69d8a6441a8453bf7d455fd7c79d3ee1497",
+                "f85209d83cb0aa3c5612ed80de32df51ba580abd",
+                "fa84ddd0e39f45bf3f09dcc5d6b9fbdda7820fef"
+            ]
+        },
+        "https://dart.googlesource.com/process.dart.git": {
+            "refs": [
+                "56ece43b53b64c63ae51ec184b76bd5360c28d0b"
             ]
         },
         "https://dart.googlesource.com/protobuf.git": {
@@ -771,12 +1329,25 @@
                 "0bab78d9538e49d50023bab36159b15ff3c369eb",
                 "14bbd0bd7ff9b7e322ff4e85bd243f6905170b92",
                 "1aaa332af75c61ff32739821f7ec52186ff18d4c",
+                "20ec6856b65b7fd6445219fdec24d90b414f7469",
+                "2d6c6037cee6c5f683e8f38e598443f9bec74b94",
                 "456e2ee704af27225e25ba092164f66dcbf63000",
                 "610943a3bed70c1c2079af5fca02462df10d223f",
+                "75bc380a6e9601565606a13dee16c5ab2bf5019c",
+                "7d2d29340e10b1e1d7d298dd5166dbe0da7f0be5",
                 "84079e8b8531309e06ba7276b1c28bdca9210ad6",
                 "9e30258e0aa6a6430ee36c84b75308a9702fde42",
+                "a293fb9c866b1def3d3e7fffc5f6763a2ec59cc9",
+                "a912f76df9e00d789baccf25b12fcb5d19ac14be",
+                "b7613581d847e1e36e76f0e36db3a412d8fea5b1",
                 "b7dd58cdbd879beee4c3fbf8ee80fce8e97bad26",
+                "b90a4c44d56075eb23ee38ae56ce0febfd7f280f",
+                "ba29983968de5b54196c6c2a5cff1afbdda24ae2",
                 "bce362dec347ae3cca085bd28db2aa2649f754e5",
+                "c16bc891978a1764f0d6d8eca54f420242c78a6a",
+                "c181573c330ff0337db0bab5501deda3a42ba028",
+                "c1eb6cb51af39ccbaa1a8e19349546586a5c8e31",
+                "cc0f287fb6a8680e431eb9210225f1d0ac33c047",
                 "ccf104dbc36929c0f8708285d5f3a8fae206343e",
                 "d5639f45b8468fba684b076b9403ccd5f2290056",
                 "da7279c56734cffed4deb1e3a6f93bdcefccf6b8"
@@ -784,16 +1355,32 @@
         },
         "https://dart.googlesource.com/pub.git": {
             "refs": [
+                "048e3ad2b5e1b4ebe6883addbc95722be6904a7b",
+                "078c7fea0be2656debc675646806da14fa94f853",
+                "0cbaf7a2fb8c8ca543c6f222bf25d5f5c63abbf3",
+                "1779628b386819675130f14326f1e8812901c48f",
                 "1efd3f5e274e153637d99698b0ee454f6f2550ab",
+                "21aa23f148a428ae4dd97a27ecc70b08c1328089",
                 "26c6985c742593d081f8b58450f463a584a4203a",
+                "27adcf41ab43023c45dafb4ef9b1e3ec0885f102",
                 "30bfc439fedba1ee3daadcf542f1483479bc4909",
+                "3a7dc04eda4e7c359aed35176658bb2acc264f2e",
+                "42819a1e10f803eb7f6296692c5a976e1c647360",
                 "469eb6193c0a49495ea2ce7432cf749f077ad596",
+                "4bd757ce1dad04035fb0dbc6156879af23d8b3b8",
                 "52f512315bc886de487061091ef82056abf9dab8",
                 "58de642dc1d07601f6eb2b4ecd94555c0210106b",
                 "639536aa78f7382b4a948669bfdc283f830b2ae9",
+                "6506cc01b1bd17aff782037817d86a88a1c312e8",
                 "74408212b5348003381bc63f3b59274aaa23cfa3",
+                "79952b99861109c526f8fc6c513d1ac297c690d9",
+                "8434b40d6a21dece68c4880e59dbdedfbd6bd7e5",
+                "a3689f03168c896dd1cb0db8a60c568b38ee16bf",
+                "a949b329b1b51f5f3973a790e0a0a45897d837de",
                 "b21ac685bc64f6e81050ec0093aa83543d66e2fd",
                 "b2c03b448a47fdd52800609b9222cd737be3a934",
+                "be6868ba132c782d9835b1638a634ecb73428579",
+                "dcb6abac2d7d43258c03b348be42bf4aab9529b1",
                 "ddc1c2fd2e2a7cd94a0b92ea033961a25f4ad517",
                 "ea4a1c854690d3abceb92c8cc2c6454470f9d5a7",
                 "ec276d10a7fa0f6c6ec005340fb9ad29f3b012d0",
@@ -802,105 +1389,243 @@
         },
         "https://dart.googlesource.com/pub_semver.git": {
             "refs": [
+                "028b43506a3f7ec7f7b4673a78ba3da3d5fb138d",
+                "17231113f98c80285881cc4452863bcfd085d1a8",
+                "28159b8c5b96fc2709d0904389d7932880f68659",
+                "3175ba0a58a96fb23f8d68b5f5c44d1a5b30cc16",
+                "3946e33446365aa6af84abc0b1f47ad3a6f3b490",
+                "45721813dea1591a7689f93762afa358cbf260c7",
+                "5c0b4bfd5ca57fe16f1319c581dc8c882e9b8cb2",
+                "860e3d825ff7ff9f3422091fe5948f5fd0fb0dcd",
                 "8cce9d00431b6653026cdfcf6cf8548078c56f02",
                 "8e9fcb9d3f89f06022387f906da4d380688f935c",
                 "960f91309e325ae037e5f1434acb77b83a12d91e",
+                "a43ad72fb6b7869607581b5fedcb186d1e74276a",
                 "a9025f3cc23ebb0f86c0af8759d95306b9133ce0",
+                "c03435229a57d7b158df9feafdb5a2ccaef28d39",
+                "c0e6ea74ccfbfdb2ef54c7cd9ad31455ca8e481f",
                 "d9e5ee68a350fbf4319bd4dfcb895fc016337d3a",
-                "dfcad38866fb1e94e8ca91bff3dddd5189fb0794"
+                "dfcad38866fb1e94e8ca91bff3dddd5189fb0794",
+                "ea6c54019948dc03042c595ce9413e17aaf7aa38",
+                "f0be74a446f971db478e68b59ea62e393d6df3bd"
+            ]
+        },
+        "https://dart.googlesource.com/root_certificates.git": {
+            "refs": [
+                "692f6d6488af68e0121317a9c2c9eb393eb0ee50"
             ]
         },
         "https://dart.googlesource.com/sdk.git": {
             "refs": [
                 "0bf5d0bb49d7872a1a01e55dbea63ad7455d754e",
+                "20d25283c9644bbfcfaba7ac2ef7988741a5a6ac",
                 "2d5dfe32cf2e6b3c3d6b396885502a5402b4fc72",
                 "2f5a888a5e6a7316074416822a9584d54e3f5ab5",
                 "416e33b0ffaef062a60ec966bb8c82ed2b83f128",
+                "45a360d262c259d1cb04973dca9c3377d59b6b7c",
                 "4a4ff9fba9ca67e9406743a24a3c47ad64d9e9c2",
                 "4bb26ad346b166d759773e01ffc8247893b9681e",
+                "51d6128b190eef58fc16e160937b069631776cce",
+                "57061b644e84a8280ce535c5b39d95fe6a9644ef",
                 "5a8921e0042c662ea2adbac35ea051dec20a5341",
+                "5b42fc09c981093abd0475e3630b9448ba6aa188",
+                "63c2197b976931c6472d9dc9574f98ff2ae9408c",
+                "6fbb9236c65a54c26830f047b88709ac11bdf2ae",
                 "782552bdddc112c62db28ec7e9b2763f4457a3ea",
+                "7a6514d1377175decd3a886fe4190fbbebddac3a",
+                "7aa128f98118c96009b820ae605ffd27d705707b",
+                "7c64e31f4c3eaa0bcfd29ce40459b74cf20a806d",
                 "7d7fbb30e0ca19c76800b1ad388fa55d09037e66",
                 "7e6469bd51d404916395a47b011d907d2c905121",
                 "7fce3544047c41018b8c00b4453c0262f463dd74",
+                "8b57d23a7246566a82ab1463ac64e192a0ecd2b6",
                 "9576691c37d84d3b66a9722e4fadacc764f04b21",
                 "963eac24852a989a1244586fea61b173e98677dd",
                 "9aa7097f2e3e80647d539b5575273257e1883633",
                 "9ac06cdd18015c83a25921e26912c96e3fbe22c2",
+                "9f52c6d20d22cad84cb23348a014b0b52b64917f",
                 "a8bfb132c5f7b9555d13ea79eaf0eaa77825824d",
                 "b1a587b650acd12239743dd1f9d88d6fe19ae442",
                 "bc20d999d68a261ae12c56bab7ba304bd0de5346",
+                "c766fffb626ecac3be237703d4c68178f308e5f3",
                 "c7e47c6c5df6ffa16d92704d5291b3387f974648",
                 "cf0d430bc6a507b3d54d4b5bfc91b308f0325178",
-                "d684a576a6aa954ae107a03b2b4e1d61c3bebe93"
+                "d684a576a6aa954ae107a03b2b4e1d61c3bebe93",
+                "d7a812ba00162203f828480140fb9fa2f80927ea",
+                "d97d5ad9889378e70f9803f8bf1ba3e0781ab1b8",
+                "e0caea366989174c2835c52beae1717133d0a956"
             ]
         },
         "https://dart.googlesource.com/shelf.git": {
             "refs": [
                 "082d3ac2d13a98700d8148e8fad8f3e12a6fd0e1",
+                "1acbc673326e5b31280184744f2864a8f92c5b46",
+                "1c2104737973715426035c11ba840c7f23d8f186",
                 "2536c15a562cb183dabbc628824a215663830325",
+                "2926f76dc0f713b46ba5d9dbc391e29c6d1521a9",
                 "2af8529640d10a247ebfa4e17e629a2ff5273656",
                 "2b5b683e78f5cc84e479a43297fd7b5489d7db02",
+                "46483f896cc4308ee3d8e997030ae799b72aa16a",
                 "4c54af6b6baa9404826d234385c1bf69575dfd47",
+                "56919a10d8898ae9cceab7dea1fa2ff6272ae263",
+                "592656f9f5af6392509e9ff20a035fd30e5e5099",
                 "71248e727317930f244c4b4535e9733bcfc66677",
+                "733588f90572801574f68d636338f61c12781cd1",
                 "74d58bc1499115f91f8120dbd08f77c83f7f343d",
+                "78ac724a7944700340a3cef28c84bccbe62e9367",
+                "823966f0cb4fa26d549d31ca07c5d7b19bb9f842",
+                "8f8f3703efd241f9cf6b18e36e0067ca74c47fd8",
+                "8fca9d96f0a30beb4fec394849e507b1900eaf25",
                 "900731b313dabf48927a82f2124e5a996c4a3d05",
+                "9a792b49f07bd9d310d83cd103035cc60a9956af",
                 "9f2dffecbe8f219146a077e401758602752d486a",
                 "b39e61196ce555dc1d3a0c3da695228fa6bdebb8",
+                "bd59ead508e55b1db354ab53d666715595b5bd79",
                 "c4b94d3879e627c0b1fe95d9e1ce5f93ebf122d3",
                 "dd830a0338b31bee92fe7ebc20b9bb963403b6b0",
                 "de91a5b8c1de05f622c0c6f1eab38d5f31e0113f",
+                "e3cfe796ad478cb4b61ad8e68ea29644c0bb1037",
                 "f30d65034a868530a9aa9ada7c3067d22fa01185",
                 "f5600534e3e49ebed02e1e14ec82553958d86f36"
             ]
         },
+        "https://dart.googlesource.com/shelf_packages_handler.git": {
+            "refs": [
+                "78302e67c035047e6348e692b0c1182131f0fe35"
+            ]
+        },
+        "https://dart.googlesource.com/shelf_proxy.git": {
+            "refs": [
+                "ccd311f64d8689e7a145d703ba267975d6df9e28"
+            ]
+        },
+        "https://dart.googlesource.com/shelf_static.git": {
+            "refs": [
+                "202ec1a53c9a830c17cf3b718d089cf7eba568ad"
+            ]
+        },
+        "https://dart.googlesource.com/shelf_web_socket.git": {
+            "refs": [
+                "24fb8a04befa75a94ac63a27047b231d1a22aab4"
+            ]
+        },
         "https://dart.googlesource.com/source_map_stack_trace.git": {
             "refs": [
+                "08a81a81710fe1442a705c5761bccf3280940a9c",
+                "16e54fd9fc088961773340cb5c3688a089387135",
+                "196d7bfa58ef307687907c323ab8e5fb1f382afa",
+                "1c3026f69d9771acf2f8c176a1ab750463309cce",
+                "220962658bf67304207aedc7eeedca6ef64a7c72",
+                "45ea3688b6bec1eb565c38c4e28f37b01f8a0fa9",
+                "72dbf21a33293b2b8434d0a9751e36f9463981ac",
                 "741b6ceb4b6cdb8ff620664337d7ecc63ca52cc1",
-                "96a8213dacf7cd42aefb1311491a4169826f98d2"
+                "80709f2d2fe5086ab50d744a28a2d26ea4384a1b",
+                "8d8078fcc81c8f7936805cd277198493e0b7fc62",
+                "96a8213dacf7cd42aefb1311491a4169826f98d2",
+                "adea3e51269f355514b59b66a4fcecabd1fa6e95",
+                "b83af01938225c1706bbc6c1f86bd4a394f91380",
+                "c75649651d01826236e3ab7093d277a70756905a"
             ]
         },
         "https://dart.googlesource.com/source_maps.git": {
             "refs": [
+                "0a4b030b381996c203f054f4f3f93cd256fec83a",
                 "17695e81d9ad129d20effd3d5c4f1cfa03f5add8",
                 "198d32bbde2f5736c04dfbab306a17096fd1648b",
+                "55e92a4b0a8560d5b2b3bb7255249afdb8186ea6",
+                "6499ee3adac8d469e2953e2e8ba4bdb4c2fbef90",
+                "87dc58736b5bd334502005cdbd4d325aba9bc696",
+                "97c4833100b1bd8ea7e4a2fa1808383007e2d1e8",
+                "a112e981a985a8af2047ee25a9cf56b0d5413b02",
+                "b031e2cdbef5675ab9a92025202d323a5e7cc526",
                 "caa79c2011015759c6cf3299f299f5cccdf8bb61",
-                "e5e9d343302acf7df2145316ae4e56026c550989"
+                "d995912983f4f4c33a040c629952fb4632aeea70",
+                "dd5b5cd5704927d99b33065a24d7eb03c535034d",
+                "e5e9d343302acf7df2145316ae4e56026c550989",
+                "e93565b43a7b6b367789de8ffba969c4ebeeb317",
+                "eb3d40a6193adc63da958ed9451e3218bd6e95a0"
             ]
         },
         "https://dart.googlesource.com/source_span.git": {
             "refs": [
+                "1be3c44045a06dff840d2ed3a13e6082d7a03a23",
+                "21a403a75b6887fbd811fb53b74b08c2cef67ab6",
                 "22a243eb50d926935a8a1300a49af6d2988c3ae6",
+                "24151fd80e4557a626f81f2bc0d6a2ebde172cae",
+                "37735aecc5d8c0fb75ed61691bae056510b357bb",
+                "3951ba50ec29b9870c3131c6ddcc88700d26f3ee",
+                "48d0f574ee0a92a241c865d47f461803a664b5ba",
+                "4dc78fb33d37153a3ac55aee201a9a7b62c40ce7",
                 "59a3903521dbf4c38c77df73669e73174a170327",
+                "72d5c55e455c3940c37fe768730f5922e7a1f309",
                 "89520f3009e332ce2b6675f71dca166521c36cc4",
+                "9398e2464e24d2f15cccfa1199381a6247403829",
+                "b739fbf161e0b3058d6fda6f95953b359afdd0fb",
+                "d1d47e550b6f77ed9b4907339a8a5e430b9ca314",
+                "dc189b455d823e2919667f6c5dcb41ab7483bce0",
                 "e6a34591b7f7880c7ca0fcb95b858ccf7f8be304",
                 "ec100b7f12e9d36d2cdb3c369fefde736de4a550"
             ]
         },
         "https://dart.googlesource.com/sse.git": {
             "refs": [
+                "11e83a0810c06b6f468ca8f50117ab97fcf9c92e",
+                "283568dd4865cc51e25370ed107fcbdb68759c22",
+                "2df072848a6090d3ed67f30c69e86ec4d6b96cd6",
+                "4e63b08cbe4974c834e43e30c52af632ad147cea",
                 "52d042ff9ab2d0e5bc26805d74a03077a67861e1",
                 "7dcde164d5bfe707441f206379ef33e7509e2aac",
+                "8c03b73f90d951f5b33dd496593718107c79f97a",
+                "8d018dd606f1f8a957c51de16159d532ce664569",
+                "8d2e2f0d00a5b46f005c621a3b23465ce7348724",
+                "9084339389eb441d0c0518cddac211a097e78657",
                 "af2c5c572a8da6d2f7551b80d75121f2a38a4c79",
+                "b53ba14de4fe9823432ebfbb4ec04f23a620ec50",
                 "b573a1e9a61f5f3e2198becfa3f4f2e8decd1e90",
-                "b97dc3ad9a58a454dc5ffe5b3ec814dadc389e32"
+                "b97dc3ad9a58a454dc5ffe5b3ec814dadc389e32",
+                "bfcbcd7a7320c74dfee154152419381c508a1fad",
+                "e24108561ec359a6f67c26e27e9f4ad7b8208180",
+                "eeb2588ce56a5b2f1e4bbd88c2b35c910c505b71"
             ]
         },
         "https://dart.googlesource.com/stack_trace.git": {
             "refs": [
+                "0f4710c9d2678530501e1e88c77f955b68450325",
                 "115bcd9591d251dab7a5ad518655c2124a1cc525",
+                "155f12c51226d6372f6722f5e55c38ef39625006",
+                "17f09c2c6845bb31c7c385acecce5befb8527a13",
+                "4ddd86d5d22aad9a8e8e9a06fd0a6a6271736135",
                 "4fd3e2a2dc6611febf4cfb9197ebf9e60fc6a34d",
+                "5220580872625ddee41e9ca9a5f3364789b2f0f6",
                 "5fe4cfea7f0d8e67b7d5738d2e1c64a18b5ba450",
+                "6ceb191ace71c18ccf5648f6b2e8be52da39c56f",
+                "86f7e30912d3cac447a751dc0bf2bafd473492dd",
+                "9c1b1c506053e98602957b79f45930b31ffdba29",
                 "ab09060b82c936c38c04eb49c1154b83f6648349",
-                "b660cfa444d46bcceb3a0eacbd6a2a7829da11de"
+                "b660cfa444d46bcceb3a0eacbd6a2a7829da11de",
+                "bcf2a0b1b7d4abaeedcb8b18ff41e4994aea1b17",
+                "c08ee90b83380381a893d1e77a9a533d632f40e0",
+                "dce00134f6558086e8963e37d0b1ba0830862c01"
             ]
         },
         "https://dart.googlesource.com/stream_channel.git": {
             "refs": [
+                "0ce7ab69c3a2ab83cdeb9dc60e1bacbb83abc165",
+                "178104d0f1316b0120cf0031b8dbae0cbfec4c26",
                 "28a65331aa2d66a5e953205aa462bcdb1e240a5b",
                 "31a3aba8a78a78b266fbf7474f19cd4ba9ca562e",
+                "3b9926876dc06970b583c34d0cb359ef976c4350",
+                "3fa3e40c75c210d617b8b943b9b8f580e9866a89",
                 "71fe6dd315e7f451466da80f7af2661cd28aaaea",
+                "74646ea6d87cf3b3ef5b08656b2afd326e4e5beb",
+                "8e0d7ef1f4a3fb97fbd82e11cd539093f58511f3",
+                "914304769d036867b993bd7f9c111145f1ca4ab0",
+                "a20ccd4142947637213393803289787a233402a1",
+                "a5129ca44322a7024074ca38fb98e343dcb638c7",
+                "b1d3384638064a4f25beacef3be770e2c4534408",
                 "b41ff7a25395ace8b23e454e3d1a3459a71306ca",
+                "e02a5ddef804f0d546a405ab3917fb27788acaef",
+                "e54234f94da929153b012de2bba75c5246a52538",
                 "f4407168b275fcde9187baefd7dbce76d0992825"
             ]
         },
@@ -908,80 +1633,162 @@
             "refs": [
                 "084b201c54b168aced178fff41fce71e3869ae42",
                 "0de03b5279a04aa05052ce306f90fca473c6fd1a",
+                "0e53bf9059e8e22a3b346aac7ec755a0f8314eb6",
+                "1b63e6e5db5933d7be0a45da6e1129fe00262734",
+                "29e471ea98762db8052cca0e6a69ef9c7999abed",
+                "35657e2ae381612468aa2c432e89d7357c0b568c",
+                "4a5cbc5c1127151ea507cc9da797b829857607e8",
                 "69212690d491603a511904a7a84cd502f34bf7a9",
+                "6bb314f2176598a5ecc4770a3bbd42626e18b576",
                 "77de235c061a09264cae920e52939787325c8cae",
                 "7b37c1b3d1ca6b581792e6ba385f651573af4a45",
-                "e1cab8f0538b50f6d7180598752cf5a7e07e74db"
+                "a2bcdb575f6bb30b944b4f632ea95d8dc4f914bd",
+                "c637deb8d998b72a5807afbd06aba8370db725c0",
+                "da9142cf9809e7e1364144b8193ec60d87f0a4b8",
+                "e1cab8f0538b50f6d7180598752cf5a7e07e74db",
+                "ebc30a3dec2552bbdb481099180618c22c122b69",
+                "f7a656fdaaab069fc6f8c9d34d3205ce6100dfb1"
             ]
         },
         "https://dart.googlesource.com/sync_http.git": {
             "refs": [
+                "36a1bd086798cbdb48e7541b05e5a14b5e5bb56b",
+                "39509d69fd5a9c3da46eab48fcafdf62e6ad4580",
                 "47e6b264a209d0d806cfe9cdad8b6c69ce231986",
                 "6666fff944221891182e1f80bf56569338164d72",
                 "7622bdd07501f3f279212e355325b7c84a2b0a08",
+                "8233f74cd8a87707c13beceb59b56bca41b52966",
                 "91c0dd5ef9a008f0277aadcfd83036f82e572d09",
+                "b59c134f2e34d12acac110d4f17f83e5a7db4330",
+                "b849559fedc7c5d19a68950f255b6edde6eec6ef",
                 "c07f96f89a7eec7e3daac641fa6c587224fcfbaa",
-                "dc54465f07d9652875deeade643256dafa2fbc6c"
+                "c3d6ad48ec997c56b7f076bc9f8b4134c4a9225c",
+                "dc54465f07d9652875deeade643256dafa2fbc6c",
+                "f5c1f18f579752112870fa2f1860470d28c6f605",
+                "f96db9543e5a9f62833ca9a24269b12fcf63d45b"
             ]
         },
         "https://dart.googlesource.com/term_glyph.git": {
             "refs": [
                 "19d8c08a4e81122639129c62049896021910c932",
+                "1b28285a7e818b8e87c4d2119d968c5b36d73c7a",
                 "38a158f55006cf30942c928171ea601ee5e0308f",
+                "423700a3c019dc67f93d2bd6578016a1402506f7",
+                "4885b7f8af6931e23d3aa6d1767ee3f9a626923d",
+                "4c5a49664ee78b62c35de528cec5a9469bb84936",
                 "52677db71a2c6b6d0018ebbe5ed7552dbae1248f",
+                "6a0f9b6fb645ba75e7a00a4e20072678327a0347",
+                "741efdedf9da62ee66a06c295d36fa28f8780e24",
+                "822cd5b3418615c6db715a796c2c9ba9acb63b0d",
+                "85a4aa6bf25cd6ecaa5c56a1b259b2d95264a439",
+                "8cd931827bc3bfc1c62fd7ea44cbbc99b8a94f4d",
+                "9d8956f4a355cc8c7e4695438266852488e3bbd4",
                 "9ed8ed96fdd84cb7b72ee1be3e86010969fa95d4",
-                "c86e8171ee7e9f6fc8e775e0be755a603dd0b72d"
+                "c86e8171ee7e9f6fc8e775e0be755a603dd0b72d",
+                "d275a8f7482b6a5e4f15d0da6feb66c24f52eb94",
+                "ec7cf7bb51ebb7d55760a1359f6697690dbc06ba",
+                "f6856e264f8f88309be36a7eed6defce2ab38b24"
             ]
         },
         "https://dart.googlesource.com/test.git": {
             "refs": [
+                "099dcc4d052a30c6921489cfbefa1c8531d12975",
                 "0d5fe4dcb20b4b601b4350398d32e3c47321f841",
                 "14f99ecdcb74778654d936ce26c70798a3b6649f",
+                "173a36f2cd4fbf1b2309a87722664d802c74009b",
                 "20967732ea9dd30240a6429621ab2f82874bd9f0",
+                "27dcae11f6630c0d980f521cf372e962d286e9d3",
                 "2be5ca067bdf09e999be2ad760ab8efab854e789",
+                "309596e4e8d0d26fe0fc61d825f10a7371c58257",
                 "3256c23cc753a184bb3bf27610a7c8410735e3ac",
                 "329c6dff4dfcb178ba6c7009cf1c1b9215b317aa",
+                "3429712b44b9c6222437312601044c44dc6f5e4e",
+                "3ba78f15538399073d0b5aba4ec19b1378af1625",
+                "43ff5bf9e25330aec1144bf14ef2a22fc95cda57",
                 "5aef9719ad9b598260c062b2a90a50d2f50a78f3",
+                "6700049d5de97906d033f4271f67f7599090bf4e",
+                "6a4e75a6283b1366ea21067f9ced0b6c87745d4a",
                 "8083c8f24ffbca58cc0385add03c296b70636e7a",
                 "84eba115521b74e848f096572a2d3e4d3607e8fa",
                 "8643fbf375330cd1099cdc7434306532b4bcaaf1",
                 "8bbb8474e3ff85aa9450c2b00f9476b34ebdd679",
                 "8e8a83607d90a7a6813fa378b2d1962a2fc0d44b",
+                "8ea42987b0fee4a31ec97c101d0c66a461bf18f3",
                 "9e349d0e9f6c477584ea320f7ba2f49f761d84ac",
                 "a833663e56b6182f8372180f5c95d1c01b531150",
+                "b25dac9936c2ea9605b54a3418e0c956937da48f",
+                "b6aba5544628730b7d6a38eae1aef9117a1bb235",
                 "b99d556ec6096965eb177111299c0783678200f6",
                 "bcc5228370ba909e5774441398b8585ba9874423",
                 "bd92e633e7f05edc3301865bdc00d1ae181cb1f1",
+                "cc0598b2c3bf3a7439f10f9542a8d01ff50b69e9",
+                "cec47c1c3f7a5d80f1e8d02ead05faaad88cca00",
                 "f364fc8291d668d85c702a5b9f9a4f2e5c1ade0e",
-                "f95c0f5c10fa9af35014117cb00ec17d2a117265"
+                "f95c0f5c10fa9af35014117cb00ec17d2a117265",
+                "fb4ccaf6c68fcc1d208c5c53a52d8e0e718bdffe"
             ]
         },
         "https://dart.googlesource.com/test_descriptor.git": {
             "refs": [
+                "030193dfdfbf85930eae8536909c546151da9e9c",
+                "13dbc20e9d5c354b670353220c3ab95642ae228c",
+                "1d4a967dd17874f3835af30720e9820c74977569",
                 "2f19400259e6ec6801a79dcbf038b235545ab400",
+                "35f97afacb2b7fe627f6ed0bede722fd48980848",
                 "408526a84e74d7af0f9c8c3fbb49ce9178927ee0",
+                "54a4c592226a986abd04ed2cb72dca9bf92787c5",
+                "59ce97fae49709fa1f479efa808c031a576e617e",
+                "5ed5d7f6bf1191592995dcb8eedbbc17df69d386",
+                "66f14ce9159f425da000ad105e0b890fe396c2b7",
                 "90743bc16bc00526a1b9a64f813614be9b2479d9",
                 "92fa0c551267b38e4b27c9f74976ae4cd96d8b1e",
                 "a3db1efe3dc725dcae9ee61647d3bfc19b3231ac",
-                "b23d7ccb0f9882e161fb4dea75b2237bf428432b"
+                "aa11162f55a93fc6cefc927c5189b5f74decb957",
+                "b23d7ccb0f9882e161fb4dea75b2237bf428432b",
+                "b73c691c4e38e23bf8383148d3d68fa65e4a57e9",
+                "be7ce0751d85abd1ef605d14d359f499e1ba8fe2",
+                "ead23c1e7df079ac0f6457a35f7a71432892e527"
             ]
         },
         "https://dart.googlesource.com/test_process.git": {
             "refs": [
+                "1774aa7a94ebbc60924a7f7174adb02e84458c25",
+                "2a6ee23fc2550fa466105819f5335fcfbab14035",
+                "3e695bcfeab551473ddc288970f345f30e5e1375",
                 "52ee3f5ab70ed965bb7122c1d499081fbccd0bde",
                 "5b0349ca18fe48cd527f74ac883db2964cbdba40",
+                "5ff212250f6cc5f850b26295e7c8123bd5238ea3",
                 "6223572ca16d7585d5f08d9281de6a5734e45150",
+                "62ea2ba786d9e0e7cccedaf305d3972ee41fbc6a",
+                "7c73ec8a8a6e0e63d0ec27d70c21ca4323fb5e8f",
+                "7fe39afbb6c444f256c1ec0eef008edebcd44644",
                 "862eaf3b825f5e97b278d84a2afbe81b3e8a1683",
-                "a7ca20b73f28d220e6478254082ea2b52f46dc97"
+                "946bc27abd9726c4dadb9afae7c56f55df5945ed",
+                "a7ca20b73f28d220e6478254082ea2b52f46dc97",
+                "b360784a9149b15888aed8d7cf167bb46fe733d5",
+                "d68de5bc53bf33a12334d06748af9db4844d66f0",
+                "f76d0b8fcf078d629cb57f859db79be93d6323d5"
             ]
         },
         "https://dart.googlesource.com/test_reflective_loader.git": {
             "refs": [
+                "0bfaad91ed308ce9da11b48395c8210d7542c16b",
+                "40d61b16647cd61b02d806fea46362ef07e7c502",
+                "45c57d62fb08471681cd0b0a1c3b131bf0122929",
+                "52b6753852661787208e003f9716b079026c7ac7",
                 "598af2f503955020af0eaa82558d574a03934078",
                 "6e648863b39aab8d0204e769d25805eea9db0ac4",
+                "6edf5358b53bfda487840bad1a03d089326fa08c",
                 "816942eaeeac30cc59d8699f1e94ad779cc53c06",
+                "8d0de01bbe852fea1f8e33aba907abcba50a8a1e",
+                "9862703a3d14848376c8efde271c88022fba91eb",
                 "9e35c9e00b8b6299e9295c0f29617af39276717d",
-                "faade6299d1823f0d062eb5e98f3b440ddcea7c6"
+                "a85a930ad3736f93b96f6cc104d3576c1ae19e0e",
+                "c4c2d5c3f94a96f3fc79e9e28944fba391bc544c",
+                "cf58259b91c4d3cccc90abd4c0b44273e6421646",
+                "ef934b7a894d78601ba67d8f6207bd4505690456",
+                "faade6299d1823f0d062eb5e98f3b440ddcea7c6",
+                "fcfce37666672edac849d2af6dffc0f8df236a94"
             ]
         },
         "https://dart.googlesource.com/tools.git": {
@@ -989,47 +1796,102 @@
                 "06493ded8ca27996d979f9f903d2bc24a1215064",
                 "1c5b8b949128d62182e162ef65a2e6f3feb19acf",
                 "24707e094cd761178eb76e725ce17f51e22fd442",
+                "2c8cbd63b96d94ef4fbc0c7df6fd5eff65fc9a85",
+                "2f59ab443ab829dfbd2922d0edac44cda27889ae",
                 "4321aecf2cb618dceab5d90adf0cb2ef7207169c",
                 "43a8582a85d2220b5f1ca8383d97587792085b36",
                 "4a284152c263a5d3429d5ab6acfdb70eca2ebcfb",
+                "545d7e1c73ce21b8c91f638021f9d487d324a501",
                 "62bc13bc086a66ce9a6a3e64865c82d17a1379b3",
                 "6866f9b19553625cc8af099d67aecbfb02067dcb",
                 "6a7dd15748e63db7d41cfee8294c54636b668f41",
                 "6c1eb214e09f3703255b563f9effbbb2e6989f6b",
                 "7f986eaa15f493dd2da081ba0daa49be22fcc2fb",
                 "7fec8be9af0cd0367d03dbec29b66b3f46565720",
+                "81ff996e48962ccfa008a94fd9fe323b98e08798",
                 "87270e60a5c92f127acb29d6e0dbc2d920c3f669",
+                "8d18d01192077e85839539de9afdf679622445c8",
+                "af38b2bd26b45353a4ef624ccfd8adfcd6d0f983",
                 "b412ba4550bb634caf3c1064b7ebb671cd5e9247",
                 "b51f39d01f5a4af33428a0189cd62595c01e23de",
+                "bed358ea8ca10551c710282be96cf6e95620fb24",
                 "d74f9e13dc02736f12ae57d5984c57024113cf5a",
                 "e660a68dce659311fb47735ab00365e26fca2fe3",
                 "eaeb52bcd3004be92b105e90bcf8e4ada01dd659",
+                "f611290b530123ee2f0a3fda7c440d85dd080a30",
+                "f6e67f2223fd5f9c6bdb3ace908d22c73ea02bc5",
                 "f882de9ba86712003728d4663e1b73a620d352b1",
                 "fd7cc89aaac774fb34502502803a3bcf62cb83cd"
             ]
         },
         "https://dart.googlesource.com/typed_data.git": {
             "refs": [
+                "1e838b8ec85699b5b99e793d004ae315e72fcbc0",
+                "29ce5a92b03326d0b8035916ac04f528874994bd",
                 "365468a74251c930a463daf5b8f13227e269111a",
+                "375efaa02a13dad0785cfbd9bdcb9f09aa8ef529",
+                "6369490ede1c87a4a5758304a606a6e4eee364b9",
+                "693f48e3d1d528f6f26d7069a2ad29b460650455",
                 "6abfafdcf661cd8a814619d7e2a3e99edb3a3862",
+                "6f6d81d64cd698f8def5116fc97b7b1fb7441696",
+                "80e8943524a627f7ff421ace824f38105983e89a",
                 "85299290551297a28202b6e7a177bb787f790ffd",
-                "d14f9654f7a5d6baa7dcc27691bd0fa56769fb67"
+                "9c209b9c99ca7528a45c23d5d09579788b3ea81b",
+                "a20be901e11eddcbd6e5735fb01b64d28c94c49d",
+                "bb10b64f9a56b8fb49307d4465474bf1c1309f6d",
+                "d14f9654f7a5d6baa7dcc27691bd0fa56769fb67",
+                "d85363d2efb333afce07ec409a529ec32986e1a2",
+                "f858046fb420cf644e7d8cb86b7893f2830d8a6c"
+            ]
+        },
+        "https://dart.googlesource.com/usage.git": {
+            "refs": [
+                "0698711985b332432ce9a901bbbd3b1ed227b090",
+                "09bb8472fdafff2c48a19aabbcf57b3af0f43934",
+                "1d3c31e780af665fb796a27898a441fcb7d263db",
+                "2773c7d334db9a902582feb8c5f38899c83d7b54",
+                "399770f45ed2d384d79395c0341a04fb25609a4d",
+                "67ecd7d1328347ec15cbf8d8a46918df75a66af8",
+                "6ee09084596f9829371bb836f9d1ca05820f29ea",
+                "7b12d510b5abde8a216437b8430ccfd02273625c",
+                "e99690ae6d5fa9ec24ac5218bcd3621e8e3ae8a9",
+                "f0cb8f7cce8b675255c81488dbab8cf9f2f56404",
+                "fee1d9d9c295362f6edebfeebb9f8187711c55ab"
             ]
         },
         "https://dart.googlesource.com/watcher.git": {
             "refs": [
+                "00aa79b0ff5562c9dafb0525891e2e69c51be06d",
                 "0484625589d8512b36a7ad898a6cc6351d24c556",
+                "1aed03e2a8005f45083fdb38cbd4b684cd23082f",
+                "21858a41da1482922e03ee65cdf2169d01d59a67",
+                "32591071a83f632478e702f67e29de6e54428ce9",
+                "3924194385fb215cef483193ed2879a618a3d69c",
+                "3b49c7ea087cc158bdcba19fe8919283fdc1cd86",
                 "3b850778ad0b62db3aa2cfe48832870c2461db30",
+                "3f17faa2d09dca3e23bc07a01f2045ec0cd2837d",
+                "5968409e1d73e21e75fc22a6481d5efaef7f3558",
+                "66cd694ffb7ee6e09ff0cde6c9f788aa47ee1a23",
+                "7457413060ed7403b90b01533a61bd959932122e",
                 "7f3b3a3ea49ba7e21fff240ce8ee616d62d32956",
                 "bc44e6f6b85972e516c44b9ae6c042b4cbd7c72b",
-                "c00fc2a6cd869cdebbc52e00af3d912d25745729"
+                "c00fc2a6cd869cdebbc52e00af3d912d25745729",
+                "e00c0ea769e32821d91c0880da8eb736839a6e6d",
+                "f76997ab0c857dc5537ac0975a9ada92b54ef949"
+            ]
+        },
+        "https://dart.googlesource.com/web-components.git": {
+            "refs": [
+                "8f57dac273412a7172c8ade6f361b407e2e4ed02"
             ]
         },
         "https://dart.googlesource.com/web.git": {
             "refs": [
                 "15599ee684a2d4c1f974eba70013d80103a80cec",
                 "25a0b5b0a4a126788c06738331c5c4af8225f6f8",
+                "26c769a7a3d3162ad31ab3dd909c004e63f4d934",
                 "294391c659526ecd0392eff2ccf133b07f9e1f80",
+                "2f13cd55f938f71bcd16c831110e3a196967337f",
                 "2fe754fb396cb9b87010f0318cfbfc5408346c48",
                 "354e22995859757223cea3fccbff0ad86c540d60",
                 "35fc98dd8f9da175ed0a2dcf246299e922e1e1e2",
@@ -1042,6 +1904,7 @@
                 "bdab4622612101fdcd6529a99cf6ebef6342fb0e",
                 "bdf112ec64d28285cc29c6c78274ff3a827bb79b",
                 "c2d5f63e9ea4c1409d6e159fc7b92dbcf4dc0d4d",
+                "d17fdd2b6ddec289920d02a3df92c3368f0a0e50",
                 "e0ea82dd5e737b0c06fcaad6194731fb6f414791",
                 "e4c4d8126466e28dc137890b8f999da59bdedddd",
                 "eb8c3fc61a1e35f48f865836c7c7342897d91bcc"
@@ -1049,11 +1912,23 @@
         },
         "https://dart.googlesource.com/web_socket_channel.git": {
             "refs": [
+                "1b0561cfec8ff7e9465896eb340ea3c382b59393",
+                "28d7b82986cf931e6d977d973a7849cfc7c0bab9",
+                "3db86bc0a09e1038a0fa418262c8a92211c5de69",
                 "40aa29f1d2167467f5934d755891a8beb62a1239",
+                "40eb2360e10595c2eab33cf61439c45708eb8d29",
+                "5241175e7c66271850d6e75fb9ec90068f9dd3c4",
+                "6448ce532445a8a458fa191d9346df071ae0acad",
                 "7a2039fd7c4c656ab27850926f89103b5f188dab",
+                "7ae4d0f31f700747bfe9fbfc0b7ec860d46f7755",
                 "8e95ea75302180af075295f7dd7ffe922e26f789",
+                "99dbdc5769e19b9eeaf69449a59079153c6a8b1f",
                 "a937243563e8ee75d11fb23610297d4f6e5cb2b9",
-                "bf69990738f173c07e67cf6945551194bc8c2d92"
+                "af945f1ad3ac4193ed70b4ebfbdcba3b9f0198bc",
+                "bf69990738f173c07e67cf6945551194bc8c2d92",
+                "e2fe7f665997ab8e28aa76a8b26483f9903221a8",
+                "eae225866551ea7b51a380064521186a232bc0a4",
+                "eba15419e51836a67fee18d1b7fd1b875d890bc3"
             ]
         },
         "https://dart.googlesource.com/webcore.git": {
@@ -1063,20 +1938,34 @@
         },
         "https://dart.googlesource.com/webdev.git": {
             "refs": [
+                "069b87091b0cd25ae1a5e5927cdf6a475fda5bf7",
                 "234e44c2ba0aa6cee5a36026538ca89457bf0d55",
                 "23aefebea46c1f94c27703743b2c8db1f651bf29",
+                "2539d54bca7143a2dd1a1ec5d55fa38ca481639c",
                 "2947c78c92d1e56ea310fcc63055506e8ef70f79",
                 "29ba1b12c83b5d0e34bc61181801120c36b95c54",
                 "302b6db6125901fd183390e339aff7490cdde3d0",
+                "5081dff0952eb7163f98a508d7b2d976c1573c55",
+                "51b5484348b4a8ede351e8dff0428b083495ba78",
                 "5b7299f5b85706536aeac1c9f470b869ddb39fef",
                 "5bf833d0c277a384ab8bbfc10e7d3d71b8022560",
                 "5f30c560dc4e3df341356c43ec1a766ee6b74a7c",
+                "637b406f325669507b5c1048c19a7c0083c1bd6e",
                 "75417c09181c97786d9539a662834bed9d2f1e77",
                 "7f376d242709e933fff70610503d0c5c09b2e17e",
+                "832b096c0c24798d3df46faa7b7661fe930573c2",
+                "9487a4595f84891b1a01eb6fe998a7b1277dd2d4",
+                "9c4428472b04f50748ea4871829897cff43455a3",
+                "b2405cba63064e655f1276a319ada842a8fb53bf",
                 "bf7b1e59d75381189bc593f4658a9bc1ff4d142e",
+                "c2c8b17c9a1adc19ee3efd847ed2dd6cd7025aec",
                 "c56611255f3f02642da10750448a8c90a9fa7b47",
                 "c8b1cfa9d12c680b612eb1ed7a6b9f99fcce3ac3",
+                "ce9c58139a5d131591e4c9e8ae8484a9040ac155",
+                "cfe97534b33d37c7e0bbac2a3576085f74f2eaa3",
+                "d74fadd6e971278a93bccbec3a688ae71245346a",
                 "e72f365a4408dce73bc023e624adc6a9a72dd7a2",
+                "e887316c2352524baaf3b2e5aadd15ba0773edf6",
                 "eccc7d87982b23f666d5e3e09953dca59ca094e4",
                 "f4856867de3e7b6ea6778dbc47cff44b12f9eed2",
                 "f9a56607fac5ad0c979d2647cf11d3e3be993bf6"
@@ -1085,24 +1974,48 @@
         "https://dart.googlesource.com/yaml.git": {
             "refs": [
                 "0406507fb719b0c8787896475734747fa35f2b78",
+                "0b9041de94b00bc54e8d38daecfe9075b5623996",
+                "0f80b12978f066b3547632dec4a273649138fae4",
                 "2a3727288a9336b6f9b7c5236657414ce1ee5d8a",
                 "30fd9e0cd49b2e04f74769f9b24a0300e400403e",
                 "4cf24ca3bbcb2cd8cbea32fdd355ee5d0a597247",
+                "509fd72c0910746bf25db9c7d890b4c47c286a8c",
+                "56dfaf4fb021ac1c0f1a469e7c8e71ea4f7add2f",
                 "7873b3fb9f16ec83bc7778fed58615fa91f1f042",
-                "e773005ab84e1b4d24132b0a687be7f9a3bfda15"
+                "7930148a3d03d7985ce2b53bc5eb2be9c878dab8",
+                "ad0779d1baa25c6b10a192d080efc45de02b6a32",
+                "ae001879aa377afee2e70cf11b8716d6cc3e2658",
+                "b2fce6cb8f07f091967b849d5434ed495cbb305f",
+                "e5984433a2803d5c67ed0abac5891a55040381ee",
+                "e773005ab84e1b4d24132b0a687be7f9a3bfda15",
+                "f6992752da8883a4bd9b036063371dca552848cc",
+                "fda5b15692ccfa0feb7793a27fe3829b3d0f77fa"
             ]
         },
         "https://dart.googlesource.com/yaml_edit.git": {
             "refs": [
+                "01589b3ce447b03aed991db49f1ec6445ad5476d",
                 "08a146ef8f2c7aba908d2017c9ec840b882c9e51",
+                "299f74594ff9fda412c1da5c0b5d5231d0c6fc42",
                 "35f4248c7bbba289b3899fa55486e2f31ef1a8c5",
+                "386fd331f206e0cb1d081cd76a4fe92fe016c99d",
+                "47eb20e9083954b7b9ec1fb04e7a9f8976a8ed14",
+                "4a9734dda12f63ef9eee4121f87ff4401e25a607",
+                "4fadb43801b07f90b3f0c6065dbce4efc6d8d55e",
+                "54884db790720ac0f7ca491cb9e6d7a0395ad4cb",
                 "57a28daea82a3f00f57a90d5ea6df6a458b2f781",
+                "6abc42a74b76700ad02fa1c1ebd94951b62626b9",
+                "87dcf31fcaada207ae7c3527f9885982534badce",
+                "df1452bfe1653286277a1a8f34dddf3e4fbedd9e",
+                "fbc5cb3ced4b9862b8acfd646389d4fbbd4074d1",
                 "fbdc70acc164af187772e013a2e1364cd05b88dc"
             ]
         },
         "https://fuchsia.googlesource.com/protobuf-gn": {
             "refs": [
-                "ca669f79945418f6229e4fef89b666b2a88cbb10"
+                "b9517855b24624ec4edf4a11c1b7060f4ef237e6",
+                "ca669f79945418f6229e4fef89b666b2a88cbb10",
+                "f872f05cb0378eef9a7a2609076929f0f35b4141"
             ]
         },
         "https://fuchsia.googlesource.com/third_party/protobuf": {
@@ -1794,6 +2707,17 @@
         "https://github.com/findbugsproject/findbugs.git": {
             "refs": [
                 "5fc13043eaf606570bc3723affc8e02e8df50410"
+            ]
+        },
+        "https://github.com/flutter/devtools.git": {
+            "refs": [
+                "013958fbd45351e5975068756b7b9114465a7f98",
+                "026f0adf03725fbab24d601ac74c811808f258e5",
+                "23444af89d716818f099974df3e4fffac87fd886",
+                "8c525828ba33029ed664bf8ea2829b6e5370535f",
+                "95d292626da26505b02417735f77e8922783b477",
+                "bf15e7348d53dc83531d503be94e0c035b604984",
+                "c7a81f64dabb4b9f2cae0cf2c9411ef8bb805191"
             ]
         },
         "https://github.com/fusesource/jansi.git": {
@@ -6732,6 +7656,24 @@
         },
         {
             "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.2/sdk/dartsdk-linux-arm64-release.zip",
+            "sha256": "be67ab8d79140149c8f058cafbadaa2ea8044e603e04b3c4657171c18a48f8a6",
+            "path": "./dartsdk-linux_arm64.zip"
+        },
+        {
+            "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.2/sdk/dartsdk-linux-x64-release.zip",
+            "sha256": "7a0ad877b0785e19018873c8144db3a29c4ab50e7c1aa968800280fd47a25e72",
+            "path": "./dartsdk-linux_amd64.zip"
+        },
+        {
+            "kind": "blob",
+            "url": "https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.2/sdk/dartsdk-macos-arm64-release.zip",
+            "sha256": "7994346806962c2ad2a124f4b2cb976a0260c33f2df2599ddcdc576b9aa3a20e",
+            "path": "./dartsdk-darwin_arm64.zip"
+        },
+        {
+            "kind": "blob",
             "url": "https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.20.17.tar.xz",
             "sha256": "d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e",
             "path": "work/.build/tarballs/linux-4.20.17.tar.xz"
@@ -7617,6 +8559,36 @@
             "kind": "tar.gz",
             "url": "https://pub.dev/api/archives/devtools_shared-13.0.1.tar.gz",
             "sha256": "5ab724cfd36ef4b0e47ef4719527be61ba262c5cfdb8522535f9bad7aa862556",
+            "path": "third_party/devtools/devtools_shared"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://pub.dev/api/archives/devtools_shared-2.25.0.tar.gz",
+            "sha256": "7f6b66004c53e270cacd2fd419570cca3f2dbe688ea4e45aea30c81ff6a4beec",
+            "path": "third_party/devtools/devtools_shared"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://pub.dev/api/archives/devtools_shared-4.0.0.tar.gz",
+            "sha256": "816bf3290ba18104e2a05e0871ebacae850e11adee86b1bc1351224e04485fc7",
+            "path": "third_party/devtools/devtools_shared"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://pub.dev/api/archives/devtools_shared-6.0.3.tar.gz",
+            "sha256": "7f173edabb97ac7c7815ae6b08dc18733504e62651eb0ab4216559e173164df1",
+            "path": "third_party/devtools/devtools_shared"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://pub.dev/api/archives/devtools_shared-6.0.4.tar.gz",
+            "sha256": "1f46a18cf389dd47b10e1b963cff463c0fede747b8c0fc787d2455eb034135e8",
+            "path": "third_party/devtools/devtools_shared"
+        },
+        {
+            "kind": "tar.gz",
+            "url": "https://pub.dev/api/archives/devtools_shared-8.0.1.tar.gz",
+            "sha256": "d171bacb1b1c275f00c6921ee5571ea7a8b8e5a214f351dd5e7afe441b0d504f",
             "path": "third_party/devtools/devtools_shared"
         },
         {

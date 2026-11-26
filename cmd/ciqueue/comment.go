@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mrcyjanek/simplybs/utils/uniparse"
 )
@@ -141,10 +141,9 @@ func renderCommentBody(st CommentState, queue string) string {
 }
 
 func loadCommentState(repo string, pr int, marker string) (CommentState, error) {
-	cmd := ghAPI("repos/" + repo + "/issues/" + strconv.Itoa(pr) + "/comments?per_page=100")
-	out, err := cmd.Output()
+	out, err := ghOutput("repos/" + repo + "/issues/" + strconv.Itoa(pr) + "/comments?per_page=100")
 	if err != nil {
-		return CommentState{}, fmt.Errorf("list comments: %w", formatCmdErr(err))
+		return CommentState{}, fmt.Errorf("list comments: %w", err)
 	}
 	var comments []struct {
 		ID   int64  `json:"id"`
@@ -184,10 +183,9 @@ func parseState(body, marker string) (CommentState, bool) {
 }
 
 func upsertComment(repo string, pr int, body, marker string) error {
-	cmd := ghAPI("repos/" + repo + "/issues/" + strconv.Itoa(pr) + "/comments?per_page=100")
-	out, err := cmd.Output()
+	out, err := ghOutput("repos/" + repo + "/issues/" + strconv.Itoa(pr) + "/comments?per_page=100")
 	if err != nil {
-		return fmt.Errorf("list comments: %w", formatCmdErr(err))
+		return fmt.Errorf("list comments: %w", err)
 	}
 	var comments []struct {
 		ID   int64  `json:"id"`
@@ -208,17 +206,9 @@ func upsertComment(repo string, pr int, body, marker string) error {
 		return err
 	}
 	if existing == 0 {
-		post := ghAPI("-X", "POST", "repos/"+repo+"/issues/"+strconv.Itoa(pr)+"/comments", "--input", "-")
-		post.Stdin = bytes.NewReader(payload)
-		post.Stdout = os.Stdout
-		post.Stderr = os.Stderr
-		return post.Run()
+		return runGH([]string{"-X", "POST", "repos/" + repo + "/issues/" + strconv.Itoa(pr) + "/comments", "--input", "-"}, payload)
 	}
-	patch := ghAPI("-X", "PATCH", "repos/"+repo+"/issues/comments/"+strconv.FormatInt(existing, 10), "--input", "-")
-	patch.Stdin = bytes.NewReader(payload)
-	patch.Stdout = os.Stdout
-	patch.Stderr = os.Stderr
-	return patch.Run()
+	return runGH([]string{"-X", "PATCH", "repos/" + repo + "/issues/comments/" + strconv.FormatInt(existing, 10), "--input", "-"}, payload)
 }
 
 func ghAPI(args ...string) *exec.Cmd {
@@ -226,11 +216,38 @@ func ghAPI(args ...string) *exec.Cmd {
 	return exec.Command("gh", all...)
 }
 
-func formatCmdErr(err error) error {
-	if exitErr, ok := err.(*exec.ExitError); ok {
-		return fmt.Errorf("%w: %s", err, strings.TrimSpace(string(exitErr.Stderr)))
-	}
+// gh sometimes applies a comment write and then returns an empty body,
+// which it reports as "unexpected end of JSON input". Retry the call.
+// A repeated PATCH sends the same body.
+func runGH(args []string, stdin []byte) error {
+	_, err := ghOutputInput(args, stdin)
 	return err
+}
+
+func ghOutput(args ...string) ([]byte, error) {
+	return ghOutputInput(args, nil)
+}
+
+func ghOutputInput(args []string, stdin []byte) ([]byte, error) {
+	var last error
+	for attempt := 1; attempt <= 3; attempt++ {
+		cmd := ghAPI(args...)
+		if stdin != nil {
+			cmd.Stdin = bytes.NewReader(stdin)
+		}
+		var stdout, stderr bytes.Buffer
+		cmd.Stdout = &stdout
+		cmd.Stderr = &stderr
+		err := cmd.Run()
+		if err == nil {
+			return stdout.Bytes(), nil
+		}
+		last = fmt.Errorf("%w: %s", err, strings.TrimSpace(stderr.String()))
+		if attempt < 3 {
+			time.Sleep(time.Duration(attempt) * time.Second)
+		}
+	}
+	return nil, last
 }
 
 func previewRemaining(items []Item) []Item {

@@ -134,11 +134,31 @@ rebuilds the whole chain back to `native/dart-bin`.
 
 ## Later, downward
 
-The same rule applies below the current tip. The floor for a seed that
-already runs natively on linux-amd64, linux-arm64, and macOS-arm64 is
-`2.14.1` (8 Sept 2021). linux-arm64 host builds start at 2.6; macOS-arm64
-stable starts at 2.14.1. That seed is a binary, the same shape as
-`native/dart-bin`. From there, hop upward one `sdk_tag` at a time.
+Walk one `sdk_tag` down from the package the current source tip is built
+by. Build that package from the recipe above it, move the prebuilt to
+its compiler, then rebuild the two newer packages so the new SDK still
+bootstraps them. Stop on a hop that will not build.
+
+The prebuilt is now `native/dart-bin@2.16.2`. It builds
+`native/dart@2.16.2`, which builds `native/dart@2.17.0`, which builds
+`native/dart@2.18.0`.
+
+`2.16.2`'s `DEPS` names `2.15.1`. The compiler used here is the
+`2.16.2` prebuilt. Clang 21 needs
+`-Wno-missing-designated-field-initializers` for this SDK.
+
+This SDK's clang toolchains live in `buildtools/linux-x64` and
+`buildtools/mac-x64`, including the arm64 ones. The recipe installs
+the compiler wrapper there on arm64 Linux and arm64 macOS. On Darwin,
+`tools/gn.py` runs `sysctl` to detect Rosetta, so `/usr/sbin/sysctl` is
+linked onto `PATH`. `GuessArchitecture` checks `arm64` before the
+`arm` prefix, which is what `2.17.0` does. Without that, an arm64 Mac
+builds 32-bit `arm`. The macOS SDK defines `TARGET_OS_MAC`, so zlib treats the host as
+Mac OS 9: it stubs `fdopen` and sets `OS_CODE` to 7, then the
+`__APPLE__` block sets `OS_CODE` to 19. The recipe limits that block
+to `MACOS` and drops both defines. Clang 21's `-Werror` files also
+reject `-stdlib=libc++` on C, the macro redefinition, and K&R
+prototypes, so the wrapper disables those three warnings.
 
 `2.14.1` runs on an arm64 Mac. Its `create_sdk` scripts still treat that
 Mac as a cross compile; they learned it is a native host in the
